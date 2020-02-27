@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:703240877360:android:58b9170ef1622126",
         "android_client_info": {
-          "package_name": "mmalla.android.com.whatnext"
+          "package_name": "mmalla.android.com.connoisseur"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "703240877360-9b5cffqkf1je5347clpa1k7g0osikukr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "mmalla.android.com.whatnext",
+            "package_name": "mmalla.android.com.connoisseur",
             "certificate_hash": "9933795ab808e74ec16f28755907af654e92b88c"
           }
         },
