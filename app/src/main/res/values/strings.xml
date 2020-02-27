@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">Connoisseur</string>
+    <string name="wishlist">WISHLIST</string>
+    <string name="discover">DISCOVER</string>
+    <string name="history">HISTORY</string>
+    <string name="popular">POPULAR</string>
+
+    <string name="label_emailpassword">Email/Password Authentication</string>
+    <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
+
+    <string name="label_passwordless">Passwordless Authentication</string>
+    <string name="desc_passwordless">Use only an email to authenticate with Firebase.</string>
+
+    <string name="label_anonymous_auth">Anonymous Authentication</string>
+    <string name="desc_anonymous_auth">Sign in anonymously and then later upgrade to a full Firebase Auth user.</string>
+
+    <string name="label_firebase_ui">FirebaseUI Auth</string>
+    <string name="desc_firebase_ui">Use the FirebaseUI-Android library to authenticate with Firebase.</string>
+
+    <string name="hint_user_id">User ID</string>
+    <string name="get_custom_token">Get Token</string>
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="send_link">Send Link</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="verify_email">Verify Email</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="loading">Loading…</string>
+    <string name="custom_token">Custom Token</string>
+    <string name="signed_in">Signed In</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="token_null">Token: null</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="desc_firebase_lockup">Firebase logo and name</string>
+    <string name="auth_failed">Authentication failed</string>
+    <string name="start_phone_auth">Start</string>
+    <string name="verify_phone_auth">Verify</string>
+    <string name="resend_phone_auth">Resend</string>
+    <string name="hint_phone_number">Phone Number</string>
+    <string name="hint_verification_code">Verification Code</string>
+    <string name="status_code_sent">Code Sent</string>
+    <string name="status_verification_failed">Verification failed</string>
+    <string name="status_verification_succeeded">Verification succeeded</string>
+    <string name="status_sign_in_failed">Sign-in failed</string>
+    <string name="instant_validation">(instant validation)</string>
+
+    <string name="firebase_status_fmt">Firebase User: %s</string>
+    <string name="firebase_user_management">Firebase User Management</string>
+
+    <string name="emailpassword_status_fmt">Email User: %1$s (verified: %2$b)</string>
+    <string name="emailpassword_title_text">Connoisseur</string>
+
+    <string name="passwordless_status_fmt">Email User: %1$s (verified: %2$b)</string>
+    <string name="passwordless_title_text">Passwordless Sign In</string>
+    <string name="status_email_not_sent">Send link to your email to get started.</string>
+    <string name="status_email_sent">Link sent, check your email to continue.</string>
+    <string name="status_link_found">Link received, enter email to sign in.</string>
+
+    <string name="phone_title_text">Phone Number</string>
+
+    <string name="firebaseui_status_fmt">Firebase User: %s</string>
+    <string name="firebaseui_title_text">FirebaseUI Auth</string>
+
+    <string name="id_fmt">User ID: %s</string>
+    <string name="email_fmt">Email: %s</string>
+
+    <string name="title_activity_feature">FeatureActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="configure">Configure Widget</string>
+    <string name="no_recipes_widget">No movies !</string>
+    <string name="collapsing_toolbar">Movie Name</string>
+    <string name="long_latin">Victor Navorksi (played by Tom Hanks), a man from the Eastern European nation of Krakozhia, flies into JFK airport. At Customs he is forbidden entry to the USA - Krakozhia has been taken over in a coup and the US does not currently recognise the new regime, or nation. In addition, the borders of Krakozhia are now closed. This leaves Victor in limbo - he cannot enter the US or go back to Krakozhia. While waiting for the diplomatic situation to sort itself out he is forced to live in the International Transit section of JFK, living off his own resourcefulness. He also makes some new friends along the way.</string>
+
+    <!-- Highly used strings for parceling and other onsaveinstance flows -->
+    <string name="DISCOVERED_MOVIE">DISCOVERED_MOVIE</string>
+    <string name="PARCELED_MOVIE">PARCELED_MOVIE</string>
+    <string name="HISTORY_MOVIES">HISTORY_MOVIES</string>
+    <string name="widget_wishlist">Wishlist</string>
+    <string name="start_fresh">Start Fresh!</string>
+    <string name="set_account_details">Set Account Details</string>
+    <string name="movie_poster_fragment_history_content_scr">Movie Poster</string>
+    <string name="movie_poster_discover_screen_content_desc">Movie poster</string>
+    <string name="dislike_movie_button">dislike movie button</string>
+    <string name="like_movie_button">like movie button</string>
+    <string name="add_to_watchlist">Add to watchlist</string>
+    <string name="widget_movie_poster">Widget movie poster</string>
+    <string name="watchlist_splash_activity_icon">watchlist splash activity icon</string>
+    <string name="new_movie_icon_activity_splash">new movie icon activity splash</string>
+    <string name="history_icon_splash_activity">History icon splash activity</string>
+    <string name="movie_poster_fragment_wishlist_item">movie poster fragment wishlist item</string>
+    <string name="image_view_widget_general">image view widget general</string>
+    <string name="toolbar_image_activity_details">toolbar image activity details</string>
+    <string name="enter_a_name_of_the_widget">Enter a name of the widget</string>
+    <string name="plot_summary">PLOT SUMMARY</string>
+    <string name="the_plot_follows_the_intertwining_lives_of_two_assassins_a_fatally_ill_teacher_a_janitor_and_a_waitress_all_of_whom_become_part_of_an_evil_mastermind_s_murderous_plan_the_plot_follows_the_intertwining_lives_of_two_assassins_a_fatally_ill_teacher_a_janitor_and_a_waitress_all_of_whom_become_part_of_an_evil_mastermind_s_murderous_plan">The plot follows the intertwining lives of two assassins, a fatally-ill teacher, a janitor and a waitress, all of whom become part of an evil mastermind\'s murderous plan. The plot follows the intertwining lives of two assassins, a fatally-ill teacher, a janitor and a waitress, all of whom become part of an evil mastermind\'s murderous plan.</string>
+    <string name="click_to_see_new_content">Click to see new content</string>
+    <string name="feature_name">FEATURE NAME</string>
+    <string name="The_movie_is_added_to_your_wishlist">The movie is added to your wishlist</string>
+    <string name="The_movie_is_added_to_your_liked_list">The movie is added to your liked movie/history list</string>
+    <string name="The_movie_is_added_to_your_dislike_list">The movie is added to your dislike list</string>
+    <string name="Disabling_the_liked_dislike_buttons"><![CDATA[Disabling the liked & dislike buttons]]></string>
+    <string name="Disabling_the_watchlist_dislike_buttons"><![CDATA[Disabling the watchlist & dislike buttons]]></string>
+    <string name="Disabling_the_liked_watchlist_buttons"><![CDATA[Disabling the liked & watchlist buttons]]></string>
+    <string name="Required_error_content">Required.</string>
+    <string name="Edit_account_details_clicked">Edit Account Details clicked</string>
+    <string name="Cleared_movie_list">Cleared all the user preferences</string>
+    <string name="Rating_Title">Rating</string>
+    <string name="released_date">Released date</string>
+    <string name="search">Search</string>
+    <string name="search_option_clicked">Search option clicked!</string>
+
+</resources>

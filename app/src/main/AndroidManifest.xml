@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="mmalla.android.com.connoisseur">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name="mmalla.android.com.connoisseur.SplashScreen"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="mmalla.android.com.connoisseur.login.EmailPasswordActivity"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity"></activity>
+        <activity android:name="mmalla.android.com.connoisseur.SplashActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mmalla.android.com.connoisseur.login.EmailPasswordActivity" />
+        </activity>
+        <activity
+            android:name="mmalla.android.com.connoisseur.features.FeatureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_feature"
+            android:parentActivityName="mmalla.android.com.connoisseur.SplashActivity"
+            android:theme="@style/FullscreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mmalla.android.com.connoisseur.SplashActivity" />
+        </activity>
+
+        <receiver android:name="mmalla.android.com.connoisseur.widget.Widget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <activity android:name="mmalla.android.com.connoisseur.widget.WidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity> <!-- Required for binding remoteViews to the Widget -->
+        <service
+            android:name="mmalla.android.com.connoisseur.widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+    </application>
+
+</manifest>
