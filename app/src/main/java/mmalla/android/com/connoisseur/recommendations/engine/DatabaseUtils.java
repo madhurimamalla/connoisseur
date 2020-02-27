@@ -124,7 +124,7 @@ public class DatabaseUtils {
      * @param userID
      * @return
      */
-    public List<Movie> getWishlist(String userID) {
+    public List<Movie> getWishlistedMovies(String userID) {
         return getList(userID, Movie.PREFERENCE.WISHLISTED);
     }
 
@@ -135,7 +135,7 @@ public class DatabaseUtils {
      * @param userID
      * @return
      */
-    public List<Movie> getHistory(String userID) {
+    public List<Movie> getLikedMovies(String userID) {
         return getList(userID, Movie.PREFERENCE.LIKED);
     }
 

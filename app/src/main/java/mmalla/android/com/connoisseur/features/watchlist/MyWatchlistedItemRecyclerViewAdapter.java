@@ -1,4 +1,4 @@
-package mmalla.android.com.connoisseur.features.wishlist;
+package mmalla.android.com.connoisseur.features.watchlist;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -20,14 +20,14 @@ import mmalla.android.com.connoisseur.model.Movie;
  * specified
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyWishlistItemRecyclerViewAdapter extends RecyclerView.Adapter<MyWishlistItemRecyclerViewAdapter.WishlistViewHolder> {
+public class MyWatchlistedItemRecyclerViewAdapter extends RecyclerView.Adapter<MyWatchlistedItemRecyclerViewAdapter.WishlistViewHolder> {
 
-    private final static String TAG = MyWishlistItemRecyclerViewAdapter.class.getSimpleName();
+    private final static String TAG = MyWatchlistedItemRecyclerViewAdapter.class.getSimpleName();
 
     private final List<Movie> mValues;
 
 
-    public MyWishlistItemRecyclerViewAdapter(List<Movie> items, Context mContext) {
+    public MyWatchlistedItemRecyclerViewAdapter(List<Movie> items, Context mContext) {
         mValues = items;
         Context mContext1 = mContext;
     }

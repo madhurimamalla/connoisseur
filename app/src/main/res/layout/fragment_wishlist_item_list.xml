@@ -11,5 +11,5 @@
     android:layout_marginEnd="@dimen/fragment_history_list_marginRight"
     android:layout_marginRight="@dimen/fragment_history_list_marginRight"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:context=".features.wishlist.WishlistFragment"
+    tools:context=".features.watchlist.WatchlistFragment"
     tools:listitem="@layout/fragment_wishlist_item" />

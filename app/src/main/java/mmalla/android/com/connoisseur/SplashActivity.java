@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
     private List<Movie> presentLikedMovies;
     private List<Movie> dislikedMovies;
+    private List<Movie> wishlistedMovies;
 
 
     private final static String TAG = SplashActivity.class.getSimpleName();
@@ -77,8 +79,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         this.dislikedMovies = new ArrayList<Movie>();
 
         this.size = databaseUtils.checkIfMoviesExist(mAuth.getCurrentUser().getUid());
-        this.presentLikedMovies = databaseUtils.getHistory(mAuth.getCurrentUser().getUid());
+        this.presentLikedMovies = databaseUtils.getLikedMovies(mAuth.getCurrentUser().getUid());
         this.dislikedMovies = databaseUtils.getDislikedMovies(mAuth.getCurrentUser().getUid());
+
+        // TODO Added this below in case we want to play around with the options showing up in Recommendations
+        this.wishlistedMovies = databaseUtils.getWishlistedMovies(mAuth.getCurrentUser().getUid());
     }
 
     /**
@@ -167,6 +172,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
             Intent popularIntent = new Intent(this, FeatureActivity.class);
             popularIntent.putExtra(MOVIE_POPULAR_PARCELED, "");
+            popularIntent.putParcelableArrayListExtra(MOVIES_LIKED, (ArrayList<? extends Parcelable>) this.presentLikedMovies);
+            popularIntent.putParcelableArrayListExtra(MOVIES_DISLIKED, (ArrayList<? extends Parcelable>) this.dislikedMovies);
             startActivity(popularIntent);
 
         } else if (i == R.id.history) {

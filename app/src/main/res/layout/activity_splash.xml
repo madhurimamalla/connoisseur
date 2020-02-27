@@ -50,10 +50,10 @@
                 android:elevation="@dimen/activity_splash_wishlist_elevation"
                 android:padding="@dimen/activity_splash_wishlist_padding"
                 android:shadowColor="@color/cardview_dark_background"
-                android:text="@string/wishlist"
+                android:text="@string/watchlist"
                 android:textSize="@dimen/activity_splash_wishlist_textsize"
                 android:theme="@style/ThemeOverlay.MyDarkButton"
-                tools:text="@string/wishlist" />
+                tools:text="@string/watchlist" />
         </LinearLayout>
 
         <LinearLayout

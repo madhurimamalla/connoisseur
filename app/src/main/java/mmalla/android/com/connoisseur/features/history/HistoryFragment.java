@@ -78,7 +78,7 @@ public class HistoryFragment extends Fragment {
         /**
          * Displayed the movies which the user has seen and liked
          */
-        this.movies = databaseUtils.getHistory(mAuth.getCurrentUser().getUid());
+        this.movies = databaseUtils.getLikedMovies(mAuth.getCurrentUser().getUid());
         Timber.d(TAG, " Got the movies! ");
 
     }

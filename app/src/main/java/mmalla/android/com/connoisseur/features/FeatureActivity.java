@@ -25,7 +25,8 @@ import mmalla.android.com.connoisseur.BaseActivity;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.features.discovery.DiscoverPagerAdapter;
 import mmalla.android.com.connoisseur.features.history.HistoryFragment;
-import mmalla.android.com.connoisseur.features.wishlist.WishlistFragment;
+import mmalla.android.com.connoisseur.features.popular.PopularPagerAdapter;
+import mmalla.android.com.connoisseur.features.watchlist.WatchlistFragment;
 import mmalla.android.com.connoisseur.model.Movie;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClient;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClientException;
@@ -69,6 +70,7 @@ public class FeatureActivity extends BaseActivity {
     private static final String MOVIES_DISLIKED = "MOVIES_DISLIKED";
     private static final String MOVIES_LIKED = "MOVIES_LIKED";
     private static final String MOVIES_DISCOVERED = "MOVIES_DISCOVERED";
+    private static final String MOVIES_POPULAR = "MOVIES_POPULAR";
 
     private final static String TAG = FeatureActivity.class.getSimpleName();
 
@@ -168,9 +170,33 @@ public class FeatureActivity extends BaseActivity {
         // TODO Later surround this by a check if the saveInstanceState is there, then load the saved instance
         // For saved instance, keep the screen details too of the fragment
 
-        // TODO Add the logic which kicks off the Wishlist fragment here
-
         Intent previousIntent = getIntent();
+
+        if (savedInstanceState != null) {
+            num = savedInstanceState.getLong(ARE_THERE_MOVIES_UNDER_USER);
+        } else if (previousIntent.getExtras().containsKey(ARE_THERE_MOVIES_UNDER_USER)) {
+            num = previousIntent.getExtras().getLong(ARE_THERE_MOVIES_UNDER_USER);
+        }
+
+        if (savedInstanceState != null) {
+            discoveredMovies.clear();
+            discoveredMovies = savedInstanceState.getParcelableArrayList(MOVIES_DISCOVERED);
+        } else if (previousIntent.getExtras().containsKey(MOVIES_LIKED)) {
+            discoveredMovies = previousIntent.getExtras().getParcelableArrayList(MOVIES_LIKED);
+            likedMovies = previousIntent.getExtras().getParcelableArrayList(MOVIES_LIKED);
+        }
+
+        if (savedInstanceState != null) {
+            dislikedMovies.clear();
+            dislikedMovies = savedInstanceState.getParcelableArrayList(MOVIES_DISLIKED);
+        } else if (previousIntent.getExtras().containsKey(MOVIES_DISLIKED)) {
+            dislikedMovies = previousIntent.getExtras().getParcelableArrayList(MOVIES_DISLIKED);
+        }
+
+        if(savedInstanceState != null) {
+            popularMovies.clear();
+            popularMovies = savedInstanceState.getParcelableArrayList(MOVIES_POPULAR);
+        }
 
         /*
       Store the state if the Activity was showing Discover, Wishlist or History feature
@@ -181,40 +207,19 @@ public class FeatureActivity extends BaseActivity {
         int state;
         if (previousIntent.getExtras().containsKey(MOVIE_WISHLIST_PARCELED)) {
 
-            WishlistFragment wishlistFragment = (WishlistFragment) getFragmentManager().findFragmentById(R.id.feature_container);
+            WatchlistFragment watchlistFragment = (WatchlistFragment) getFragmentManager().findFragmentById(R.id.feature_container);
             state = 0;
-            mFeatureTitle.setText(R.string.wishlist);
-            if (wishlistFragment == null) {
-                wishlistFragment = new WishlistFragment();
+            mFeatureTitle.setText(R.string.watchlist);
+            if (watchlistFragment == null) {
+                watchlistFragment = new WatchlistFragment();
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.feature_container, wishlistFragment);
+                fragmentTransaction.replace(R.id.feature_container, watchlistFragment);
                 fragmentTransaction.commit();
             }
 
         } else if (previousIntent.getExtras().containsKey(MOVIE_DISCOVER_FEATURE)) {
             state = 1;
             mFeatureTitle.setText(R.string.discover);
-
-            if (savedInstanceState != null) {
-                num = savedInstanceState.getLong(ARE_THERE_MOVIES_UNDER_USER);
-            } else if (previousIntent.getExtras().containsKey(ARE_THERE_MOVIES_UNDER_USER)) {
-                num = previousIntent.getExtras().getLong(ARE_THERE_MOVIES_UNDER_USER);
-            }
-
-            if (savedInstanceState != null) {
-                discoveredMovies.clear();
-                discoveredMovies = savedInstanceState.getParcelableArrayList(MOVIES_DISCOVERED);
-            } else if (previousIntent.getExtras().containsKey(MOVIES_LIKED)) {
-                discoveredMovies = previousIntent.getExtras().getParcelableArrayList(MOVIES_LIKED);
-                likedMovies = previousIntent.getExtras().getParcelableArrayList(MOVIES_LIKED);
-            }
-
-            if (savedInstanceState != null) {
-                dislikedMovies.clear();
-                dislikedMovies = savedInstanceState.getParcelableArrayList(MOVIES_DISLIKED);
-            } else if (previousIntent.getExtras().containsKey(MOVIES_DISLIKED)) {
-                this.dislikedMovies = previousIntent.getExtras().getParcelableArrayList(MOVIES_DISLIKED);
-            }
 
             if (num == 0 || discoveredMovies.size() == 0) {
 
@@ -291,10 +296,10 @@ public class FeatureActivity extends BaseActivity {
             }
 
             /**
-             * TODO Refine the discovered movies to remove any disliked/liked/wishlisted movies
+             * TODO Refine the discovered movies to remove any disliked/liked movies
              */
 
-            Timber.d(TAG, "Iterating through the discovered movie list to remove the disliked movies");
+            Timber.d(TAG, "Iterating through the discovered movie list to remove the disliked & liked movies");
             for (Movie m : likedMovies
             ) {
                 if (discoveredMovies.contains(m)) {
@@ -324,6 +329,58 @@ public class FeatureActivity extends BaseActivity {
             discoverPagerAdapter.setList(discoveredMovies);
             mViewPager.setAdapter(discoverPagerAdapter);
 
+        } else if (previousIntent.getExtras().containsKey(MOVIE_POPULAR_PARCELED)) {
+
+            mFeatureTitle.setText(R.string.popular);
+
+            final MovieDBClient client = new MovieDBClient();
+
+            class fetchMovies extends AsyncTask<String, Void, List<Movie>> {
+
+                @Override
+                protected List<Movie> doInBackground(String... strings) {
+                    List<Movie> movielist = new ArrayList<Movie>();
+
+                    try {
+                        movielist = client.getSomePopularMovies(20);
+                    } catch (MovieDBClientException e) {
+                        e.printStackTrace();
+                    }
+                    return movielist;
+                }
+            }
+
+            try {
+                this.popularMovies = new fetchMovies().execute("").get();
+                Timber.d(TAG, "Popular movies are here!");
+
+                for (Movie m : dislikedMovies
+                ) {
+                    if (popularMovies.contains(m)) {
+                        Timber.d(TAG, "Removed movie from popular list: " + m.getmTitle());
+                        popularMovies.remove(m);
+                    }
+                }
+                for (Movie m : likedMovies
+                ) {
+                    if (popularMovies.contains(m)) {
+                        Timber.d(TAG, "Removed movie from popular list: " + m.getmTitle());
+                        popularMovies.remove(m);
+                    }
+                }
+
+                /**
+                 * Get the discovered movie list and set the adapter list so it can display in the viewpager
+                 */
+                PopularPagerAdapter popularPagerAdapter = new PopularPagerAdapter(getSupportFragmentManager());
+                popularPagerAdapter.setList(this.popularMovies);
+                mViewPager.setAdapter(popularPagerAdapter);
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else if (previousIntent.getExtras().containsKey(MOVIE_HISTORY_PARCELED)) {
             state = 2;
             mFeatureTitle.setText(R.string.history);
@@ -338,39 +395,6 @@ public class FeatureActivity extends BaseActivity {
                 fragmentTransaction.commit();
             }
 
-        } else if (previousIntent.getExtras().containsKey(MOVIE_POPULAR_PARCELED)) {
-            mFeatureTitle.setText(R.string.popular);
-
-            final MovieDBClient client = new MovieDBClient();
-
-            class fetchMovies extends AsyncTask<String, Void, List<Movie>> {
-
-                @Override
-                protected List<Movie> doInBackground(String... strings) {
-                    List<Movie> movielist = new ArrayList<Movie>();
-
-                    try {
-                        movielist = client.getSomePopularMovies(10);
-                    } catch (MovieDBClientException e) {
-                        e.printStackTrace();
-                    }
-                    return movielist;
-                }
-            }
-
-            try {
-                popularMovies = new fetchMovies().execute("").get();
-                Timber.d(TAG, "Popular movies are here!");
-
-                /**
-                 * TODO Remove the ones that are in disliked movies list from the Popular Movies Set
-                 */
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -453,6 +477,6 @@ public class FeatureActivity extends BaseActivity {
         outState.putLong(ARE_THERE_MOVIES_UNDER_USER, num);
         outState.putParcelableArrayList(MOVIES_DISLIKED, (ArrayList<? extends Parcelable>) dislikedMovies);
         outState.putParcelableArrayList(MOVIES_DISCOVERED, (ArrayList<? extends Parcelable>) discoveredMovies);
-
+        outState.putParcelableArrayList(MOVIES_POPULAR, (ArrayList<? extends Parcelable>) popularMovies);
     }
 }

@@ -1,4 +1,4 @@
-package mmalla.android.com.connoisseur.features.wishlist;
+package mmalla.android.com.connoisseur.features.watchlist;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -25,9 +25,9 @@ import timber.log.Timber;
  * A fragment representing a list of Items.
  * <p/>
  */
-public class WishlistFragment extends Fragment {
+public class WatchlistFragment extends Fragment {
 
-    private final static String TAG = WishlistFragment.class.getSimpleName();
+    private final static String TAG = WatchlistFragment.class.getSimpleName();
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -45,13 +45,13 @@ public class WishlistFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public WishlistFragment() {
+    public WatchlistFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static WishlistFragment newInstance(int columnCount) {
-        WishlistFragment fragment = new WishlistFragment();
+    public static WatchlistFragment newInstance(int columnCount) {
+        WatchlistFragment fragment = new WatchlistFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -70,7 +70,7 @@ public class WishlistFragment extends Fragment {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         DatabaseUtils databaseUtils = new DatabaseUtils();
-        this.movies = databaseUtils.getWishlist(mAuth.getCurrentUser().getUid());
+        this.movies = databaseUtils.getWishlistedMovies(mAuth.getCurrentUser().getUid());
         Timber.d(TAG, " Got the movies! ");
     }
 
@@ -89,7 +89,7 @@ public class WishlistFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyWishlistItemRecyclerViewAdapter(movies, getActivity().getApplicationContext()));
+            recyclerView.setAdapter(new MyWatchlistedItemRecyclerViewAdapter(movies, getActivity().getApplicationContext()));
         }
         return view;
     }

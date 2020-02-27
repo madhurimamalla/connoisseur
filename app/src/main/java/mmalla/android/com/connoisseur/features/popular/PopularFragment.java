@@ -35,7 +35,7 @@ public class PopularFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment DiscoverFragment.
+     * @return A new instance of fragment PopularFragment.
      */
     public static PopularFragment newInstance(Movie movie) {
         PopularFragment fragment = new PopularFragment();
@@ -52,7 +52,7 @@ public class PopularFragment extends Fragment {
         if (savedInstanceState != null) {
             this.movie = savedInstanceState.getParcelable(getString(R.string.PARCELED_MOVIE));
         } else if (getArguments() != null) {
-            this.movie = getArguments().getParcelable(getString(R.string.DISCOVERED_MOVIE));
+            this.movie = getArguments().getParcelable(getString(R.string.POPULAR_MOVIE));
         }
 
         mAuth = FirebaseAuth.getInstance();
