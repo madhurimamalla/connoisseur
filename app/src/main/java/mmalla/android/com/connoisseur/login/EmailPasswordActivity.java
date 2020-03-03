@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
+    private Space mSpace;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -45,7 +47,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_emailpassword);
+        setContentView(R.layout.login_activity);
 
         /**
          * Set up Timber for logging
@@ -55,15 +57,17 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         // Views
         mStatusTextView = findViewById(R.id.status);
         mDetailTextView = findViewById(R.id.detail);
-        mEmailField = findViewById(R.id.fieldEmail);
-        mPasswordField = findViewById(R.id.fieldPassword);
+        mEmailField = findViewById(R.id.fieldEmail_new);
+        mPasswordField = findViewById(R.id.fieldPassword_new);
+        mSpace = findViewById(R.id.spacer);
+
 
         // Buttons
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
         findViewById(R.id.verifyEmailButton).setOnClickListener(this);
-        findViewById(R.id.newcontent).setOnClickListener(this);
+        findViewById(R.id.newcontent_two).setOnClickListener(this);
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -78,7 +82,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        findViewById(R.id.newcontent).setVisibility(View.GONE);
+        findViewById(R.id.newcontent_two).setVisibility(View.GONE);
         updateUI(currentUser);
 
     }
@@ -183,7 +187,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                         // [START_EXCLUDE]
                         // Re-enable button
                         findViewById(R.id.verifyEmailButton).setEnabled(true);
-                        findViewById(R.id.newcontent).setEnabled(false);
+                        findViewById(R.id.newcontent_two).setEnabled(false);
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,
@@ -226,24 +230,26 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+            mStatusTextView.setText("Welcome back " + user.getEmail());
+            //mDetailTextView.setText("Welcome back " + user.getEmail());
 
             findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
+            mSpace.setVisibility(View.VISIBLE);
             findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
-            findViewById(R.id.newcontent).setVisibility(View.VISIBLE);
-            findViewById(R.id.newcontent).setEnabled(user.isEmailVerified());
+            findViewById(R.id.newcontent_two).setVisibility(View.VISIBLE);
+            findViewById(R.id.newcontent_two).setEnabled(user.isEmailVerified());
             findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
+
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
 
+            mSpace.setVisibility(View.GONE);
             findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
             findViewById(R.id.signedInButtons).setVisibility(View.GONE);
-            findViewById(R.id.newcontent).setVisibility(View.GONE);
+            findViewById(R.id.newcontent_two).setVisibility(View.GONE);
         }
     }
 
@@ -263,7 +269,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             case R.id.verifyEmailButton:
                 sendEmailVerification();
                 break;
-            case R.id.newcontent:
+            case R.id.newcontent_two:
                 /**
                  * Start the SplashActivity on newContent button click
                  */

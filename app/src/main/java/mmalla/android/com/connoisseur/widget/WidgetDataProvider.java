@@ -2,6 +2,7 @@ package mmalla.android.com.connoisseur.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
@@ -20,8 +21,7 @@ import java.util.List;
 
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
-import mmalla.android.com.connoisseur.moviedbclient.MovieDBClient;
-import mmalla.android.com.connoisseur.recommendations.engine.DatabaseUtils;
+
 import timber.log.Timber;
 
 class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
@@ -33,26 +33,60 @@ class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
     private static final String USERS = "users";
 
     private Context mContext;
+    private Intent mIntent;
 
-    private List<Movie> movieList;
+    private List<Movie> movieList = new ArrayList<>();
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-
-    public WidgetDataProvider(Context mContext, Intent mIntent) {
-        this.mContext = mContext;
-        Intent mIntent1 = mIntent;
-        movieList = new ArrayList<Movie>();
-    }
+    private String userId;
 
     private void initData() throws NullPointerException {
         try {
-            DatabaseUtils databaseUtils = new DatabaseUtils();
+            this.movieList.clear();
             this.mAuth = FirebaseAuth.getInstance();
+            this.user = mAuth.getCurrentUser();
+            this.userId = user.getUid();
+            Timber.d(TAG, "The user name is: " + this.user.getDisplayName().toString());
+
+            /**
+             * Getting the Firebase database for this application
+             */
+            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+            FirebaseDatabase moviesListDB = FirebaseDatabase.getInstance();
+            DatabaseReference moviesListRef = moviesListDB.getReference().child(USERS).child(this.userId).child(MOVIES);
+
+            /**
+             * Get list of movie id from the Firebase
+             */
+
+            ValueEventListener valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Movie movie = ds.getValue(Movie.class);
+                        if (movie != null && movie.getmPref().equals(Movie.PREFERENCE.WISHLISTED)) {
+                            movieList.add(movie);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Timber.e(TAG, databaseError.getMessage());
+                }
+            };
+
+            moviesListRef.addValueEventListener(valueEventListener);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
 
+    public WidgetDataProvider(Context mContext, Intent intent) {
+        this.mContext = mContext;
+        this.mIntent = intent;
     }
 
     @Override
@@ -60,33 +94,6 @@ class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
         Timber.d(TAG, "Starting onCreate() in WidgetDataProvider.......");
         initData();
 
-        MovieDBClient client = new MovieDBClient();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference moviesListRef = firebaseDatabase.getReference().child(USERS)
-                .child(mAuth.getCurrentUser().getUid()).child(MOVIES);
-
-        /**
-         * Get list of movie id from the Firebase
-         */
-
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Movie movie = ds.getValue(Movie.class);
-                    if (movie.getmPref().equals(Movie.PREFERENCE.WISHLISTED)) {
-                        movieList.add(movie);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Timber.e(TAG, databaseError.getMessage());
-            }
-        };
-
-        moviesListRef.addValueEventListener(valueEventListener);
     }
 
     /**
@@ -96,33 +103,6 @@ class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
     public void onDataSetChanged() {
         Timber.d(TAG, "Starting onDataSetChanged() in WidgetDataProvider.......");
         initData();
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference moviesListRef = firebaseDatabase.getReference().child(USERS)
-                .child(mAuth.getCurrentUser().getUid()).child(MOVIES);
-
-        /**
-         * Get list of movie id from the Firebase
-         */
-
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Movie movie = ds.getValue(Movie.class);
-                    if (movie.getmPref().equals(Movie.PREFERENCE.WISHLISTED)) {
-                        movieList.add(movie);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Timber.e(TAG, databaseError.getMessage());
-            }
-        };
-
-        moviesListRef.addValueEventListener(valueEventListener);
-
         Timber.d(TAG, "Completed onDataSetChanged() in WidgetDataProvider.......");
     }
 
@@ -146,6 +126,7 @@ class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.wishlist_widget_item_row);
         remoteViews.setTextViewText(R.id.widget_movie_title, movie.getmTitle());
         remoteViews.setTextViewText(R.id.widget_movie_year, movie.getmReleaseYear());
+        remoteViews.setImageViewUri(R.id.widget_movie_poster, Uri.parse("http://image.tmdb.org/t/p/w185/" + movie.getmPoster()));
 
         Bundle extras = new Bundle();
         extras.putParcelable(MOVIE_PARCELED, movie);

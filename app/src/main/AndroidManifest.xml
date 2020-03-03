@@ -12,34 +12,36 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name="mmalla.android.com.connoisseur.SplashScreen"
+            android:name=".SplashScreen"
             android:theme="@style/ThemeOverlay.MyNoTitleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="mmalla.android.com.connoisseur.login.EmailPasswordActivity"
-            android:theme="@style/ThemeOverlay.MyNoTitleActivity"></activity>
-        <activity android:name="mmalla.android.com.connoisseur.SplashActivity">
+            android:name=".login.EmailPasswordActivity"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity" />
+        <activity android:name=".SplashActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mmalla.android.com.connoisseur.login.EmailPasswordActivity" />
         </activity>
         <activity
-            android:name="mmalla.android.com.connoisseur.features.FeatureActivity"
+            android:name=".features.FeatureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_feature"
-            android:parentActivityName="mmalla.android.com.connoisseur.SplashActivity"
+            android:parentActivityName=".SplashActivity"
             android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mmalla.android.com.connoisseur.SplashActivity" />
         </activity>
 
-        <receiver android:name="mmalla.android.com.connoisseur.widget.Widget">
+        <receiver android:name=".widget.Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -49,14 +51,18 @@
                 android:resource="@xml/widget_info" />
         </receiver>
 
-        <activity android:name="mmalla.android.com.connoisseur.widget.WidgetConfigureActivity">
+        <activity android:name=".widget.WidgetConfigureActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity> <!-- Required for binding remoteViews to the Widget -->
         <service
-            android:name="mmalla.android.com.connoisseur.widget.WidgetService"
+            android:name=".widget.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

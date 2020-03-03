@@ -16,20 +16,20 @@
             android:background="@color/colorPrimary"
             android:orientation="horizontal"
             android:padding="@dimen/widget_layout_main_padding"
-            android:paddingLeft="@dimen/widget_layout_main_paddingLeft"
-            android:paddingRight="@dimen/widget_layout_main_paddingRight"
             android:paddingStart="@dimen/widget_layout_main_paddingLeft"
-            android:paddingEnd="@dimen/widget_layout_main_paddingRight">
+            android:paddingLeft="@dimen/widget_layout_main_paddingLeft"
+            android:paddingEnd="@dimen/widget_layout_main_paddingRight"
+            android:paddingRight="@dimen/widget_layout_main_paddingRight">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_horizontal"
-                android:paddingEnd="@dimen/widget_header_padding"
-                android:paddingLeft="@dimen/widget_header_padding"
-                android:paddingRight="@dimen/widget_header_padding"
                 android:paddingStart="@dimen/widget_header_padding"
+                android:paddingLeft="@dimen/widget_header_padding"
+                android:paddingEnd="@dimen/widget_header_padding"
+                android:paddingRight="@dimen/widget_header_padding"
                 android:text="@string/widget_wishlist"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorText"
