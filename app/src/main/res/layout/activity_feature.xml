@@ -37,6 +37,7 @@
                     style="@style/Base.TextAppearance.AppCompat.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/activity_feature_feature_title_margin"
                     android:padding="@dimen/activity_feature_title_padding"

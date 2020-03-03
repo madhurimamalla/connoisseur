@@ -3,11 +3,13 @@ package mmalla.android.com.connoisseur.features.popular;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +26,8 @@ public class PopularFragment extends Fragment {
     private final static String POPULAR_MOVIE = "POPULAR_MOVIE";
     private DatabaseUtils databaseUtils;
     private FirebaseAuth mAuth;
+
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     private Movie movie;
 
@@ -69,6 +73,12 @@ public class PopularFragment extends Fragment {
         ImageView imageView = (ImageView) rootView.findViewById(R.id.movie_poster_popular_screen);
         String mImgPath = movie.getmPoster();
 
+        TextView mPlotSummary = (TextView) rootView.findViewById(R.id.plot_summary);
+
+        View viewBottom = rootView.findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(viewBottom);
+        mBottomSheetBehavior.setHideable(true);
+
         /**
          * Glide the image rendering!
          */
@@ -78,6 +88,7 @@ public class PopularFragment extends Fragment {
         String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w780/";
         Glide.with(getActivity().getApplicationContext()).load(IMAGE_MOVIE_URL + mImgPath).into(imageView);
 
+        mPlotSummary.setText("PLOT SUMMARY \n " + movie.getmOverview());
 
         /**
          * The button clicks need to be recorded here
@@ -85,6 +96,39 @@ public class PopularFragment extends Fragment {
         final ImageView watchlistView = (ImageView) rootView.findViewById(R.id.add_to_watchlist);
         final ImageView likedMovieView = (ImageView) rootView.findViewById(R.id.like_movie_button);
         final ImageView dontlikeMovieView = (ImageView) rootView.findViewById(R.id.dislike_movie_button);
+
+        /**
+         * The options become invisible as we pull the plot summary drawer
+         */
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int i) {
+                switch (i) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        likedMovieView.setVisibility(View.VISIBLE);
+                        dontlikeMovieView.setVisibility(View.VISIBLE);
+                        watchlistView.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        likedMovieView.setVisibility(View.INVISIBLE);
+                        dontlikeMovieView.setVisibility(View.INVISIBLE);
+                        watchlistView.setVisibility(View.INVISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        likedMovieView.setVisibility(View.INVISIBLE);
+                        dontlikeMovieView.setVisibility(View.INVISIBLE);
+                        watchlistView.setVisibility(View.INVISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+                likedMovieView.setVisibility(View.INVISIBLE);
+                dontlikeMovieView.setVisibility(View.INVISIBLE);
+                watchlistView.setVisibility(View.INVISIBLE);
+            }
+        });
 
         watchlistView.setOnClickListener(new View.OnClickListener() {
             @Override

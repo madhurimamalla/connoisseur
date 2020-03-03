@@ -32,21 +32,6 @@
         android:theme="@style/ThemeOverlay.MyTitleText"
         tools:text="@string/app_name" />
 
-    <TextView
-        android:id="@+id/appDesc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/title_start_margin"
-        android:layout_marginLeft="@dimen/title_start_margin"
-        android:layout_marginEnd="@dimen/title_bottom_margin"
-        android:layout_marginRight="@dimen/title_bottom_margin"
-        android:fontFamily="@font/montserrat"
-        android:text="@string/app_desc"
-        android:textAlignment="center"
-        android:theme="@style/ThemeOverlay.MyTitleDetail"
-        tools:text="@string/app_desc" />
-
-
     <Space
         android:layout_width="1dp"
         android:layout_height="32dp" />
@@ -85,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/new_content_margin"
             android:padding="@dimen/new_content_padding"
-            android:text="@string/click_to_see_new_content"
+            android:text="@string/app_desc"
             android:theme="@style/ThemeOverlay.MyDarkButton"
             app:fontFamily="@font/montserrat" />
 

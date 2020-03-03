@@ -2,11 +2,13 @@ package mmalla.android.com.connoisseur.features.discovery;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +32,7 @@ public class DiscoverFragment extends Fragment {
 
     private DatabaseUtils databaseUtils;
     private FirebaseAuth mAuth;
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     private Movie movie;
 
@@ -73,8 +76,15 @@ public class DiscoverFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_discover, container, false);
+
+        View viewBottom = rootView.findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(viewBottom);
+        mBottomSheetBehavior.setHideable(true);
+
         ImageView imageView = (ImageView) rootView.findViewById(R.id.movie_poster_discover_screen);
         String mImgPath = movie.getmPoster();
+
+        TextView mPlotSummary = (TextView) rootView.findViewById(R.id.plot_summary);
 
         /**
          * Glide the image rendering!
@@ -87,17 +97,7 @@ public class DiscoverFragment extends Fragment {
          * TODO Need to fix the issue when the image is null and should set a default poster instead
          */
         Glide.with(getActivity().getApplicationContext()).load(IMAGE_MOVIE_URL + mImgPath).into(imageView);
-
-        /**
-         * TODO Still need to add the plot summary of the movie
-         */
-        //        /**
-//         * Show the bottom modal fragment to display the plot summary
-//         * TODO Figure out how to send data to the modal because we need to send the plot summary to it
-//         */
-//        PlotSummaryModalSheet plotSummaryModalSheet = new PlotSummaryModalSheet();
-//        plotSummaryModalSheet.setMovie(movie);
-//        plotSummaryModalSheet.show(getFragmentManager(), "Opening PlotSummaryModalSheet");
+        mPlotSummary.setText("PLOT SUMMARY \n " + movie.getmOverview());
 
         /**
          * The button clicks need to be recorded here
@@ -105,6 +105,40 @@ public class DiscoverFragment extends Fragment {
         final ImageView watchlistView = (ImageView) rootView.findViewById(R.id.add_to_watchlist);
         final ImageView likedMovieView = (ImageView) rootView.findViewById(R.id.like_movie_button);
         final ImageView dontlikeMovieView = (ImageView) rootView.findViewById(R.id.dislike_movie_button);
+
+
+        /**
+         * The options become invisible as we pull the plot summary drawer
+         */
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int i) {
+                switch (i) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        likedMovieView.setVisibility(View.VISIBLE);
+                        dontlikeMovieView.setVisibility(View.VISIBLE);
+                        watchlistView.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        likedMovieView.setVisibility(View.INVISIBLE);
+                        dontlikeMovieView.setVisibility(View.INVISIBLE);
+                        watchlistView.setVisibility(View.INVISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        likedMovieView.setVisibility(View.INVISIBLE);
+                        dontlikeMovieView.setVisibility(View.INVISIBLE);
+                        watchlistView.setVisibility(View.INVISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+                likedMovieView.setVisibility(View.INVISIBLE);
+                dontlikeMovieView.setVisibility(View.INVISIBLE);
+                watchlistView.setVisibility(View.INVISIBLE);
+            }
+        });
 
         watchlistView.setOnClickListener(new View.OnClickListener() {
             @Override
