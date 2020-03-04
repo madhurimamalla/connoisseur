@@ -19,6 +19,9 @@ import mmalla.android.com.connoisseur.BuildConfig;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
 
+/**
+ * A simple client which does the job of creating URLs and executing them
+ */
 public class MovieDBClient {
 
     private static final String TAG = MovieDBClient.class.getSimpleName();
