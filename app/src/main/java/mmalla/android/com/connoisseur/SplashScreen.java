@@ -9,6 +9,9 @@ import mmalla.android.com.connoisseur.login.EmailPasswordActivity;
 
 public class SplashScreen extends AppCompatActivity {
 
+    /**
+     * The splash screen of this app is on for SPLASH_TIMEOUT in ms.
+     */
     private static int SPLASH_TIMEOUT = 4000;
 
     @Override

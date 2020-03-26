@@ -12,7 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".SplashActivityNew"
+            android:label="@string/title_activity_splash_new"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".login.EmailPasswordActivity" />
 
+        </activity>
         <activity
             android:name=".SplashScreen"
             android:theme="@style/ThemeOverlay.MyNoTitleActivity">

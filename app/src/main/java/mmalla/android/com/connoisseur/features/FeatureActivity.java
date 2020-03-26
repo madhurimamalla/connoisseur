@@ -452,13 +452,6 @@ public class FeatureActivity extends BaseActivity {
         mHideHandler.removeCallbacks(mHidePart2Runnable);
         mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
 
-//        /**
-//         * Show the bottom modal fragment to display the plot summary
-//         * TODO Figure out how to send data to the modal because we need to send the plot summary to it
-//         */
-//        PlotSummaryModalSheet plotSummaryModalSheet = new PlotSummaryModalSheet();
-//        plotSummaryModalSheet.show(getSupportFragmentManager(), "Opening PlotSummaryModalSheet");
-
     }
 
     /**

@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,7 +134,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
                 });
                 /**
-                 * When the searchView is closed, return to SplashActivity with the options
+                 * TODO When the searchView is closed, return to SplashActivity with the options
                  */
                 searchView.setOnCloseListener(new SearchView.OnCloseListener() {
                     @Override

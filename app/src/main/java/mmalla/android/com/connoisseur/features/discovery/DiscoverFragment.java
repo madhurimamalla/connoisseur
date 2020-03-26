@@ -105,7 +105,14 @@ public class DiscoverFragment extends Fragment {
         final ImageView watchlistView = (ImageView) rootView.findViewById(R.id.add_to_watchlist);
         final ImageView likedMovieView = (ImageView) rootView.findViewById(R.id.like_movie_button);
         final ImageView dontlikeMovieView = (ImageView) rootView.findViewById(R.id.dislike_movie_button);
-
+        
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                return true;
+            }
+        });
 
         /**
          * The options become invisible as we pull the plot summary drawer

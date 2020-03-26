@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import mmalla.android.com.connoisseur.BaseActivity;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.SplashActivity;
+import mmalla.android.com.connoisseur.SplashActivityNew;
 import mmalla.android.com.connoisseur.model.User;
 import mmalla.android.com.connoisseur.recommendations.engine.DatabaseUtils;
 import timber.log.Timber;
@@ -68,6 +69,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         findViewById(R.id.signOutButton).setOnClickListener(this);
         findViewById(R.id.verifyEmailButton).setOnClickListener(this);
         findViewById(R.id.newcontent_two).setOnClickListener(this);
+        findViewById(R.id.new_ui_flow).setOnClickListener(this);
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -82,7 +84,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        findViewById(R.id.newcontent_two).setVisibility(View.GONE);
+        disableOldUI();
         updateUI(currentUser);
 
     }
@@ -188,6 +190,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                         // Re-enable button
                         findViewById(R.id.verifyEmailButton).setEnabled(true);
                         findViewById(R.id.newcontent_two).setEnabled(false);
+                        disableOldUI();
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,
@@ -239,6 +242,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
             findViewById(R.id.newcontent_two).setVisibility(View.VISIBLE);
             findViewById(R.id.newcontent_two).setEnabled(user.isEmailVerified());
+            disableOldUI();
             findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
 
         } else {
@@ -249,8 +253,12 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
             findViewById(R.id.signedInButtons).setVisibility(View.GONE);
-            findViewById(R.id.newcontent_two).setVisibility(View.GONE);
+            disableOldUI();
         }
+    }
+
+    private void disableOldUI() {
+        findViewById(R.id.newcontent_two).setVisibility(View.GONE);
     }
 
     @Override
@@ -279,6 +287,14 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                     startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 } else {
                     startActivity(intent);
+                }
+                break;
+            case R.id.new_ui_flow:
+                Intent homeIntent = new Intent(this, SplashActivityNew.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(homeIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                } else {
+                    startActivity(homeIntent);
                 }
                 break;
         }
