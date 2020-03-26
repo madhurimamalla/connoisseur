@@ -12,7 +12,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId 'mmalla.android.com.connoisseur'
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -48,6 +48,9 @@ dependencies {
      * Needed for loading and cacheing images
      */
     implementation 'com.github.bumptech.glide:glide:4.7.1'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
     implementation 'com.google.firebase:firebase-database:16.0.5'
@@ -62,6 +65,8 @@ dependencies {
      * Picasso library
      */
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.github.stfalcon:androidmvvmhelper:0.4'
 }
 
 apply plugin: 'com.google.gms.google-services'
