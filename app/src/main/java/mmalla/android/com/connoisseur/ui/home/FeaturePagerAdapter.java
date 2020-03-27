@@ -1,6 +1,7 @@
 package mmalla.android.com.connoisseur.ui.home;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -22,13 +23,23 @@ public class FeaturePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
+        MovieListFragment movieListFragment = new MovieListFragment();
         switch (i) {
             case 0:
-                return new DiscoverFragmentNew();
+                Bundle discoverBundle = new Bundle();
+                discoverBundle.putString("FEATURE", mContext.getResources().getString(FEATURE_TITLES[0]));
+                movieListFragment.setArguments(discoverBundle);
+                return movieListFragment;
             case 1:
-                return new WatchlistFragmentNew();
+                Bundle watchlistBundle = new Bundle();
+                watchlistBundle.putString("FEATURE", mContext.getResources().getString(FEATURE_TITLES[1]));
+                movieListFragment.setArguments(watchlistBundle);
+                return movieListFragment;
             case 2:
-                return new HistoryFragmentNew();
+                Bundle historyBundle = new Bundle();
+                historyBundle.putString("FEATURE", mContext.getResources().getString(FEATURE_TITLES[2]));
+                movieListFragment.setArguments(historyBundle);
+                return movieListFragment;
         }
         return null;
     }

@@ -20,15 +20,14 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View homeRootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         FeaturePagerAdapter featurePagerAdapter = new FeaturePagerAdapter(getContext(), getChildFragmentManager());
-        ViewPager featureViewPager = (ViewPager) root.findViewById(R.id.view_pager_features);
+        ViewPager featureViewPager = (ViewPager) homeRootView.findViewById(R.id.view_pager_features);
         featureViewPager.setAdapter(featurePagerAdapter);
 
-        TabLayout tabsLayout = root.findViewById(R.id.featureTabsLayout);
+        TabLayout tabsLayout = homeRootView.findViewById(R.id.featureTabsLayout);
         tabsLayout.setupWithViewPager(featureViewPager);
-
-        return root;
+        return homeRootView;
     }
 }
