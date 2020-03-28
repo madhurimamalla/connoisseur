@@ -44,7 +44,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     private Long[] size;
 
     private List<Movie> presentLikedMovies;
-    private List<Movie> dislikedMovies;
+    private List<Movie> presentDislikedMovies;
     private List<Movie> wishlistedMovies;
 
 
@@ -75,11 +75,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
          */
 
         this.presentLikedMovies = new ArrayList<Movie>();
-        this.dislikedMovies = new ArrayList<Movie>();
+        this.presentDislikedMovies = new ArrayList<Movie>();
 
         this.size = databaseUtils.checkIfMoviesExist(mAuth.getCurrentUser().getUid());
         this.presentLikedMovies = databaseUtils.getLikedMovies(mAuth.getCurrentUser().getUid());
-        this.dislikedMovies = databaseUtils.getDislikedMovies(mAuth.getCurrentUser().getUid());
+        this.presentDislikedMovies = databaseUtils.getDislikedMovies(mAuth.getCurrentUser().getUid());
 
         // TODO Added this below in case we want to play around with the options showing up in Recommendations
         this.wishlistedMovies = databaseUtils.getWishlistedMovies(mAuth.getCurrentUser().getUid());
@@ -164,7 +164,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             discoverIntent.putExtra(MOVIE_DISCOVER_FEATURE, "");
             discoverIntent.putExtra(ARE_THERE_MOVIES_UNDER_USER, size[0]);
             discoverIntent.putParcelableArrayListExtra(MOVIES_LIKED, (ArrayList<? extends Parcelable>) this.presentLikedMovies);
-            discoverIntent.putParcelableArrayListExtra(MOVIES_DISLIKED, (ArrayList<? extends Parcelable>) this.dislikedMovies);
+            discoverIntent.putParcelableArrayListExtra(MOVIES_DISLIKED, (ArrayList<? extends Parcelable>) this.presentDislikedMovies);
             startActivity(discoverIntent);
 
         } else if (i == R.id.popular) {
@@ -172,7 +172,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             Intent popularIntent = new Intent(this, FeatureActivity.class);
             popularIntent.putExtra(MOVIE_POPULAR_PARCELED, "");
             popularIntent.putParcelableArrayListExtra(MOVIES_LIKED, (ArrayList<? extends Parcelable>) this.presentLikedMovies);
-            popularIntent.putParcelableArrayListExtra(MOVIES_DISLIKED, (ArrayList<? extends Parcelable>) this.dislikedMovies);
+            popularIntent.putParcelableArrayListExtra(MOVIES_DISLIKED, (ArrayList<? extends Parcelable>) this.presentDislikedMovies);
             startActivity(popularIntent);
 
         } else if (i == R.id.history) {

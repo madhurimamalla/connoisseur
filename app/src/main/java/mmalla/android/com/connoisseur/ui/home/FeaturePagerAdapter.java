@@ -14,6 +14,7 @@ public class FeaturePagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
     private static final int[] FEATURE_TITLES = new int[]{R.string.discover, R.string.watchlist, R.string.history};
+    private final static String FEATURE = "FEATURE";
     private Context mContext;
 
     public FeaturePagerAdapter(Context context, FragmentManager fm) {
@@ -27,17 +28,17 @@ public class FeaturePagerAdapter extends FragmentPagerAdapter {
         switch (i) {
             case 0:
                 Bundle discoverBundle = new Bundle();
-                discoverBundle.putString("FEATURE", mContext.getResources().getString(FEATURE_TITLES[0]));
+                discoverBundle.putString(FEATURE, mContext.getResources().getString(FEATURE_TITLES[0]));
                 movieListFragment.setArguments(discoverBundle);
                 return movieListFragment;
             case 1:
                 Bundle watchlistBundle = new Bundle();
-                watchlistBundle.putString("FEATURE", mContext.getResources().getString(FEATURE_TITLES[1]));
+                watchlistBundle.putString(FEATURE, mContext.getResources().getString(FEATURE_TITLES[1]));
                 movieListFragment.setArguments(watchlistBundle);
                 return movieListFragment;
             case 2:
                 Bundle historyBundle = new Bundle();
-                historyBundle.putString("FEATURE", mContext.getResources().getString(FEATURE_TITLES[2]));
+                historyBundle.putString(FEATURE, mContext.getResources().getString(FEATURE_TITLES[2]));
                 movieListFragment.setArguments(historyBundle);
                 return movieListFragment;
         }

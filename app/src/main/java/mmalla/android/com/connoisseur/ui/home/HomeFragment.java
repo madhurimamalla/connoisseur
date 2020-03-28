@@ -10,7 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.arch.lifecycle.ViewModelProviders;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import mmalla.android.com.connoisseur.R;
+import mmalla.android.com.connoisseur.recommendations.engine.DatabaseUtils;
 
 public class HomeFragment extends Fragment {
 
@@ -21,6 +24,8 @@ public class HomeFragment extends Fragment {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View homeRootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        //homeViewModel.fetchMovies();
 
         FeaturePagerAdapter featurePagerAdapter = new FeaturePagerAdapter(getContext(), getChildFragmentManager());
         ViewPager featureViewPager = (ViewPager) homeRootView.findViewById(R.id.view_pager_features);

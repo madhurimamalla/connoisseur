@@ -6,6 +6,9 @@
     <string name="history">HISTORY</string>
     <string name="popular">POPULAR</string>
 
+    <string name="error_message">Some error has occurred. Try after sometime</string>
+    <string name="content_description">Movie Poster</string>
+
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
 
