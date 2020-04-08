@@ -14,7 +14,6 @@ import java.util.List;
 
 import mmalla.android.com.connoisseur.model.Movie;
 import mmalla.android.com.connoisseur.model.User;
-import mmalla.android.com.connoisseur.moviedbclient.MovieDBClient;
 import timber.log.Timber;
 
 /**
@@ -72,12 +71,10 @@ public class DatabaseUtils {
      */
     public void updateMovie(String userID, Movie movie, Movie.PREFERENCE preference) {
         DatabaseReference userWishlistRef = database.getRef().child(USERS).child(userID);
-
         movie.setmPref(preference);
         HashMap<String, Object> map = new HashMap<>();
         map.put(movie.getmId(), movie);
         userWishlistRef.child(MOVIES).updateChildren(map);
-
     }
 
     /**
@@ -88,7 +85,6 @@ public class DatabaseUtils {
      * @return
      */
     private List<Movie> getList(String userID, final Movie.PREFERENCE preference) {
-        MovieDBClient client = new MovieDBClient();
         FirebaseDatabase moviesList = FirebaseDatabase.getInstance();
         DatabaseReference moviesListRef = moviesList.getReference().child(USERS).child(userID).child(MOVIES);
         final List<Movie> list = new ArrayList<Movie>();
@@ -138,7 +134,6 @@ public class DatabaseUtils {
     public List<Movie> getLikedMovies(String userID) {
         return getList(userID, Movie.PREFERENCE.LIKED);
     }
-
     /**
      * Method to retrieve the movies seen and disliked
      */
@@ -178,7 +173,6 @@ public class DatabaseUtils {
 
         FirebaseDatabase moviesList = FirebaseDatabase.getInstance();
         DatabaseReference moviesListRef = moviesList.getReference().child(USERS).child(userID).child(MOVIES);
-        boolean isExists = false;
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

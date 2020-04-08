@@ -31,10 +31,6 @@ public class MovieListViewModel extends ViewModel {
         mTitle.setValue(index);
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
-
     public LiveData<List<Movie>> getMovies() {
         return mMoviesList;
     }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,12 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
     private MovieListViewModel movieListViewModel;
     private final static String FEATURE = "FEATURE";
+    private List<Movie> movieList = new ArrayList<Movie>();
+    private List<Movie> watchlistMovies;
+    private List<Movie> discoveredMovies;
+    private List<Movie> historyMovies;
+    private String bundleTypeStr;
+    private ViewPager mMoviesDetailsViewPager;
 
     @Nullable
     @Override
@@ -42,7 +49,7 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         movieListViewModel =
                 ViewModelProviders.of(this).get(MovieListViewModel.class);
 
-        String bundleTypeStr = getArguments().getString(FEATURE);
+        bundleTypeStr = getArguments().getString(FEATURE);
 
         /**
          * Inflating the view of this fragment
@@ -50,19 +57,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         View rootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
         final TextView textView = (TextView) rootView.findViewById(R.id.text_feature);
+        mMoviesDetailsViewPager = rootView.findViewById(R.id.view_pager_movies_details);
 
         movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
         movieListViewModel.setIndex(bundleTypeStr);
-
-        /**
-         * TODO Remove this
-         */
-        /*movieListViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
 
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
@@ -77,7 +75,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         /**
          * Create dummy data to test the UI screens
          */
-        List<Movie> movieList = new ArrayList<Movie>();
         Movie movie = new Movie("75", "Mars Attacks!");
         movie.setmPoster("/gaTuHICwavPUmqQzPZFEXKSRwsC.jpg");
         movieList.add(movie);
@@ -111,35 +108,74 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         /**
          * Shuffling the same list to mock actual behavior of the application
          */
-        List<Movie> watchlistMovies = new ArrayList<>(movieList);
+        watchlistMovies = new ArrayList<>(movieList);
         Collections.copy(watchlistMovies, movieList);
-        Collections.shuffle(movieList);
-        List<Movie> discoveredMovies = new ArrayList<>(movieList);
+        shuffle(movieList);
+        discoveredMovies = new ArrayList<>(movieList);
         Collections.copy(discoveredMovies, movieList);
-        Collections.shuffle(movieList);
-        List<Movie> historyMovies = new ArrayList<>(movieList);
+        shuffle(movieList);
+        historyMovies = new ArrayList<>(movieList);
         Collections.copy(historyMovies, movieList);
-        final MovieListAdapter movieListAdapter = new MovieListAdapter(getContext(), movieList, this);
+        MovieListAdapter movieListAdapter = null;
+        switch (bundleTypeStr) {
+            case "DISCOVER":
+                Timber.d("The movies being set are of type : " + bundleTypeStr);
+                movieListAdapter = new MovieListAdapter(getContext(), discoveredMovies, this);
+                break;
+            case "HISTORY":
+                Timber.d("The movies being set are of type : " + bundleTypeStr);
+                movieListAdapter = new MovieListAdapter(getContext(), historyMovies, this);
+                break;
+            case "WATCHLIST":
+                Timber.d("The movies being set are of type : " + bundleTypeStr);
+                movieListAdapter = new MovieListAdapter(getContext(), watchlistMovies, this);
+                break;
+            default:
+                Timber.d("The switch case has come into default");
+                movieListAdapter = new MovieListAdapter(getContext(), movieList, this);
+        }
         recyclerView.setAdapter(movieListAdapter);
 
-        movieListViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(@Nullable List<Movie> movies) {
-                movieListAdapter.setMovies(movies);
-            }
-        });
+//        movieListViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Movie> movies) {
+//                movieListAdapter.setMovies(movies);
+//            }
+//        });
 
         return rootView;
     }
 
     @Override
-    public void onClick(Movie movie) {
-        /**
-         * TODO Enter the flow here which goes to open the MovieDetailsContent
-         */
+    public void onClick(Movie movie, int position) {
         Toast.makeText(getContext(), "Clicked on the movie:" + movie.getmTitle(), Toast.LENGTH_SHORT).show();
-        //Intent movieDetailsIntent = new Intent(this, MovieDetailsActivity.class);
-        //movieDetailsIntent.putExtra(Intent.EXTRA_TEXT, movie.getMovieId());
-        //startActivity(movieDetailsIntent);
+        Timber.d("The movie clicked here is: " + movie.getmId() + ": and title is: " + movie.getmTitle());
+        Timber.d("The movie clicked was at position: " + position + " in the movielist of type: " + bundleTypeStr);
+
+        /**
+         * Get the discovered movie list and set the adapter list so it can display in the viewpager
+         * Keep the starting position of the viewPager based on which movie was clicked
+         */
+        MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
+        switch (bundleTypeStr) {
+            case "HISTORY":
+                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
+                movieDetailsPagerAdapter.setList(historyMovies);
+                break;
+            case "DISCOVER":
+                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
+                movieDetailsPagerAdapter.setList(discoveredMovies);
+                break;
+            case "WATCHLIST":
+                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
+                movieDetailsPagerAdapter.setList(watchlistMovies);
+                break;
+            default:
+                Timber.d("The switch case has come into default");
+                movieDetailsPagerAdapter.setList(movieList);
+                break;
+        }
+        mMoviesDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
+        mMoviesDetailsViewPager.setCurrentItem(position);
     }
 }

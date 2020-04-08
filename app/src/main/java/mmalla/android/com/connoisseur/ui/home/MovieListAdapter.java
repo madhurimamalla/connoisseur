@@ -31,7 +31,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     }
 
     public interface MoviesListOnClickListener {
-        void onClick(Movie movie);
+        void onClick(Movie movie, int position);
     }
 
     @NonNull
@@ -44,7 +44,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MovieViewHolder movieViewHolder, final int i) {
         Movie movie = this.mMoviesList.get(movieViewHolder.getAdapterPosition());
 
         ImageView movie_thumbnail = (ImageView) movieViewHolder.movie_thumbnail.findViewById(R.id.movie_item_poster);
@@ -53,8 +53,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         movie_thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Movie movie1 = mMoviesList.get(i);
-                mListener.onClick(movie1);
+                Movie movie1 = mMoviesList.get(movieViewHolder.getAdapterPosition());
+                mListener.onClick(movie1, movieViewHolder.getAdapterPosition());
             }
         });
     }

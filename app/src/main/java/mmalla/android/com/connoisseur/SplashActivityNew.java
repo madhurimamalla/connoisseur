@@ -70,6 +70,10 @@ public class SplashActivityNew extends BaseActivity {
         setContentView(R.layout.activity_splash_new);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        /**
+         * TODO Remove if it's not needed.
+         */
+        /*
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +82,7 @@ public class SplashActivityNew extends BaseActivity {
                         .setAction("Action", null).show();
             }
         });
+        */
 
         mAuth = FirebaseAuth.getInstance();
          /*
