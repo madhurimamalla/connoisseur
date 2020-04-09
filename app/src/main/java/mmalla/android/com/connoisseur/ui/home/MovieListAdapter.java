@@ -15,8 +15,11 @@ import java.util.List;
 
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
+import timber.log.Timber;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
+
+    private static final String TAG = MovieListAdapter.class.getSimpleName();
 
     private Context mContext;
     private List<Movie> mMoviesList = new ArrayList<>();
@@ -60,6 +63,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     }
 
     public void setMovies(List<Movie> movies) {
+        Timber.d(TAG + "Setting the movies in the MovieListAdapter... ");
         this.mMoviesList = movies;
         notifyDataSetChanged();
     }

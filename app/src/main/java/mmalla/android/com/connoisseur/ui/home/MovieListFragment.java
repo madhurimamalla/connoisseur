@@ -17,15 +17,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
-
-import static java.util.Collections.shuffle;
 
 public class MovieListFragment extends Fragment implements MovieListAdapter.MoviesListOnClickListener {
 
@@ -33,23 +38,41 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
     private MovieListViewModel movieListViewModel;
     private final static String FEATURE = "FEATURE";
-    private List<Movie> movieList = new ArrayList<Movie>();
-    private List<Movie> watchlistMovies;
-    private List<Movie> discoveredMovies;
-    private List<Movie> historyMovies;
+    private int SCALING_FACTOR = 120;
+
     private String bundleTypeStr;
+
     private ViewPager mMoviesDetailsViewPager;
+    private View loadingIcon;
+
+    private List<Movie> movieList = new ArrayList<Movie>();
+    private MovieListAdapter movieListAdapter = null;
+
+    /**
+     * Required for Firebase configuration
+     */
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private final static String USERS = "users";
+    private final static String MOVIES = "movies";
+
+    public MovieListFragment() {
+        // Empty constructor
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        Timber.d("The movieListViewModel is set here...");
+        Timber.d(TAG + "The movieListViewModel is set here...");
         movieListViewModel =
                 ViewModelProviders.of(this).get(MovieListViewModel.class);
 
         bundleTypeStr = getArguments().getString(FEATURE);
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
 
         /**
          * Inflating the view of this fragment
@@ -59,21 +82,94 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         final TextView textView = (TextView) rootView.findViewById(R.id.text_feature);
         mMoviesDetailsViewPager = rootView.findViewById(R.id.view_pager_movies_details);
 
+        loadingIcon = (View) rootView.findViewById(R.id.loading_icon);
+
         movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
         movieListViewModel.setIndex(bundleTypeStr);
 
+        /**
+         * Adjusting the number of items on the screen based on the DisplayMetrics and scaling factor
+         */
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int scalingFactor = 120;
-        int noOfColumns = (int) (dpWidth / scalingFactor);
+        int noOfColumns = (int) (dpWidth / SCALING_FACTOR);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), noOfColumns, GridLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.movies_recycleview);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
 
+        switch (bundleTypeStr) {
+            case "DISCOVER":
+                loadDiscover();
+                Timber.d("The movies being set are of type : " + bundleTypeStr);
+                break;
+            case "HISTORY":
+                loadHistory();
+                Timber.d("The movies being set are of type : " + bundleTypeStr);
+                break;
+            case "WATCHLIST":
+                loadWatchlist();
+                Timber.d("The movies being set are of type : " + bundleTypeStr);
+                break;
+            default:
+                loadDiscover();
+                Timber.d("The switch case has come into default");
+        }
+
+        movieListAdapter = new MovieListAdapter(getContext(), movieList, this);
+        recyclerView.setAdapter(movieListAdapter);
+
+//        movieListViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+//            @Override
+//            public void onChanged(@Nullable List<Movie> movies) {
+//                movieListAdapter.setMovies(movies);
+//            }
+//        });
+
+        return rootView;
+    }
+
+    /**
+     * Load the watchlist in the Watchlist tab
+     */
+    private void loadWatchlist() {
+        showLoadingIcon();
+        movieList = new ArrayList<Movie>();
+        final FirebaseDatabase moviesList = FirebaseDatabase.getInstance();
+        DatabaseReference moviesListRef = moviesList.getReference().child(USERS).child(mUser.getUid()).child(MOVIES);
         /**
-         * Create dummy data to test the UI screens
+         * Get list of movie id from the Firebase
+         */
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Movie movie = ds.getValue(Movie.class);
+                    if (movie != null && movie.getmPref().equals(Movie.PREFERENCE.WISHLISTED)) {
+                        movieList.add(movie);
+                    }
+                }
+                if (movieList.size() > 0) {
+                    movieListAdapter.setMovies(movieList);
+                }
+                movieListAdapter.notifyDataSetChanged();
+                hideLoadingIcon();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Timber.e(TAG, databaseError.getMessage());
+            }
+        };
+
+        moviesListRef.addValueEventListener(valueEventListener);
+    }
+
+    private void loadDiscover() {
+        /**
+         * TODO Implement the discover function here to retrieve the discover list from TMDB
          */
         Movie movie = new Movie("75", "Mars Attacks!");
         movie.setmPoster("/gaTuHICwavPUmqQzPZFEXKSRwsC.jpg");
@@ -104,48 +200,64 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         movieList.add(movie);
         movieList.add(movie1);
         movieList.add(movie3);
-
-        /**
-         * Shuffling the same list to mock actual behavior of the application
-         */
-        watchlistMovies = new ArrayList<>(movieList);
-        Collections.copy(watchlistMovies, movieList);
-        shuffle(movieList);
-        discoveredMovies = new ArrayList<>(movieList);
-        Collections.copy(discoveredMovies, movieList);
-        shuffle(movieList);
-        historyMovies = new ArrayList<>(movieList);
-        Collections.copy(historyMovies, movieList);
-        MovieListAdapter movieListAdapter = null;
-        switch (bundleTypeStr) {
-            case "DISCOVER":
-                Timber.d("The movies being set are of type : " + bundleTypeStr);
-                movieListAdapter = new MovieListAdapter(getContext(), discoveredMovies, this);
-                break;
-            case "HISTORY":
-                Timber.d("The movies being set are of type : " + bundleTypeStr);
-                movieListAdapter = new MovieListAdapter(getContext(), historyMovies, this);
-                break;
-            case "WATCHLIST":
-                Timber.d("The movies being set are of type : " + bundleTypeStr);
-                movieListAdapter = new MovieListAdapter(getContext(), watchlistMovies, this);
-                break;
-            default:
-                Timber.d("The switch case has come into default");
-                movieListAdapter = new MovieListAdapter(getContext(), movieList, this);
-        }
-        recyclerView.setAdapter(movieListAdapter);
-
-//        movieListViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
-//            @Override
-//            public void onChanged(@Nullable List<Movie> movies) {
-//                movieListAdapter.setMovies(movies);
-//            }
-//        });
-
-        return rootView;
     }
 
+    /**
+     * Load the history list in the History tab
+     */
+    private void loadHistory() {
+        showLoadingIcon();
+        movieList = new ArrayList<Movie>();
+        final FirebaseDatabase moviesList = FirebaseDatabase.getInstance();
+        DatabaseReference moviesListRef = moviesList.getReference().child(USERS).child(mUser.getUid()).child(MOVIES);
+        /**
+         * Get list of movie id from the Firebase
+         */
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Movie movie = ds.getValue(Movie.class);
+                    if (movie != null && movie.getmPref().equals(Movie.PREFERENCE.LIKED)) {
+                        movieList.add(movie);
+                    }
+                }
+                if (movieList.size() > 0) {
+                    movieListAdapter.setMovies(movieList);
+                }
+                movieListAdapter.notifyDataSetChanged();
+                hideLoadingIcon();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Timber.e(TAG, databaseError.getMessage());
+            }
+        };
+        moviesListRef.addValueEventListener(valueEventListener);
+    }
+
+    /**
+     * Show the loading icon
+     */
+    public void showLoadingIcon() {
+        loadingIcon.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Hide the loading icon
+     */
+    public void hideLoadingIcon() {
+        loadingIcon.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * On clicking on a poster, the MovieDetailsFragment is loaded showing more options
+     *
+     * @param movie
+     * @param position
+     */
     @Override
     public void onClick(Movie movie, int position) {
         Toast.makeText(getContext(), "Clicked on the movie:" + movie.getmTitle(), Toast.LENGTH_SHORT).show();
@@ -159,16 +271,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
         switch (bundleTypeStr) {
             case "HISTORY":
-                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
-                movieDetailsPagerAdapter.setList(historyMovies);
-                break;
             case "DISCOVER":
-                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
-                movieDetailsPagerAdapter.setList(discoveredMovies);
-                break;
             case "WATCHLIST":
                 Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
-                movieDetailsPagerAdapter.setList(watchlistMovies);
+                movieDetailsPagerAdapter.setList(movieList);
                 break;
             default:
                 Timber.d("The switch case has come into default");

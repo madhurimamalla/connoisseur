@@ -32,9 +32,6 @@ public class MovieDetailsViewModel extends ViewModel {
     public void setMovieLiveData(Movie movie) {
         mMovie = movie;
         mPlotSummary.setValue(movie.getmOverview());
-        //TODO DO remove this hardcoded value once the real data flows through.
-        mPlotSummary.setValue("Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency."
-                + "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.");
         mTitle.setValue(movie.getmTitle());
         mPosterPath.setValue(movie.getmPoster());
         Timber.d("Setting the known data....");
