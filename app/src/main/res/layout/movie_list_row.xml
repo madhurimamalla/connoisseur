@@ -15,7 +15,6 @@
         android:id="@+id/movie_item_poster"
         android:layout_width="120dp"
         android:layout_height="180dp"
-        android:background="@drawable/andhdhun2"
         android:contentDescription="@string/content_description"
         android:scaleType="centerCrop" />
 </RelativeLayout>

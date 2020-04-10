@@ -17,7 +17,6 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private FeaturePagerAdapter featurePagerAdapter;
-
     private final static String TAG = HomeFragment.class.getSimpleName();
 
     public View onCreateView(@NonNull LayoutInflater inflater,

@@ -8,10 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.List;
-
 import mmalla.android.com.connoisseur.R;
-import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
 
 public class FeaturePagerAdapter extends FragmentPagerAdapter {
@@ -21,16 +18,10 @@ public class FeaturePagerAdapter extends FragmentPagerAdapter {
     private static final int[] FEATURE_TITLES = new int[]{R.string.discover, R.string.watchlist, R.string.history};
     private final static String FEATURE = "FEATURE";
     private Context mContext;
-    private List<Movie> sentMovieList;
 
     public FeaturePagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
-    }
-
-    public void setMovies(List<Movie> movies) {
-        sentMovieList = movies;
-        Timber.d("The movies are set!");
     }
 
     @Override

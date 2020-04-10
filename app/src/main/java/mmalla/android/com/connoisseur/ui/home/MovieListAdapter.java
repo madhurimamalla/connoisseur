@@ -25,11 +25,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     private List<Movie> mMoviesList = new ArrayList<>();
     private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w780/";
 
-    private final MovieListAdapter.MoviesListOnClickListener mListener;
 
-    public MovieListAdapter(@NonNull Context context, List<Movie> moviesList, MoviesListOnClickListener listener) {
+    public MovieListAdapter(@NonNull Context context, List<Movie> moviesList) {
         mContext = context;
-        mListener = listener;
         mMoviesList = moviesList;
     }
 
@@ -53,13 +51,13 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         ImageView movie_thumbnail = (ImageView) movieViewHolder.movie_thumbnail.findViewById(R.id.movie_item_poster);
         Glide.with(mContext.getApplicationContext()).load(IMAGE_MOVIE_URL + movie.getmPoster()).into(movie_thumbnail);
 
-        movie_thumbnail.setOnClickListener(new View.OnClickListener() {
+/*        movie_thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Movie movie1 = mMoviesList.get(movieViewHolder.getAdapterPosition());
                 mListener.onClick(movie1, movieViewHolder.getAdapterPosition());
             }
-        });
+        });*/
     }
 
     public void setMovies(List<Movie> movies) {

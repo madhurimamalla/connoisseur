@@ -295,10 +295,6 @@ public class FeatureActivity extends BaseActivity {
                 }
             }
 
-            /**
-             * TODO Refine the discovered movies to remove any disliked/liked movies
-             */
-
             Timber.d(TAG, "Iterating through the discovered movie list to remove the disliked & liked movies");
             for (Movie m : likedMovies
             ) {

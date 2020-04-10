@@ -136,5 +136,6 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="title_activity_splash_new">SplashActivityNew</string>
+    <string name="no_movies_present_try_adding_a_few">No movies present. Try adding a few.</string>
 
 </resources>
