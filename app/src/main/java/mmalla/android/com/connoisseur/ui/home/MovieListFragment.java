@@ -23,7 +23,7 @@ import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
 
-public class MovieListFragment extends Fragment {
+public class MovieListFragment extends Fragment implements MovieListAdapter.MoviesListOnClickListener {
 
     private final static String TAG = MovieListFragment.class.getSimpleName();
 
@@ -36,6 +36,7 @@ public class MovieListFragment extends Fragment {
     private ViewPager mMoviesDetailsViewPager;
     private View loadingIcon;
     private View noMoviesMessageView;
+    private List<Movie> moviesList = new ArrayList<Movie>();
 
     private MovieListAdapter movieListAdapter = null;
 
@@ -68,6 +69,8 @@ public class MovieListFragment extends Fragment {
         movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
         movieListViewModel.setIndex(bundleTypeStr);
 
+        movieListAdapter = new MovieListAdapter(getContext(), this);
+
         /**
          * Adjusting the number of items on the screen based on the DisplayMetrics and scaling factor
          */
@@ -79,13 +82,16 @@ public class MovieListFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
+        showLoadingIcon();
 
         movieListViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
-                showLoadingIcon();
-                movieListAdapter = new MovieListAdapter(getContext(), movies);
+                movieListAdapter.setMovies(movies);
+                Timber.d("Setting the movies in the MovieListAdapter...");
+                moviesList = movies;
                 recyclerView.setAdapter(movieListAdapter);
+                Timber.d("Loading the recyclerView with the MovieListAdapter...");
                 hideLoadingIcon();
             }
         });
@@ -117,37 +123,35 @@ public class MovieListFragment extends Fragment {
         loadingIcon.setVisibility(View.INVISIBLE);
     }
 
-//
-//    /**
-//     * On clicking on a poster, the MovieDetailsFragment is loaded showing more options
-//     *
-//     * @param movie
-//     * @param position
-//     */
-//    @Override
-//    public void onClick(Movie movie, int position) {
-//        Toast.makeText(getContext(), "Clicked on the movie:" + movie.getmTitle(), Toast.LENGTH_SHORT).show();
-//        Timber.d("The movie clicked here is: " + movie.getmId() + ": and title is: " + movie.getmTitle());
-//        Timber.d("The movie clicked was at position: " + position + " in the movielist of type: " + bundleTypeStr);
-//
-//        /**
-//         * Get the discovered movie list and set the adapter list so it can display in the viewpager
-//         * Keep the starting position of the viewPager based on which movie was clicked
-//         */
-//        MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
-//        switch (bundleTypeStr) {
-//            case "HISTORY":
-//            case "DISCOVER":
-//            case "WATCHLIST":
-//                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
-//                movieDetailsPagerAdapter.setList(movieList);
-//                break;
-//            default:
-//                Timber.d("The switch case has come into default");
-//                movieDetailsPagerAdapter.setList(movieList);
-//                break;
-//        }
-//        mMoviesDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
-//        mMoviesDetailsViewPager.setCurrentItem(position);
-//    }
+    /**
+     * On clicking on a poster, the MovieDetailsFragment is loaded showing more options
+     *
+     * @param movie
+     * @param position
+     */
+    @Override
+    public void onClick(Movie movie, int position) {
+        Timber.d("The movie clicked here is: " + movie.getmId() + ": and title is: " + movie.getmTitle());
+        Timber.d("The movie clicked was at position: " + position + " in the movielist of type: " + bundleTypeStr);
+
+        /**
+         * Get the discovered movie list and set the adapter list so it can display in the viewpager
+         * Keep the starting position of the viewPager based on which movie was clicked
+         */
+        MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
+        switch (bundleTypeStr) {
+            case "HISTORY":
+            case "DISCOVER":
+            case "WATCHLIST":
+                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
+                movieDetailsPagerAdapter.setList(moviesList);
+                break;
+            default:
+                Timber.d("The switch case has come into default");
+                movieDetailsPagerAdapter.setList(moviesList);
+                break;
+        }
+        mMoviesDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
+        mMoviesDetailsViewPager.setCurrentItem(position);
+    }
 }
