@@ -137,6 +137,7 @@
                 android:autofillHints="Fill in your password here"
                 android:background="@drawable/password_group"
                 android:hint="@string/hint_password"
+                android:inputType="textPassword"
                 android:padding="8dp"
                 android:textAlignment="center"
                 app:fontFamily="@font/montserrat" />

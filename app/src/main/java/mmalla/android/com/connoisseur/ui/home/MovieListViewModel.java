@@ -5,8 +5,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
-import android.os.AsyncTask;
 
+import android.os.AsyncTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -24,7 +24,6 @@ public class MovieListViewModel extends ViewModel {
     private MutableLiveData<List<Movie>> mMoviesList;
     private MutableLiveData<String> mTypeOfList = new MutableLiveData<>();
     private MovieRepository movieRepository = new MovieRepository();
-
     /**
      * This method is used to set the type of list : WATCHLIST, HISTORY, DISCOVER here
      *

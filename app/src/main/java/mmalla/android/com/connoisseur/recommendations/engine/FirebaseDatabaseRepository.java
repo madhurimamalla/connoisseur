@@ -9,25 +9,24 @@ import java.util.List;
 
 public abstract class FirebaseDatabaseRepository<Model> {
 
-    protected DatabaseReference databaseReference;
-    protected FirebaseDatabaseRepositoryCallback<Model> firebaseCallback;
+    private DatabaseReference databaseReference;
+    private FirebaseDatabaseRepositoryCallback<Model> firebaseCallback;
     private BaseValueEventListener listener;
     private FirebaseMapper mapper;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     private final static String USERS = "users";
     private final static String MOVIES = "movies";
 
     protected abstract String getRootNode();
 
     public FirebaseDatabaseRepository(FirebaseMapper mapper) {
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference().child(USERS).child(mUser.getUid()).child(MOVIES).getRef();
         this.mapper = mapper;
     }
 
+    @SuppressWarnings("unchecked")
     public void addListener(FirebaseDatabaseRepositoryCallback<Model> firebaseCallback) {
         this.firebaseCallback = firebaseCallback;
         listener = new BaseValueEventListener(mapper, firebaseCallback);

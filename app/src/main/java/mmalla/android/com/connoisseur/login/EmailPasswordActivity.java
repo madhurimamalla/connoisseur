@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Space;
@@ -75,6 +76,12 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
+        /**
+         * Make sure the password field is hidden
+         */
+        EditText passwordEditText = (EditText) findViewById(R.id.fieldPassword_new);
+        passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
     }
 
@@ -242,6 +249,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
             findViewById(R.id.newcontent_two).setVisibility(View.VISIBLE);
             findViewById(R.id.newcontent_two).setEnabled(user.isEmailVerified());
+            findViewById(R.id.new_ui_flow).setVisibility(View.VISIBLE);
             disableOldUI();
             findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
 
@@ -253,6 +261,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
             findViewById(R.id.signedInButtons).setVisibility(View.GONE);
+            findViewById(R.id.new_ui_flow).setVisibility(View.GONE);
             disableOldUI();
         }
     }
