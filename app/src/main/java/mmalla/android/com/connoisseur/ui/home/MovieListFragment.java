@@ -2,7 +2,9 @@ package mmalla.android.com.connoisseur.ui.home;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -10,15 +12,17 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
@@ -27,17 +31,20 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
     private final static String TAG = MovieListFragment.class.getSimpleName();
 
+    @BindView(R.id.view_pager_movies_details)
+    ViewPager mMoviesDetailsViewPager;
+
+    @BindView(R.id.loading_icon)
+    View loadingIcon;
+
+    @BindView(R.id.no_movies_message)
+    View noMoviesMessageView;
+
     private MovieListViewModel movieListViewModel;
     private final static String FEATURE = "FEATURE";
     private int SCALING_FACTOR = 120;
-
     private String bundleTypeStr;
-
-    private ViewPager mMoviesDetailsViewPager;
-    private View loadingIcon;
-    private View noMoviesMessageView;
     private List<Movie> moviesList = new ArrayList<Movie>();
-
     private MovieListAdapter movieListAdapter = null;
 
     public MovieListFragment() {
@@ -49,7 +56,8 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        Timber.d(TAG + "The movieListViewModel is set here...");
+        Timber.d(TAG, "The movieListViewModel is set here...");
+
         movieListViewModel =
                 ViewModelProviders.of(this).get(MovieListViewModel.class);
 
@@ -60,11 +68,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
          */
         View rootView = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
-        final TextView textView = (TextView) rootView.findViewById(R.id.text_feature);
-        mMoviesDetailsViewPager = rootView.findViewById(R.id.view_pager_movies_details);
-
-        noMoviesMessageView = (View) rootView.findViewById(R.id.no_movies_message);
-        loadingIcon = (View) rootView.findViewById(R.id.loading_icon);
+        /**
+         * Binding the views using ButterKnife
+         */
+        ButterKnife.bind(this, rootView);
 
         movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
         movieListViewModel.setIndex(bundleTypeStr);
@@ -88,10 +95,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 movieListAdapter.setMovies(movies);
-                Timber.d("Setting the movies in the MovieListAdapter...");
+                Timber.d(TAG, "Setting the movies in the MovieListAdapter...");
                 moviesList = movies;
                 recyclerView.setAdapter(movieListAdapter);
-                Timber.d("Loading the recyclerView with the MovieListAdapter...");
+                Timber.d(TAG, "Loading the recyclerView with the MovieListAdapter...");
                 hideLoadingIcon();
             }
         });
@@ -143,11 +150,11 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
             case "HISTORY":
             case "DISCOVER":
             case "WATCHLIST":
-                Timber.d("The tab on which it was clicked is : " + bundleTypeStr);
+                Timber.d(TAG, "The tab on which it was clicked is : " + bundleTypeStr);
                 movieDetailsPagerAdapter.setList(moviesList);
                 break;
             default:
-                Timber.d("The switch case has come into default");
+                Timber.d(TAG, "The switch case has come into default");
                 movieDetailsPagerAdapter.setList(moviesList);
                 break;
         }

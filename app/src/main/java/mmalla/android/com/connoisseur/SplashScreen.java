@@ -2,7 +2,9 @@ package mmalla.android.com.connoisseur;
 
 import android.content.Intent;
 import android.os.Handler;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 
 import mmalla.android.com.connoisseur.login.EmailPasswordActivity;

@@ -4,7 +4,9 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -19,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.BaseActivity;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.SplashActivity;
@@ -31,11 +35,20 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
 
     private static final String TAG = EmailPasswordActivity.class.getSimpleName();
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
-    private EditText mEmailField;
-    private EditText mPasswordField;
-    private Space mSpace;
+    @BindView(R.id.status)
+    TextView mStatusTextView;
+
+    @BindView(R.id.detail)
+    TextView mDetailTextView;
+
+    @BindView(R.id.fieldEmail_new)
+    EditText mEmailField;
+
+    @BindView(R.id.fieldPassword_new)
+    EditText mPasswordField;
+
+    @BindView(R.id.spacer)
+    Space mSpace;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -56,13 +69,10 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
          */
         Timber.plant(new Timber.DebugTree());
 
-        // Views
-        mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
-        mEmailField = findViewById(R.id.fieldEmail_new);
-        mPasswordField = findViewById(R.id.fieldPassword_new);
-        mSpace = findViewById(R.id.spacer);
-
+        /**
+         * Setup needed for Butter Knife
+         */
+        ButterKnife.bind(this);
 
         // Buttons
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
@@ -80,8 +90,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         /**
          * Make sure the password field is hidden
          */
-        EditText passwordEditText = (EditText) findViewById(R.id.fieldPassword_new);
-        passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        mPasswordField.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
     }
 

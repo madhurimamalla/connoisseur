@@ -12,15 +12,29 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SplashActivityNew extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
     private final static String TAG = SplashActivityNew.class.getSimpleName();
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     @SuppressLint("ResourceType")
     @Override
@@ -36,7 +50,11 @@ public class SplashActivityNew extends BaseActivity {
             getWindow().setReenterTransition(explode);
         }
         setContentView(R.layout.activity_splash_new);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        /**
+         * Binding views using ButterKnife
+         */
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         /**
          * TODO Remove if it's not needed.
@@ -52,8 +70,6 @@ public class SplashActivityNew extends BaseActivity {
         });
         */
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(

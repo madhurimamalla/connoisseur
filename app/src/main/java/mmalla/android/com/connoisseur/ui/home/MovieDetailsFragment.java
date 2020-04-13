@@ -2,11 +2,16 @@ package mmalla.android.com.connoisseur.ui.home;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +21,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
@@ -37,6 +44,24 @@ public class MovieDetailsFragment extends Fragment {
     private Movie movie;
 
     private MovieDetailsViewModel movieDetailsViewModel;
+
+    @BindView(R.id.bottom_sheet)
+    View viewBottom;
+
+    @BindView(R.id.movie_poster_discover_screen)
+    ImageView imageView;
+
+    @BindView(R.id.plot_summary)
+    TextView mPlotSummary;
+
+    @BindView(R.id.like_movie_button)
+    ImageView likedMovieView;
+
+    @BindView(R.id.add_to_watchlist)
+    ImageView watchlistView;
+
+    @BindView(R.id.dislike_movie_button)
+    ImageView dislikedMovieView;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -88,16 +113,14 @@ public class MovieDetailsFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_movie_details_old, container, false);
 
-        final View viewBottom = rootView.findViewById(R.id.bottom_sheet);
-        final ImageView imageView = (ImageView) rootView.findViewById(R.id.movie_poster_discover_screen);
-        final TextView mPlotSummary = (TextView) rootView.findViewById(R.id.plot_summary);
         /**
-         * The button clicks need to be recorded here
+         * Binding view using ButterKnife
          */
-        final ImageView watchlistView = (ImageView) rootView.findViewById(R.id.add_to_watchlist);
-        final ImageView likedMovieView = (ImageView) rootView.findViewById(R.id.like_movie_button);
-        final ImageView dislikedMovieView = (ImageView) rootView.findViewById(R.id.dislike_movie_button);
+        ButterKnife.bind(this, rootView);
 
+        /**
+         * Configurations needed for the BottomSheetBehavior
+         */
         mBottomSheetBehavior = BottomSheetBehavior.from(viewBottom);
         mBottomSheetBehavior.setHideable(true);
 
