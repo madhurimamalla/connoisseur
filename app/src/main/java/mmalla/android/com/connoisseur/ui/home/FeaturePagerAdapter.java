@@ -2,14 +2,13 @@ package mmalla.android.com.connoisseur.ui.home;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import mmalla.android.com.connoisseur.R;
-import timber.log.Timber;
 
 public class FeaturePagerAdapter extends FragmentPagerAdapter {
     private static final String TAG = FeaturePagerAdapter.class.getSimpleName();

@@ -1,6 +1,6 @@
 package mmalla.android.com.connoisseur.recommendations.engine;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
