@@ -7,6 +7,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import android.os.AsyncTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -24,6 +25,7 @@ public class MovieListViewModel extends ViewModel {
     private MutableLiveData<List<Movie>> mMoviesList;
     private MutableLiveData<String> mTypeOfList = new MutableLiveData<>();
     private MovieRepository movieRepository = new MovieRepository();
+
     /**
      * This method is used to set the type of list : WATCHLIST, HISTORY, DISCOVER here
      *
@@ -50,7 +52,6 @@ public class MovieListViewModel extends ViewModel {
                     loadMovies(Movie.PREFERENCE.WISHLISTED);
                     break;
                 case "DISCOVER":
-                    // TODO
                     loadMovies(Movie.PREFERENCE.IGNORED);
                     break;
             }
@@ -150,6 +151,12 @@ public class MovieListViewModel extends ViewModel {
             return "This is the " + input.toLowerCase() + " fragment !";
         }
     });
+
+    public void initiateRefresh() {
+        if (mTypeOfList.getValue().equals("DISCOVER")) {
+            loadMovies(Movie.PREFERENCE.IGNORED);
+        }
+    }
 
     /**
      * Description: fetchInterestingMovies can only fetch 20 movies at a time for a given movie Id.
