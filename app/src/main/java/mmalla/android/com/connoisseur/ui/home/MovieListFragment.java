@@ -1,6 +1,6 @@
 package mmalla.android.com.connoisseur.ui.home;
 
-import androidx.lifecycle.Observer;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -47,6 +47,13 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     @BindView(R.id.swipe_refresh_list)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    @BindView(R.id.movies_recyclerview)
+    RecyclerView recyclerView;
+
+    @Nullable
+    @BindView(R.id.popular_switch)
+    SwitchCompat mSwitchCompat;
+
     private MovieListViewModel movieListViewModel;
     private final static String FEATURE = "FEATURE";
     private String bundleTypeStr;
@@ -88,9 +95,20 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
         if (bundleTypeStr.equals("DISCOVER") && mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setEnabled(true);
-            mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
 
             mSwipeRefreshLayout.setOnRefreshListener(() -> initiateRefresh());
+
+            mSwitchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    buttonView.setEnabled(true);
+                    Timber.d("Opting to get Popular movies....");
+                    populatePopularMovies();
+                } else {
+                    Timber.d("Getting movies from recommendation algorithm");
+                    initiateRefresh();
+                }
+            });
         }
 
         movieListAdapter = new MovieListAdapter(getContext(), this);
@@ -100,7 +118,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         int SCALING_FACTOR = 120;
         int noOfColumns = (int) (dpWidth / SCALING_FACTOR);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), noOfColumns, GridLayoutManager.VERTICAL, false);
-        final RecyclerView recyclerView = rootView.findViewById(R.id.movies_recyclerview);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
@@ -116,6 +133,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         });
 
         return rootView;
+    }
+
+    private void populatePopularMovies() {
+        movieListViewModel.getPopularMovies();
     }
 
     private void initiateRefresh() {
@@ -158,6 +179,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     public void onClick(Movie movie, int position) {
         Timber.d("The movie clicked here is: " + movie.getmId() + ": and title is: " + movie.getmTitle());
         Timber.d("The movie clicked was at position: " + position + " in the movie list of type: " + bundleTypeStr);
+
+        if (mSwitchCompat != null) {
+            mSwitchCompat.setVisibility(View.INVISIBLE);
+        }
 
         MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
         switch (bundleTypeStr) {

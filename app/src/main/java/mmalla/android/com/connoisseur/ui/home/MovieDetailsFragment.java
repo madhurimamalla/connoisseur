@@ -190,8 +190,8 @@ public class MovieDetailsFragment extends Fragment {
                 watchlistView.setEnabled(false);
                 likedMovieView.setAlpha((float) 1.0);
                 dislikedMovieView.setAlpha((float) 1.0);
-                likedMovieView.setEnabled(false);
-                dislikedMovieView.setEnabled(false);
+                likedMovieView.setVisibility(View.GONE);
+                dislikedMovieView.setVisibility(View.GONE);
                 Timber.d(TAG, getString(R.string.Disabling_the_liked_dislike_buttons));
             }
         });
@@ -203,9 +203,9 @@ public class MovieDetailsFragment extends Fragment {
                 Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_liked_list, Toast.LENGTH_LONG).show();
                 watchlistView.setAlpha((float) 1.0);
                 dislikedMovieView.setAlpha((float) 1.0);
-                watchlistView.setEnabled(false);
-                dislikedMovieView.setEnabled(false);
-                watchlistView.setEnabled(false);
+                likedMovieView.setEnabled(true);
+                dislikedMovieView.setVisibility(View.GONE);
+                watchlistView.setVisibility(View.GONE);
                 Timber.d(TAG, getString(R.string.Disabling_the_watchlist_dislike_buttons));
             }
         });
@@ -215,11 +215,11 @@ public class MovieDetailsFragment extends Fragment {
             public void onClick(View v) {
                 movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED);
                 Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_dislike_list, Toast.LENGTH_LONG).show();
-                dislikedMovieView.setEnabled(false);
+                dislikedMovieView.setEnabled(true);
                 likedMovieView.setAlpha((float) 1.0);
                 watchlistView.setAlpha((float) 1.0);
-                likedMovieView.setEnabled(false);
-                watchlistView.setEnabled(false);
+                likedMovieView.setVisibility(View.GONE);
+                watchlistView.setVisibility(View.GONE);
                 Timber.d(TAG, getString(R.string.Disabling_the_liked_watchlist_buttons));
             }
         });

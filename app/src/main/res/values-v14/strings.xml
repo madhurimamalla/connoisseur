@@ -3,4 +3,5 @@
     <string name="Rating_Title">Rating</string>
     <string name="released_date">Released date</string>
     <string name="enter_your_username_here">Enter your username here</string>
+    <string name="popular_switch_title">Popular</string>
 </resources>

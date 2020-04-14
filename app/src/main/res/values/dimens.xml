@@ -11,8 +11,8 @@
     <dimen name="text_margin_year_of_release">4dp</dimen>
     <dimen name="wishlistcard_text_margin">8dp</dimen>
 
-    <dimen name="recyclerview_item_horizontal_margin">4dp</dimen>
-    <dimen name="recyclerview_item_vertical_margin">4dp</dimen>
+    <dimen name="recyclerview_item_horizontal_margin">2dp</dimen>
+    <dimen name="recyclerview_item_vertical_margin">2dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

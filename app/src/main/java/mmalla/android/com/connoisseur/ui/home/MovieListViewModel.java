@@ -1,9 +1,7 @@
 package mmalla.android.com.connoisseur.ui.home;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import android.os.AsyncTask;
@@ -41,7 +39,6 @@ public class MovieListViewModel extends ViewModel {
      * @return
      */
     public LiveData<List<Movie>> getMovies() {
-
         if (mMoviesList == null) {
             mMoviesList = new MutableLiveData<List<Movie>>();
             switch (mTypeOfList.getValue()) {
@@ -59,6 +56,11 @@ public class MovieListViewModel extends ViewModel {
         return mMoviesList;
     }
 
+    /**
+     * The method used to load Movies in the feature tabs
+     *
+     * @param mPref
+     */
     private void loadMovies(final Movie.PREFERENCE mPref) {
         movieRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Movie>() {
             @Override
@@ -102,14 +104,7 @@ public class MovieListViewModel extends ViewModel {
                             e.printStackTrace();
                         }
                     } else {
-                        try {
-                            discoveredMovies = new fetchMovies().execute("").get();
-                            Timber.d(TAG, "Discovered movies are here!");
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        discoveredMovies = loadPopularMovies();
                     }
                     /**
                      * Remove the liked/disliked movies
@@ -137,20 +132,34 @@ public class MovieListViewModel extends ViewModel {
         });
     }
 
+    private List<Movie> loadPopularMovies() {
+        List<Movie> popularMovies = new ArrayList<>();
+        try {
+            popularMovies = new fetchPopularMovies().execute("").get();
+            Timber.d(TAG, "Popular movies are here!");
+            return popularMovies;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return popularMovies;
+    }
+
     @Override
     protected void onCleared() {
         movieRepository.removeListener();
     }
 
     /**
-     * This the string shown in mText changes according to the index
+     * This method is used to retrieve the popular movies
      */
-    private LiveData<String> mText = Transformations.map(mTypeOfList, new Function<String, String>() {
-        @Override
-        public String apply(String input) {
-            return "This is the " + input.toLowerCase() + " fragment !";
+    public void getPopularMovies() {
+        if (mTypeOfList.getValue().equals("DISCOVER")) {
+            Timber.d("Getting popular movies.....");
+            mMoviesList.setValue(loadPopularMovies());
         }
-    });
+    }
 
     public void initiateRefresh() {
         if (mTypeOfList.getValue().equals("DISCOVER")) {
@@ -185,7 +194,7 @@ public class MovieListViewModel extends ViewModel {
     /**
      * Fetch Popular movies
      */
-    class fetchMovies extends AsyncTask<String, Void, List<Movie>> {
+    class fetchPopularMovies extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
         protected List<Movie> doInBackground(String... strings) {
