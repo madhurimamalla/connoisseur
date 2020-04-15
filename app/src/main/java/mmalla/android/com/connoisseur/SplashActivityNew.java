@@ -12,11 +12,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +27,7 @@ import butterknife.ButterKnife;
 public class SplashActivityNew extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private FirebaseAuth mAuth;
 
     private final static String TAG = SplashActivityNew.class.getSimpleName();
 
@@ -56,6 +60,11 @@ public class SplashActivityNew extends BaseActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        /**
+         * Retrieving mAuth from Firebase
+         */
+        mAuth = FirebaseAuth.getInstance();
         /**
          * TODO Remove if it's not needed.
          */
@@ -81,6 +90,12 @@ public class SplashActivityNew extends BaseActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        /**
+         * Setting the user's email address in the navigational drawer
+         */
+        View headerView =  navigationView.getHeaderView(0);
+        TextView tv = (TextView) headerView.findViewById(R.id.emailAddressTv);
+        tv.setText(mAuth.getCurrentUser().getEmail());
     }
 
     @Override
