@@ -1,12 +1,10 @@
 package mmalla.android.com.connoisseur.ui.home;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -45,9 +43,6 @@ public class MovieDetailsFragment extends Fragment {
 
     private MovieDetailsViewModel movieDetailsViewModel;
 
-    @BindView(R.id.bottom_sheet)
-    View viewBottom;
-
     @BindView(R.id.movie_poster_discover_screen)
     ImageView imageView;
 
@@ -62,6 +57,12 @@ public class MovieDetailsFragment extends Fragment {
 
     @BindView(R.id.dislike_movie_button)
     ImageView dislikedMovieView;
+
+    @BindView(R.id.movie_details_title)
+    TextView movieDetailTitle;
+
+    @BindView(R.id.movie_rating_value)
+    TextView movieRatingValue;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -111,7 +112,7 @@ public class MovieDetailsFragment extends Fragment {
          */
         movieDetailsViewModel.setMovieLiveData(movie);
 
-        View rootView = inflater.inflate(R.layout.fragment_movie_details_old, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_details_movie_new, container, false);
 
         /**
          * Binding view using ButterKnife
@@ -119,68 +120,19 @@ public class MovieDetailsFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         /**
-         * Configurations needed for the BottomSheetBehavior
-         */
-        mBottomSheetBehavior = BottomSheetBehavior.from(viewBottom);
-        mBottomSheetBehavior.setHideable(true);
-
-        /**
          * Glide the image rendering!
          */
-        movieDetailsViewModel.getPosterPath().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                Glide.with(getActivity().getApplicationContext()).load(IMAGE_MOVIE_URL + s).into(imageView);
-            }
-        });
+        movieDetailsViewModel.getPosterPath().observe(this, s ->
+                Glide.with(getActivity().getApplicationContext())
+                        .load(IMAGE_MOVIE_URL + s).into(imageView));
 
-        movieDetailsViewModel.getMovieSummary().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                mPlotSummary.setText(s);
-            }
-        });
+        movieDetailsViewModel.getMovieTitle().observe(this, s -> movieDetailTitle.setText(s));
 
+        movieDetailsViewModel.getMovieSummary().observe(this, s ->
+                mPlotSummary.setText("Plot Summary: " + "\n" + s));
 
-        imageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                return true;
-            }
-        });
+        movieDetailsViewModel.getRating().observe(this, s -> movieRatingValue.setText(s));
 
-        /**
-         * The options become invisible as we pull the plot summary drawer
-         */
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int i) {
-                switch (i) {
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        likedMovieView.setVisibility(View.INVISIBLE);
-                        dislikedMovieView.setVisibility(View.INVISIBLE);
-                        watchlistView.setVisibility(View.INVISIBLE);
-                        break;
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                    case BottomSheetBehavior.STATE_DRAGGING:
-                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                    default:
-                        likedMovieView.setVisibility(View.VISIBLE);
-                        dislikedMovieView.setVisibility(View.VISIBLE);
-                        watchlistView.setVisibility(View.VISIBLE);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View view, float v) {
-                likedMovieView.setVisibility(View.INVISIBLE);
-                dislikedMovieView.setVisibility(View.INVISIBLE);
-                watchlistView.setVisibility(View.INVISIBLE);
-            }
-        });
 
         watchlistView.setOnClickListener(new View.OnClickListener() {
             @Override

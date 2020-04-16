@@ -38,6 +38,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mmalla.android.com.connoisseur.login.EmailPasswordActivity" />
         </activity>
+
+        <activity android:name=".ui.home.MovieDetailBaseActivity"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SplashActivityNew"/>
+        </activity>
+
         <activity
             android:name=".features.FeatureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

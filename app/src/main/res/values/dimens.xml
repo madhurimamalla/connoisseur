@@ -14,6 +14,18 @@
     <dimen name="recyclerview_item_horizontal_margin">2dp</dimen>
     <dimen name="recyclerview_item_vertical_margin">2dp</dimen>
 
+    <!-- Dimens required for the Movie Detail view -->
+    <dimen name="photo_placeholder_height">300dp</dimen>
+    <dimen name="detail_inner_horiz_margin">16dp</dimen>
+    <dimen name="detail_metabar_vert_padding">16dp</dimen>
+    <dimen name="detail_metabar_title_bottom_padding">4dp</dimen>
+    <dimen name="detail_title_text_size">28sp</dimen>
+    <dimen name="detail_body_text_size">22sp</dimen>
+    <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
+    <dimen name="detail_body_bottom_margin">88dp</dimen>
+
+
+
     <!--
 Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout

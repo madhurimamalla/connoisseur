@@ -3,6 +3,7 @@ package mmalla.android.com.connoisseur.ui.home;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -98,6 +100,9 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
             mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
 
             mSwipeRefreshLayout.setOnRefreshListener(() -> initiateRefresh());
+            if (mSwitchCompat != null) {
+                mSwitchCompat.setVisibility(View.VISIBLE);
+            }
 
             mSwitchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
@@ -109,6 +114,7 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
                     initiateRefresh();
                 }
             });
+
         }
 
         movieListAdapter = new MovieListAdapter(getContext(), this);
@@ -184,21 +190,26 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
             mSwitchCompat.setVisibility(View.INVISIBLE);
         }
 
-        MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
+        //MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
         switch (bundleTypeStr) {
             case "HISTORY":
             case "DISCOVER":
             case "WATCHLIST":
                 Timber.d(TAG, "The tab on which it was clicked is : %s", bundleTypeStr);
-                movieDetailsPagerAdapter.setList(moviesList);
+                //movieDetailsPagerAdapter.setList(moviesList);
                 break;
             default:
                 Timber.d(TAG, "The switch case has come into default");
-                movieDetailsPagerAdapter.setList(moviesList);
+                //movieDetailsPagerAdapter.setList(moviesList);
                 break;
         }
-        mMoviesDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
-        mMoviesDetailsViewPager.setCurrentItem(position);
+        //mMoviesDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
+        //mMoviesDetailsViewPager.setCurrentItem(position);
+
+        Intent movieDetailsIntent = new Intent(getActivity(), MovieDetailBaseActivity.class);
+        movieDetailsIntent.putExtra("CLICK_POSITION", position);
+        movieDetailsIntent.putParcelableArrayListExtra("LIST_MOVIES", (ArrayList<? extends Parcelable>) new ArrayList<Movie>(this.moviesList));
+        startActivity(movieDetailsIntent);
     }
 
     @Override
