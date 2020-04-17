@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Rating_Title">Rating</string>
+    <string name="Rating_Title">Rating (Votes)</string>
     <string name="released_date">Released date</string>
     <string name="enter_your_username_here">Enter your username here</string>
     <string name="popular_switch_title">Popular</string>
+    <string name="date_of_release">Date of release</string>
+    <string name="metabar_consisting_of_information_about_the_movie">Metabar consisting of information about the movie</string>
+    <string name="movie_name">Movie name</string>
+    <string name="movie_tagline">Movie tagline</string>
 </resources>

@@ -16,6 +16,7 @@ public class Movie implements Parcelable {
         mReleaseYear = in.readString();
         mRating = in.readString();
         mOverview = in.readString();
+        mVoteCount = in.readString();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -43,6 +44,7 @@ public class Movie implements Parcelable {
         dest.writeString(mReleaseYear);
         dest.writeString(mRating);
         dest.writeString(mOverview);
+        dest.writeString(mVoteCount);
     }
 
     public enum PREFERENCE {
@@ -56,6 +58,24 @@ public class Movie implements Parcelable {
     private String mReleaseYear;
     private String mOverview;
     private String mRating;
+    private String mTagline;
+    private String mVoteCount;
+
+    public String getmVoteCount() {
+        return mVoteCount;
+    }
+
+    public void setmVoteCount(String mVoteCount) {
+        this.mVoteCount = mVoteCount;
+    }
+
+    public String getmTagline() {
+        return mTagline;
+    }
+
+    public void setmTagline(String mTagline) {
+        this.mTagline = mTagline;
+    }
 
     public String getmTitle() {
         return mTitle;

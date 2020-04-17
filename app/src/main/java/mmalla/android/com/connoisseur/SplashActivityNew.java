@@ -18,16 +18,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mmalla.android.com.connoisseur.recommendations.engine.DatabaseUtils;
+import timber.log.Timber;
 
 public class SplashActivityNew extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
+    private DatabaseUtils databaseUtils;
 
     private final static String TAG = SplashActivityNew.class.getSimpleName();
 
@@ -65,19 +71,8 @@ public class SplashActivityNew extends BaseActivity {
          * Retrieving mAuth from Firebase
          */
         mAuth = FirebaseAuth.getInstance();
-        /**
-         * TODO Remove if it's not needed.
-         */
-        /*
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
+
+        databaseUtils = new DatabaseUtils();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -93,7 +88,7 @@ public class SplashActivityNew extends BaseActivity {
         /**
          * Setting the user's email address in the navigational drawer
          */
-        View headerView =  navigationView.getHeaderView(0);
+        View headerView = navigationView.getHeaderView(0);
         TextView tv = (TextView) headerView.findViewById(R.id.emailAddressTv);
         tv.setText(mAuth.getCurrentUser().getEmail());
     }
@@ -115,5 +110,55 @@ public class SplashActivityNew extends BaseActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.edit_account_details:
+                Toast.makeText(getApplicationContext(), R.string.Edit_account_details_clicked, Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.clear_movie_list:
+                if (databaseUtils.removeFullMoviesListFromTheUser(mAuth.getCurrentUser().getUid())) {
+                    Toast.makeText(getApplicationContext(), R.string.Cleared_movie_list, Toast.LENGTH_LONG).show();
+                }
+                return true;
+            case R.id.search_button:
+                SearchView searchView = (SearchView) item.getActionView();
+
+                /**
+                 * TODO Implement the search feature for future extension
+                 */
+                /**
+                 * When text is entered into the searchView, start a new SearchActivity
+                 */
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        Timber.d(TAG, "Text entered : " + s);
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        Timber.d(TAG, "Text changed : " + s);
+                        return false;
+                    }
+
+                });
+                /**
+                 * TODO When the searchView is closed, return to SplashActivity with the options
+                 */
+                searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                    @Override
+                    public boolean onClose() {
+                        return false;
+                    }
+                });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

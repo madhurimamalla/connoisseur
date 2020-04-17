@@ -115,7 +115,7 @@
     <string name="Required_error_content">Required.</string>
     <string name="Edit_account_details_clicked">Edit Account Details clicked</string>
     <string name="Cleared_movie_list">Cleared all the user preferences</string>
-    <string name="Rating_Title">Rating</string>
+    <string name="Rating_Title">Rating (Votes)</string>
     <string name="released_date">Released date</string>
     <string name="search">Search</string>
     <string name="search_option_clicked">Search option clicked!</string>
@@ -138,5 +138,9 @@
     <string name="title_activity_splash_new">SplashActivityNew</string>
     <string name="no_movies_present_try_adding_a_few">No movies present. Try adding a few.</string>
     <string name="popular_switch_title">Popular</string>
+    <string name="date_of_release">Date of release</string>
+    <string name="metabar_consisting_of_information_about_the_movie">Metabar consisting of information about the movie</string>
+    <string name="movie_name">Movie name</string>
+    <string name="movie_tagline">Movie tagline</string>
 
 </resources>

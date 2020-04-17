@@ -64,6 +64,15 @@ public class MovieDetailsFragment extends Fragment {
     @BindView(R.id.movie_rating_value)
     TextView movieRatingValue;
 
+    @BindView(R.id.movie_tagline)
+    TextView movieTagline;
+
+    @BindView(R.id.movie_year_of_release_value)
+    TextView movieReleaseYear;
+
+    @BindView(R.id.movie_vote_count)
+    TextView movie_vote_count;
+
     public MovieDetailsFragment() {
         // Required empty public constructor
     }
@@ -133,47 +142,43 @@ public class MovieDetailsFragment extends Fragment {
 
         movieDetailsViewModel.getRating().observe(this, s -> movieRatingValue.setText(s));
 
+        movieDetailsViewModel.getTagline().observe(this, s -> movieTagline.setText(s));
 
-        watchlistView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED);
-                Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_wishlist, Toast.LENGTH_LONG).show();
-                watchlistView.setEnabled(false);
-                likedMovieView.setAlpha((float) 1.0);
-                dislikedMovieView.setAlpha((float) 1.0);
-                likedMovieView.setVisibility(View.GONE);
-                dislikedMovieView.setVisibility(View.GONE);
-                Timber.d(TAG, getString(R.string.Disabling_the_liked_dislike_buttons));
-            }
+        movieDetailsViewModel.getReleaseYear().observe(this, s -> movieReleaseYear.setText(s));
+
+        movieDetailsViewModel.getVoteCount().observe(this, s -> movie_vote_count.setText("(" + s + ")"));
+
+        watchlistView.setOnClickListener(v -> {
+            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED);
+            Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_wishlist, Toast.LENGTH_LONG).show();
+            watchlistView.setEnabled(false);
+            likedMovieView.setAlpha((float) 1.0);
+            dislikedMovieView.setAlpha((float) 1.0);
+            likedMovieView.setVisibility(View.GONE);
+            dislikedMovieView.setVisibility(View.GONE);
+            Timber.d(TAG, getString(R.string.Disabling_the_liked_dislike_buttons));
         });
 
-        likedMovieView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED);
-                Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_liked_list, Toast.LENGTH_LONG).show();
-                watchlistView.setAlpha((float) 1.0);
-                dislikedMovieView.setAlpha((float) 1.0);
-                likedMovieView.setEnabled(true);
-                dislikedMovieView.setVisibility(View.GONE);
-                watchlistView.setVisibility(View.GONE);
-                Timber.d(TAG, getString(R.string.Disabling_the_watchlist_dislike_buttons));
-            }
+        likedMovieView.setOnClickListener(v -> {
+            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED);
+            Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_liked_list, Toast.LENGTH_LONG).show();
+            watchlistView.setAlpha((float) 1.0);
+            dislikedMovieView.setAlpha((float) 1.0);
+            likedMovieView.setEnabled(true);
+            dislikedMovieView.setVisibility(View.GONE);
+            watchlistView.setVisibility(View.GONE);
+            Timber.d(TAG, getString(R.string.Disabling_the_watchlist_dislike_buttons));
         });
 
-        dislikedMovieView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED);
-                Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_dislike_list, Toast.LENGTH_LONG).show();
-                dislikedMovieView.setEnabled(true);
-                likedMovieView.setAlpha((float) 1.0);
-                watchlistView.setAlpha((float) 1.0);
-                likedMovieView.setVisibility(View.GONE);
-                watchlistView.setVisibility(View.GONE);
-                Timber.d(TAG, getString(R.string.Disabling_the_liked_watchlist_buttons));
-            }
+        dislikedMovieView.setOnClickListener(v -> {
+            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED);
+            Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_dislike_list, Toast.LENGTH_LONG).show();
+            dislikedMovieView.setEnabled(true);
+            likedMovieView.setAlpha((float) 1.0);
+            watchlistView.setAlpha((float) 1.0);
+            likedMovieView.setVisibility(View.GONE);
+            watchlistView.setVisibility(View.GONE);
+            Timber.d(TAG, getString(R.string.Disabling_the_liked_watchlist_buttons));
         });
 
         return rootView;

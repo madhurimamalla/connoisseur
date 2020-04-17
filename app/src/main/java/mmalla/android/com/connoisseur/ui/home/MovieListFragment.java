@@ -131,11 +131,17 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
         movieListViewModel.getMovies().observe(this, movies -> {
             movieListAdapter.setMovies(movies);
-            Timber.d(TAG, "Setting the movies in the MovieListAdapter...");
-            moviesList = movies;
-            recyclerView.setAdapter(movieListAdapter);
-            Timber.d(TAG, "Loading the recyclerView with the MovieListAdapter...");
-            hideLoadingIcon();
+            if (movies.size() == 0) {
+                showNoMoviesTextView();
+                hideLoadingIcon();
+            } else {
+                hideNoMoviesTextView();
+                Timber.d(TAG, "Setting the movies in the MovieListAdapter...");
+                moviesList = movies;
+                recyclerView.setAdapter(movieListAdapter);
+                Timber.d(TAG, "Loading the recyclerView with the MovieListAdapter...");
+                hideLoadingIcon();
+            }
         });
 
         return rootView;
@@ -151,7 +157,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         Objects.requireNonNull(mSwipeRefreshLayout).setRefreshing(false);
     }
 
-/*
     public void showNoMoviesTextView() {
         noMoviesMessageView.setVisibility(View.VISIBLE);
     }
@@ -159,7 +164,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     public void hideNoMoviesTextView() {
         noMoviesMessageView.setVisibility(View.INVISIBLE);
     }
-*/
 
     /**
      * Show the loading icon

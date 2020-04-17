@@ -35,6 +35,8 @@ class MoviesListJsonUtils {
 
     private static final String PM_RATING = "vote_average";
 
+    private static final String PM_VOTE_COUNT = "vote_count";
+
     public static List<Movie> getSimpleMoviesInformationFromJson(String moviesJsonStr) throws JSONException {
 
         List<Movie> parsedMovieResults;
@@ -56,6 +58,7 @@ class MoviesListJsonUtils {
             movie_object.setmReleaseYear(movieData.getString(PM_YEAR_OF_RELEASE));
             movie_object.setmOverview(movieData.getString(PM_OVERVIEW));
             movie_object.setmRating(movieData.getString(PM_RATING));
+            movie_object.setmVoteCount(movieData.getString(PM_VOTE_COUNT));
             parsedMovieResults.add(movie_object);
         }
         return parsedMovieResults;

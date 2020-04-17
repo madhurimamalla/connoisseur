@@ -48,6 +48,10 @@ class MovieDetailsJsonUtils {
          */
         final String PM_VOTE_AVG = "vote_average";
 
+        final String PM_TAGLINE = "tagline";
+
+        final String PM_VOTE_COUNT = "vote_count";
+
         Movie parsedMovieDetails = new Movie();
 
         JSONObject movieJson = new JSONObject(moviesJsonStr);
@@ -58,6 +62,8 @@ class MovieDetailsJsonUtils {
         String movieImgPath = movieJson.getString(PM_IMG_PATH);
         String userRating = movieJson.getString(PM_VOTE_AVG);
         String movieId = movieJson.getString(PM_MOVIE_ID);
+        String tagline = movieJson.getString(PM_TAGLINE);
+        String voteCount = movieJson.getString(PM_VOTE_COUNT);
 
         parsedMovieDetails.setmTitle(movieTitle);
         parsedMovieDetails.setmId(movieId);
@@ -65,6 +71,8 @@ class MovieDetailsJsonUtils {
         parsedMovieDetails.setmPoster(movieImgPath);
         parsedMovieDetails.setmOverview(overview);
         parsedMovieDetails.setmRating(userRating);
+        parsedMovieDetails.setmTagline(tagline);
+        parsedMovieDetails.setmVoteCount(voteCount);
 
         return parsedMovieDetails;
     }
