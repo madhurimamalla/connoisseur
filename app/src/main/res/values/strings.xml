@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Connoisseur</string>
     <string name="app_desc">Recommendations to suit your taste</string>
+    <string name="app_caption">Ready to see your recommendations?</string>
     <string name="watchlist">WATCHLIST</string>
     <string name="discover">DISCOVER</string>
     <string name="history">HISTORY</string>

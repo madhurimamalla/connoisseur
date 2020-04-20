@@ -26,7 +26,7 @@
         android:layout_marginLeft="@dimen/title_start_margin"
         android:layout_marginEnd="@dimen/title_bottom_margin"
         android:layout_marginRight="@dimen/title_bottom_margin"
-        android:fontFamily="@font/montserrat"
+        android:gravity="center_horizontal"
         android:text="@string/app_name"
         android:textAlignment="center"
         android:theme="@style/ThemeOverlay.MyTitleText"
@@ -50,21 +50,18 @@
             style="@style/ThemeOverlay.MyTextDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="@string/signed_out"
             android:textAlignment="center"
-            app:fontFamily="@font/montserrat" />
-
-        <!--<Space
-            android:layout_width="1dp"
-            android:layout_height="2dp" />-->
+            />
 
         <TextView
             android:id="@+id/detail"
             style="@style/ThemeOverlay.MyTextDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:textAlignment="center"
-            app:fontFamily="@font/montserrat"
             tools:text="Welcome back user" />
 
         <Button
@@ -74,8 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:padding="4dp"
-            android:text="@string/app_desc"
-            app:fontFamily="@font/montserrat" />
+            android:text="@string/app_caption"
+            android:theme="@style/FontFamilySet" />
 
         <Button
             android:id="@+id/newcontent_two"
@@ -84,9 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/new_content_margin"
             android:padding="@dimen/new_content_padding"
-            android:text="@string/app_desc"
-            android:theme="@style/ThemeOverlay.MyDarkButton"
-            app:fontFamily="@font/montserrat" />
+            android:text="@string/app_caption"
+            android:theme="@style/ThemeOverlay.MyDarkButton" />
 
     </LinearLayout>
 
@@ -122,11 +118,12 @@
                 android:layout_margin="8dp"
                 android:autofillHints="Fill in your email address here"
                 android:background="@drawable/password_group"
+                android:gravity="center_horizontal"
                 android:hint="@string/hint_email"
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
                 android:textAlignment="center"
-                app:fontFamily="@font/montserrat" />
+                android:theme="@style/FontFamilySet" />
 
             <EditText
                 android:id="@+id/fieldPassword_new"
@@ -136,11 +133,12 @@
                 android:layout_weight="1"
                 android:autofillHints="Fill in your password here"
                 android:background="@drawable/password_group"
+                android:gravity="center_horizontal"
                 android:hint="@string/hint_password"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:textAlignment="center"
-                app:fontFamily="@font/montserrat" />
+                android:theme="@style/FontFamilySet" />
 
         </LinearLayout>
 

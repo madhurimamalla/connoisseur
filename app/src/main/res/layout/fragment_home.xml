@@ -21,6 +21,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/featureTabsLayout"
+        android:theme="@style/FontFamilySet"
         android:background="@color/colorPrimary"
         app:tabTextColor="@android:color/white"
         app:tabIndicatorColor="@android:color/white"

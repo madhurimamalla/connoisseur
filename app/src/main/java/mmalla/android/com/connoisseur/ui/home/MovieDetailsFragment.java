@@ -138,7 +138,7 @@ public class MovieDetailsFragment extends Fragment {
         movieDetailsViewModel.getMovieTitle().observe(this, s -> movieDetailTitle.setText(s));
 
         movieDetailsViewModel.getMovieSummary().observe(this, s ->
-                mPlotSummary.setText("Plot Summary: " + "\n" + s));
+                mPlotSummary.setText(s));
 
         movieDetailsViewModel.getRating().observe(this, s -> movieRatingValue.setText(s));
 
@@ -146,7 +146,7 @@ public class MovieDetailsFragment extends Fragment {
 
         movieDetailsViewModel.getReleaseYear().observe(this, s -> movieReleaseYear.setText(s));
 
-        movieDetailsViewModel.getVoteCount().observe(this, s -> movie_vote_count.setText("(" + s + ")"));
+        movieDetailsViewModel.getVoteCount().observe(this, s -> movie_vote_count.setText(" (" + s + ")"));
 
         watchlistView.setOnClickListener(v -> {
             movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED);

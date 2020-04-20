@@ -23,14 +23,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:theme="@style/FontFamilySet"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/nav_header_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/emailAddressTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:theme="@style/FontFamilySet"
+        android:typeface="normal"
+        android:textStyle="italic"
         android:text="@string/nav_header_subtitle" />
 
 </LinearLayout>
