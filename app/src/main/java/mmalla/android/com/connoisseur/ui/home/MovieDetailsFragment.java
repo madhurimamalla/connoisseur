@@ -1,5 +1,6 @@
 package mmalla.android.com.connoisseur.ui.home;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,8 +38,6 @@ public class MovieDetailsFragment extends Fragment {
     private final static String TAG = MovieDetailsFragment.class.getSimpleName();
     private final static String DISCOVERED_MOVIE = "CREATED_MOVIE";
     private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w780/";
-
-    private BottomSheetBehavior mBottomSheetBehavior;
 
     private Movie movie;
 
@@ -133,7 +133,7 @@ public class MovieDetailsFragment extends Fragment {
          */
         movieDetailsViewModel.getPosterPath().observe(this, s ->
                 Glide.with(getActivity().getApplicationContext())
-                        .load(IMAGE_MOVIE_URL + s).into(imageView));
+                        .load(IMAGE_MOVIE_URL + s).error(R.drawable.ic_404).into(imageView));
 
         movieDetailsViewModel.getMovieTitle().observe(this, s -> movieDetailTitle.setText(s));
 
@@ -150,7 +150,6 @@ public class MovieDetailsFragment extends Fragment {
 
         watchlistView.setOnClickListener(v -> {
             movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED);
-            Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_wishlist, Toast.LENGTH_LONG).show();
             watchlistView.setEnabled(false);
             likedMovieView.setAlpha((float) 1.0);
             dislikedMovieView.setAlpha((float) 1.0);
@@ -159,9 +158,19 @@ public class MovieDetailsFragment extends Fragment {
             Timber.d(TAG, getString(R.string.Disabling_the_liked_dislike_buttons));
         });
 
+        /**
+         * This is a general toast message that shows up
+         * once the movie preference entered by the user is
+         * updated in the backend
+         */
+        movieDetailsViewModel.showToast.observe(this, aBoolean -> {
+            if (aBoolean) {
+                Toast.makeText(getContext(), "Your preference is updated", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         likedMovieView.setOnClickListener(v -> {
             movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED);
-            Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_liked_list, Toast.LENGTH_LONG).show();
             watchlistView.setAlpha((float) 1.0);
             dislikedMovieView.setAlpha((float) 1.0);
             likedMovieView.setEnabled(true);
@@ -172,7 +181,6 @@ public class MovieDetailsFragment extends Fragment {
 
         dislikedMovieView.setOnClickListener(v -> {
             movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED);
-            Toast.makeText(getContext(), R.string.The_movie_is_added_to_your_dislike_list, Toast.LENGTH_LONG).show();
             dislikedMovieView.setEnabled(true);
             likedMovieView.setAlpha((float) 1.0);
             watchlistView.setAlpha((float) 1.0);
@@ -189,4 +197,6 @@ public class MovieDetailsFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.PARCELED_MOVIE), movie);
     }
+
+
 }

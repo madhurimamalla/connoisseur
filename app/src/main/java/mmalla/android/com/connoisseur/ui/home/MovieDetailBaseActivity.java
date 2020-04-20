@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.BaseActivity;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
+import timber.log.Timber;
 
 public class MovieDetailBaseActivity extends BaseActivity {
 
@@ -52,9 +53,11 @@ public class MovieDetailBaseActivity extends BaseActivity {
 
         Intent previousIntent = getIntent();
         if (savedInstanceState != null) {
+            Timber.d(TAG, "Retrieving parcelable array list from savedInstance");
             movieList = savedInstanceState.getParcelableArrayList("SAVED_MOVIES");
             position = 0;
         } else {
+            Timber.d(TAG, "Retrieving the parcelable array list from the previous intent");
             movieList = previousIntent.getExtras().getParcelableArrayList("LIST_MOVIES");
             position = previousIntent.getExtras().getInt("CLICK_POSITION");
         }

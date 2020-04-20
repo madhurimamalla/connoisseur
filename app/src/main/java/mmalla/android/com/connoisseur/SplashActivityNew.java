@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.transition.Explode;
 import android.transition.Fade;
 
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
@@ -26,14 +26,12 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mmalla.android.com.connoisseur.recommendations.engine.DatabaseUtils;
 import timber.log.Timber;
 
 public class SplashActivityNew extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private FirebaseAuth mAuth;
-    private DatabaseUtils databaseUtils;
+    SplashNewViewModel splashNewViewModel;
 
     private final static String TAG = SplashActivityNew.class.getSimpleName();
 
@@ -61,18 +59,18 @@ public class SplashActivityNew extends BaseActivity {
         }
         setContentView(R.layout.activity_splash_new);
         /**
+         * Configuring the ViewModel class for the activity
+         */
+        ViewModelProviders.of(this).get(SplashNewViewModel.class);
+        splashNewViewModel = new SplashNewViewModel();
+        splashNewViewModel.init();
+
+        /**
          * Binding views using ButterKnife
          */
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-
-        /**
-         * Retrieving mAuth from Firebase
-         */
-        mAuth = FirebaseAuth.getInstance();
-
-        databaseUtils = new DatabaseUtils();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -90,7 +88,7 @@ public class SplashActivityNew extends BaseActivity {
          */
         View headerView = navigationView.getHeaderView(0);
         TextView tv = (TextView) headerView.findViewById(R.id.emailAddressTv);
-        tv.setText(mAuth.getCurrentUser().getEmail());
+        splashNewViewModel.getUserEmailId().observe(this, s -> tv.setText(s));
     }
 
     @Override
@@ -120,13 +118,13 @@ public class SplashActivityNew extends BaseActivity {
                 Toast.makeText(getApplicationContext(), R.string.Edit_account_details_clicked, Toast.LENGTH_LONG).show();
                 return true;
             case R.id.clear_movie_list:
-                if (databaseUtils.removeFullMoviesListFromTheUser(mAuth.getCurrentUser().getUid())) {
+                if (splashNewViewModel.removeAllSavedMoviesFromFirebase()) {
                     Toast.makeText(getApplicationContext(), R.string.Cleared_movie_list, Toast.LENGTH_LONG).show();
                 }
                 return true;
             case R.id.search_button:
                 SearchView searchView = (SearchView) item.getActionView();
-
+                splashNewViewModel.retrieveSearchResults("Harry");
                 /**
                  * TODO Implement the search feature for future extension
                  */

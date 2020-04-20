@@ -29,7 +29,7 @@ public class DatabaseUtils {
     private final static String MOVIES = "movies";
     private final static String WISHLIST = "wishlist";
     private final static String HISTORY = "history";
-
+    private MovieRepository movieRepository = new MovieRepository();
     private DatabaseReference database;
 
     public DatabaseUtils() {
@@ -60,21 +60,6 @@ public class DatabaseUtils {
              */
             userWishlistRef.child(MOVIES).updateChildren(map);
         }
-    }
-
-    /**
-     * Update any movie in Firebase realtime movies table
-     *
-     * @param movie
-     * @param userID
-     * @param preference
-     */
-    public void updateMovie(String userID, Movie movie, Movie.PREFERENCE preference) {
-        DatabaseReference userWishlistRef = database.getRef().child(USERS).child(userID);
-        movie.setmPref(preference);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put(movie.getmId(), movie);
-        userWishlistRef.child(MOVIES).updateChildren(map);
     }
 
     /**
@@ -117,6 +102,7 @@ public class DatabaseUtils {
 
     /**
      * Method to retrieve the wishlist
+     *
      * @param userID
      * @return
      */
@@ -134,6 +120,7 @@ public class DatabaseUtils {
     public List<Movie> getLikedMovies(String userID) {
         return getList(userID, Movie.PREFERENCE.LIKED);
     }
+
     /**
      * Method to retrieve the movies seen and disliked
      */
@@ -190,4 +177,31 @@ public class DatabaseUtils {
     }
 
 
+    /**
+     * Update any movie in Firebase realtime movies table
+     *
+     * @param movie
+     * @param userId
+     * @param preference
+     */
+    public void updateMovie(String userId, Movie movie, Movie.PREFERENCE preference) {
+        movieRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Movie>(
+
+        ) {
+            @Override
+            public void onSuccess(List<Movie> result) {
+                DatabaseReference userMoviesListRef = database.getRef().child(USERS).child(userId);
+                movie.setmPref(preference);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put(movie.getmId(), movie);
+                userMoviesListRef.child(MOVIES).updateChildren(map);
+                Timber.d(TAG, "Successfully updated the movie preference sent by the user!");
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Timber.d(TAG, "There's an error updating the movie: " + movie.getmTitle() + " & id: " + movie.getmId());
+            }
+        });
+    }
 }

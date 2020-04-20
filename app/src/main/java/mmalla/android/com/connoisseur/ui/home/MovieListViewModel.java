@@ -23,6 +23,7 @@ public class MovieListViewModel extends ViewModel {
     private MutableLiveData<List<Movie>> mMoviesList;
     private MutableLiveData<String> mTypeOfList = new MutableLiveData<>();
     private MovieRepository movieRepository = new MovieRepository();
+    private final int LIKED_MOVIES_THRESHOLD = 2;
 
     /**
      * This method is used to set the type of list : WATCHLIST, HISTORY, DISCOVER here
@@ -90,18 +91,22 @@ public class MovieListViewModel extends ViewModel {
                             dislikedMovies.add(movie);
                         }
                     }
-                    if (likedMovies.size() > 0) {
+                    if (likedMovies.size() > LIKED_MOVIES_THRESHOLD) {
+                        discoveredMovies.clear();
                         final MovieDBClient movieDBClient = new MovieDBClient();
-                        int luckyNum = movieDBClient.getRandomNumber(0, likedMovies.size() - 1);
 
-                        try {
+                        while (discoveredMovies.size() == 0) {
+                            int luckyNum = movieDBClient.getRandomNumber(0, likedMovies.size() - 1);
                             Movie luckyMovie = likedMovies.get(luckyNum);
-                            discoveredMovies = new fetchInterestingMovies().execute(luckyMovie.getmId()).get();
-                            Timber.d(TAG, "Discovered movies are here!");
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            try {
+                                discoveredMovies = new fetchInterestingMovies().execute(luckyMovie.getmId()).get();
+                                Timber.d("Discovered movies based on movie: " + likedMovies.get(luckyNum).getmTitle());
+                                Timber.d(TAG, "Discovered movies are found based on similar movies with size: " + discoveredMovies.size());
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     } else {
                         discoveredMovies = loadPopularMovies();
@@ -121,6 +126,7 @@ public class MovieListViewModel extends ViewModel {
                             discoveredMovies.remove(m);
                         }
                     }
+                    Timber.d("Loading discovered movies with size: " + discoveredMovies.size());
                     mMoviesList.setValue(discoveredMovies);
                 }
             }
@@ -135,7 +141,7 @@ public class MovieListViewModel extends ViewModel {
     private List<Movie> loadPopularMovies() {
         List<Movie> popularMovies = new ArrayList<>();
         try {
-            popularMovies = new fetchPopularMovies().execute("").get();
+            popularMovies = new fetchPopularMovies().execute().get();
             Timber.d(TAG, "Popular movies are here!");
             return popularMovies;
         } catch (ExecutionException e) {
@@ -194,10 +200,10 @@ public class MovieListViewModel extends ViewModel {
     /**
      * Fetch Popular movies
      */
-    class fetchPopularMovies extends AsyncTask<String, Void, List<Movie>> {
+    class fetchPopularMovies extends AsyncTask<Void, Void, List<Movie>> {
 
         @Override
-        protected List<Movie> doInBackground(String... strings) {
+        protected List<Movie> doInBackground(Void... voids) {
             List<Movie> movieList1 = new ArrayList<Movie>();
             final MovieDBClient movieDBClient = new MovieDBClient();
 

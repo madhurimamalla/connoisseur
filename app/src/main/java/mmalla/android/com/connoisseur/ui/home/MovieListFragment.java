@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,22 +196,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
             mSwitchCompat.setVisibility(View.INVISIBLE);
         }
 
-        //MovieDetailsPagerAdapter movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getChildFragmentManager());
-        switch (bundleTypeStr) {
-            case "HISTORY":
-            case "DISCOVER":
-            case "WATCHLIST":
-                Timber.d(TAG, "The tab on which it was clicked is : %s", bundleTypeStr);
-                //movieDetailsPagerAdapter.setList(moviesList);
-                break;
-            default:
-                Timber.d(TAG, "The switch case has come into default");
-                //movieDetailsPagerAdapter.setList(moviesList);
-                break;
-        }
-        //mMoviesDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
-        //mMoviesDetailsViewPager.setCurrentItem(position);
-
         Intent movieDetailsIntent = new Intent(getActivity(), MovieDetailBaseActivity.class);
         movieDetailsIntent.putExtra("CLICK_POSITION", position);
         movieDetailsIntent.putParcelableArrayListExtra("LIST_MOVIES", (ArrayList<? extends Parcelable>) new ArrayList<Movie>(this.moviesList));
@@ -228,5 +214,13 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mSwitchCompat != null) {
+            mSwitchCompat.setVisibility(View.VISIBLE);
+        }
     }
 }

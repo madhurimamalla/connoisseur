@@ -155,8 +155,6 @@ public class MovieDBClient {
         return url;
     }
 
-    // https://api.themoviedb.org/3/search/movie?api_key=9f8cc2e73ac5f78cdc4e2bdc6a856a0c&language=en-US&query=gravity&page=1&include_adult=false
-
     /**
      * Description: This method builds a search query URL
      * This is by default doesn't include adult content
@@ -261,8 +259,11 @@ public class MovieDBClient {
 
         List<Movie> movieList = new ArrayList<Movie>();
         movieList = getPopularMovies();
-
-        return movieList.subList(0, length - 1);
+        if (movieList.size() > length) {
+            return movieList.subList(0, length - 1);
+        } else {
+            return movieList;
+        }
     }
 
     /**
@@ -290,7 +291,11 @@ public class MovieDBClient {
 
         List<Movie> movieList = new ArrayList<>();
         movieList = getSearchResults(queryStr);
-        return movieList.subList(0, length - 1);
+        if (movieList.size() > length) {
+            return movieList.subList(0, length - 1);
+        } else {
+            return movieList;
+        }
     }
 
     /**

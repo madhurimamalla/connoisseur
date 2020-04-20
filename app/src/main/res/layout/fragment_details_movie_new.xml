@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="600dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -177,7 +177,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"

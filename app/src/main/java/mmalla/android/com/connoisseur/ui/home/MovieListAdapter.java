@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
@@ -57,17 +59,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     public void onBindViewHolder(@NonNull final MovieViewHolder movieViewHolder, final int i) {
         Movie movie = this.mMoviesList.get(movieViewHolder.getAdapterPosition());
 
-        ImageView movie_thumbnail = (ImageView) movieViewHolder.movie_thumbnail.findViewById(R.id.movie_item_poster);
-        Glide.with(mContext.getApplicationContext()).load(IMAGE_MOVIE_URL + movie.getmPoster()).into(movie_thumbnail);
+        Glide.with(mContext.getApplicationContext()).load(IMAGE_MOVIE_URL + movie.getmPoster()).error(R.drawable.ic_404).into(movieViewHolder.movie_thumbnail);
 
-        movie_thumbnail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onClick(mMoviesList.get(movieViewHolder.getAdapterPosition()), movieViewHolder.getAdapterPosition());
-            }
-        });
+        movieViewHolder.movie_thumbnail.setOnClickListener(view -> mListener.onClick(mMoviesList.get(movieViewHolder.getAdapterPosition()), movieViewHolder.getAdapterPosition()));
     }
-
 
     @Override
     public int getItemCount() {
@@ -76,11 +71,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView movie_thumbnail;
+        @BindView(R.id.movie_item_poster)
+        ImageView movie_thumbnail;
 
         public MovieViewHolder(View view) {
             super(view);
-            movie_thumbnail = (ImageView) view.findViewById(R.id.movie_item_poster);
+            ButterKnife.bind(this, view);
         }
     }
 
