@@ -5,4 +5,6 @@
     <string name="metabar_consisting_of_information_about_the_movie">Metabar consisting of information about the movie</string>
     <string name="movie_name">Movie name</string>
     <string name="movie_tagline">Movie tagline</string>
+    <string name="year_of_release">2009</string>
+    <string name="_120_mins">120 mins</string>
 </resources>

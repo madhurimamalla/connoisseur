@@ -19,12 +19,19 @@
     <dimen name="detail_inner_horiz_margin">16dp</dimen>
     <dimen name="detail_metabar_vert_padding">16dp</dimen>
     <dimen name="detail_metabar_title_bottom_padding">2dp</dimen>
-    <dimen name="detail_title_text_size">28sp</dimen>
-    <dimen name="detail_body_text_size">22sp</dimen>
+    <dimen name="detail_title_text_size">24sp</dimen>
+    <dimen name="detail_body_text_size">18sp</dimen>
     <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
-    <dimen name="detail_body_bottom_margin">88dp</dimen>
+    <dimen name="detail_body_bottom_margin">20dp</dimen>
 
+    <dimen name="cardCornerRadius">4dp</dimen>
+    <dimen name="cardElevation">4dp</dimen>
+    <dimen name="cardview_horizontal_padding">2dp</dimen>
+    <dimen name="cardview_vertical_padding">2dp</dimen>
 
+    <dimen name="standard_75">75dp</dimen>
+    <dimen name="standard_105">105dp</dimen>
+    <dimen name="standard_155">155dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

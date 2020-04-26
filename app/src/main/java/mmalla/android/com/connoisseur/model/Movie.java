@@ -3,6 +3,8 @@ package mmalla.android.com.connoisseur.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 /**
  * @author mmalla
  */
@@ -17,6 +19,8 @@ public class Movie implements Parcelable {
         mRating = in.readString();
         mOverview = in.readString();
         mVoteCount = in.readString();
+        mRuntime = in.readString();
+        in.readList(mGenres, List.class.getClassLoader());
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -45,6 +49,8 @@ public class Movie implements Parcelable {
         dest.writeString(mRating);
         dest.writeString(mOverview);
         dest.writeString(mVoteCount);
+        dest.writeString(mRuntime);
+        dest.writeList(mGenres);
     }
 
     public enum PREFERENCE {
@@ -60,6 +66,24 @@ public class Movie implements Parcelable {
     private String mRating;
     private String mTagline;
     private String mVoteCount;
+    private String mRuntime;
+    private List<Genre> mGenres;
+
+    public List<Genre> getmGenres() {
+        return mGenres;
+    }
+
+    public void setmGenres(List<Genre> mGenres) {
+        this.mGenres = mGenres;
+    }
+
+    public String getmRuntime() {
+        return mRuntime;
+    }
+
+    public void setmRuntime(String mRuntime) {
+        this.mRuntime = mRuntime;
+    }
 
     public String getmVoteCount() {
         return mVoteCount;

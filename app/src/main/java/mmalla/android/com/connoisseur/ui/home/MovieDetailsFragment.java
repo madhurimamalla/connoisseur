@@ -1,16 +1,17 @@
 package mmalla.android.com.connoisseur.ui.home;
 
-import androidx.lifecycle.Observer;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-
 import androidx.fragment.app.Fragment;
 
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,23 +37,22 @@ public class MovieDetailsFragment extends Fragment {
 
     private final static String TAG = MovieDetailsFragment.class.getSimpleName();
     private final static String DISCOVERED_MOVIE = "CREATED_MOVIE";
-    private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w780/";
-
+    private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/original/";
     private Movie movie;
 
     private MovieDetailsViewModel movieDetailsViewModel;
 
     @BindView(R.id.movie_poster_discover_screen)
-    ImageView imageView;
+    ImageView moviePoster;
 
     @BindView(R.id.plot_summary)
     TextView mPlotSummary;
 
-    @BindView(R.id.like_movie_button)
-    ImageView likedMovieView;
-
     @BindView(R.id.add_to_watchlist)
     ImageView watchlistView;
+
+    @BindView(R.id.like_movie_button)
+    ImageView likedMovieView;
 
     @BindView(R.id.dislike_movie_button)
     ImageView dislikedMovieView;
@@ -64,14 +63,28 @@ public class MovieDetailsFragment extends Fragment {
     @BindView(R.id.movie_rating_value)
     TextView movieRatingValue;
 
+    /*
     @BindView(R.id.movie_tagline)
     TextView movieTagline;
+*/
 
     @BindView(R.id.movie_year_of_release_value)
     TextView movieReleaseYear;
 
+    @BindView(R.id.minutes_of_the_movie)
+    TextView runtimeMovie;
+
     @BindView(R.id.movie_vote_count)
-    TextView movie_vote_count;
+    TextView movieVoteCount;
+
+    @BindView(R.id.like_dislike)
+    ImageView likeDislike;
+
+    @BindView(R.id.viewToHelpButton)
+    View fadeOutView;
+
+    @BindView(R.id.genresList)
+    TextView genresList;
 
     public MovieDetailsFragment() {
         // Required empty public constructor
@@ -104,6 +117,8 @@ public class MovieDetailsFragment extends Fragment {
         Timber.d(TAG, movie.toString());
     }
 
+    @SuppressLint("RestrictedApi")
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
@@ -133,28 +148,68 @@ public class MovieDetailsFragment extends Fragment {
          */
         movieDetailsViewModel.getPosterPath().observe(this, s ->
                 Glide.with(getActivity().getApplicationContext())
-                        .load(IMAGE_MOVIE_URL + s).error(R.drawable.ic_404).into(imageView));
+                        .load(IMAGE_MOVIE_URL + s).error(R.drawable.ic_404_new).into(moviePoster));
 
-        movieDetailsViewModel.getMovieTitle().observe(this, s -> movieDetailTitle.setText(s));
+        movieDetailsViewModel.getMovieTitle().observe(this, s -> {
+                    movieDetailTitle.setBreakStrategy(Layout.BREAK_STRATEGY_BALANCED);
+                    movieDetailTitle.setText(s);
+                }
+        );
 
         movieDetailsViewModel.getMovieSummary().observe(this, s ->
                 mPlotSummary.setText(s));
 
         movieDetailsViewModel.getRating().observe(this, s -> movieRatingValue.setText(s));
 
+        movieDetailsViewModel.getRuntime().observe(this, s -> {
+            if (s == null) {
+                runtimeMovie.setVisibility(View.GONE);
+            } else {
+                if (Integer.parseInt(s) == 0) {
+                    runtimeMovie.setVisibility(View.GONE);
+                } else {
+                    runtimeMovie.setText(s + " mins");
+                }
+            }
+        });
+
+/*
         movieDetailsViewModel.getTagline().observe(this, s -> movieTagline.setText(s));
 
+*/
         movieDetailsViewModel.getReleaseYear().observe(this, s -> movieReleaseYear.setText(s));
 
-        movieDetailsViewModel.getVoteCount().observe(this, s -> movie_vote_count.setText(" (" + s + ")"));
+        movieDetailsViewModel.getVoteCount().observe(this, s -> {
+            if (s != null) {
+                if (Integer.parseInt(s) == 0) {
+                    movieVoteCount.setVisibility(View.GONE);
+                } else {
+                    movieVoteCount.setText(" (" + s + ")");
+                }
+            } else {
+                movieVoteCount.setVisibility(View.GONE);
+            }
+        });
+
+        movieDetailsViewModel.getGenresList().observe(this, s -> {
+            if (s != null) {
+                genresList.setText(s);
+                genresList.setVisibility(View.VISIBLE);
+            } else {
+                genresList.setVisibility(View.INVISIBLE);
+            }
+        });
 
         watchlistView.setOnClickListener(v -> {
+            Glide.with(getActivity().getApplicationContext())
+                    .load(R.drawable.ic_playlist_add_check_black_36dp).into(watchlistView);
             movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED);
             watchlistView.setEnabled(false);
+            likeDislike.setVisibility(View.INVISIBLE);
             likedMovieView.setAlpha((float) 1.0);
             dislikedMovieView.setAlpha((float) 1.0);
-            likedMovieView.setVisibility(View.GONE);
-            dislikedMovieView.setVisibility(View.GONE);
+            likedMovieView.setVisibility(View.INVISIBLE);
+            dislikedMovieView.setVisibility(View.INVISIBLE);
             Timber.d(TAG, getString(R.string.Disabling_the_liked_dislike_buttons));
         });
 
@@ -163,9 +218,19 @@ public class MovieDetailsFragment extends Fragment {
          * once the movie preference entered by the user is
          * updated in the backend
          */
-        movieDetailsViewModel.showToast.observe(this, aBoolean -> {
-            if (aBoolean) {
-                Toast.makeText(getContext(), "Your preference is updated", Toast.LENGTH_SHORT).show();
+        movieDetailsViewModel.showToast.observe(this, preference -> {
+            switch (preference) {
+                case IGNORED:
+                    break;
+                case LIKED:
+                    Toast.makeText(getContext(), "Added to your liked movies", Toast.LENGTH_SHORT).show();
+                    break;
+                case DISLIKED:
+                    Toast.makeText(getContext(), "Added to your disliked movies", Toast.LENGTH_SHORT).show();
+                    break;
+                case WISHLISTED:
+                    Toast.makeText(getContext(), "Added to your watchlist", Toast.LENGTH_SHORT).show();
+                    break;
             }
         });
 
@@ -189,8 +254,55 @@ public class MovieDetailsFragment extends Fragment {
             Timber.d(TAG, getString(R.string.Disabling_the_liked_watchlist_buttons));
         });
 
+        likeDislike.setOnClickListener(view -> {
+            Timber.d("Clicked on the fabSettings....");
+            openSubMenusFab();
+        });
+
+        moviePoster.setOnClickListener(v -> {
+            if (likeDislike.getVisibility() == View.INVISIBLE) {
+                closeSubMenusFab();
+            }
+        });
+
+        likedMovieView.setOnClickListener(v -> {
+            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED);
+            watchlistView.setVisibility(View.INVISIBLE);
+            closeSubMenusFab();
+        });
+
+        dislikedMovieView.setOnClickListener(v -> {
+            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED);
+            likedMovieView.setVisibility(View.VISIBLE);
+            watchlistView.setVisibility(View.INVISIBLE);
+            closeSubMenusFab();
+        });
+
         return rootView;
     }
+
+    //closes FAB submenus
+    @SuppressLint("RestrictedApi")
+    private void closeSubMenusFab() {
+        likedMovieView.animate().translationY(0);
+        dislikedMovieView.animate().translationY(0);
+        likedMovieView.setVisibility(View.INVISIBLE);
+        dislikedMovieView.setVisibility(View.INVISIBLE);
+        likeDislike.setVisibility(View.VISIBLE);
+        moviePoster.setAlpha((float) (1.0));
+    }
+
+    //Opens FAB submenus
+    @SuppressLint("RestrictedApi")
+    private void openSubMenusFab() {
+        moviePoster.setAlpha((float) 0.6);
+        likedMovieView.animate().translationX(-getResources().getDimension(R.dimen.standard_75));
+        dislikedMovieView.animate().translationY(-getResources().getDimension(R.dimen.standard_75));
+        likedMovieView.setVisibility(View.VISIBLE);
+        dislikedMovieView.setVisibility(View.VISIBLE);
+        likeDislike.setVisibility(View.INVISIBLE);
+    }
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

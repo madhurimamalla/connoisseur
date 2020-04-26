@@ -3,10 +3,12 @@ package mmalla.android.com.connoisseur.ui.home;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -24,6 +26,7 @@ public class MovieListViewModel extends ViewModel {
     private MutableLiveData<String> mTypeOfList = new MutableLiveData<>();
     private MovieRepository movieRepository = new MovieRepository();
     private final int LIKED_MOVIES_THRESHOLD = 2;
+    private boolean initiateRefresh = false;
 
     /**
      * This method is used to set the type of list : WATCHLIST, HISTORY, DISCOVER here
@@ -44,17 +47,61 @@ public class MovieListViewModel extends ViewModel {
             mMoviesList = new MutableLiveData<List<Movie>>();
             switch (mTypeOfList.getValue()) {
                 case "HISTORY":
-                    loadMovies(Movie.PREFERENCE.LIKED);
+                    loadHistory();
                     break;
                 case "WATCHLIST":
-                    loadMovies(Movie.PREFERENCE.WISHLISTED);
+                    loadWatchlist();
                     break;
                 case "DISCOVER":
-                    loadMovies(Movie.PREFERENCE.IGNORED);
+                    discoverMovies(Movie.PREFERENCE.IGNORED);
                     break;
             }
         }
         return mMoviesList;
+    }
+
+    private void loadHistory() {
+        movieRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Movie>() {
+            @Override
+            public void onSuccess(List<Movie> result) {
+                List<Movie> shortListedMovies = new ArrayList<>();
+                for (Movie movie :
+                        result) {
+                    if (movie.getmPref() == Movie.PREFERENCE.DISLIKED || movie.getmPref() == Movie.PREFERENCE.LIKED) {
+                        shortListedMovies.add(movie);
+                    }
+                }
+                Timber.d("Shortlisted movies: " + mTypeOfList.getValue() + " are here!" + " And its size is: " + shortListedMovies.size());
+                mMoviesList.setValue(shortListedMovies);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+    }
+
+    private void loadWatchlist() {
+        movieRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Movie>() {
+            @Override
+            public void onSuccess(List<Movie> result) {
+                List<Movie> shortListedMovies = new ArrayList<>();
+                for (Movie movie :
+                        result) {
+                    if (movie.getmPref() == Movie.PREFERENCE.WISHLISTED) {
+                        shortListedMovies.add(movie);
+                    }
+                }
+                Timber.d("Shortlisted movies: " + mTypeOfList.getValue() + " are here!" + " And its size is: " + shortListedMovies.size());
+                mMoviesList.setValue(shortListedMovies);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
     }
 
     /**
@@ -62,24 +109,11 @@ public class MovieListViewModel extends ViewModel {
      *
      * @param mPref
      */
-    private void loadMovies(final Movie.PREFERENCE mPref) {
+    private void discoverMovies(final Movie.PREFERENCE mPref) {
         movieRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Movie>() {
             @Override
             public void onSuccess(List<Movie> result) {
-                if (mPref == Movie.PREFERENCE.WISHLISTED | mPref == Movie.PREFERENCE.LIKED) {
-                    List<Movie> shortListedMovies = new ArrayList<>();
-                    for (Movie movie :
-                            result) {
-                        if (movie.getmPref() == mPref) {
-                            shortListedMovies.add(movie);
-                        }
-                    }
-                    Timber.d("Shortlisted movies: " + mTypeOfList.getValue() + " are here!");
-                    mMoviesList.setValue(shortListedMovies);
-                    /**
-                     * This is when we are trying to retrieve movies for the discovered tab
-                     */
-                } else if (mPref == Movie.PREFERENCE.IGNORED) {
+                if (mPref == Movie.PREFERENCE.IGNORED) {
                     List<Movie> likedMovies = new ArrayList<>();
                     List<Movie> discoveredMovies = new ArrayList<>();
                     List<Movie> dislikedMovies = new ArrayList<>();
@@ -91,42 +125,51 @@ public class MovieListViewModel extends ViewModel {
                             dislikedMovies.add(movie);
                         }
                     }
-                    if (likedMovies.size() > LIKED_MOVIES_THRESHOLD) {
-                        discoveredMovies.clear();
-                        final MovieDBClient movieDBClient = new MovieDBClient();
-
-                        while (discoveredMovies.size() == 0) {
+                    if (likedMovies.size() <= LIKED_MOVIES_THRESHOLD) {
+                        discoveredMovies = loadPopularMovies();
+                    } else if (mMoviesList != null) {
+                        if (mMoviesList.getValue() == null || initiateRefresh) {
+                            discoveredMovies.clear();
+                            initiateRefresh = false;
+                            final MovieDBClient movieDBClient = new MovieDBClient();
                             int luckyNum = movieDBClient.getRandomNumber(0, likedMovies.size() - 1);
                             Movie luckyMovie = likedMovies.get(luckyNum);
+                            Timber.d("Discovered movies based on movie: " + likedMovies.get(luckyNum).getmTitle());
                             try {
                                 discoveredMovies = new fetchInterestingMovies().execute(luckyMovie.getmId()).get();
-                                Timber.d("Discovered movies based on movie: " + likedMovies.get(luckyNum).getmTitle());
                                 Timber.d(TAG, "Discovered movies are found based on similar movies with size: " + discoveredMovies.size());
                             } catch (ExecutionException e) {
                                 e.printStackTrace();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                        } else {
+                            Timber.d("As the mMoviesList already has data, return the same one...");
+                            discoveredMovies = mMoviesList.getValue();
                         }
-                    } else {
+
+                    }
+                    if (discoveredMovies.size() == 0) {
                         discoveredMovies = loadPopularMovies();
                     }
                     /**
                      * Remove the liked/disliked movies
                      */
+                    Timber.d("Removing the liked movies from the discovered list of movies");
                     for (Movie m :
                             likedMovies) {
                         if (discoveredMovies.contains(m)) {
                             discoveredMovies.remove(m);
                         }
                     }
+                    Timber.d("Removing the disliked movies from the discovered list of movies");
                     for (Movie m :
                             dislikedMovies) {
                         if (discoveredMovies.contains(m)) {
                             discoveredMovies.remove(m);
                         }
                     }
-                    Timber.d("Loading discovered movies with size: " + discoveredMovies.size());
+                    Timber.d("Loading final discovered movies with size: " + discoveredMovies.size());
                     mMoviesList.setValue(discoveredMovies);
                 }
             }
@@ -169,9 +212,27 @@ public class MovieListViewModel extends ViewModel {
 
     public void initiateRefresh() {
         if (mTypeOfList.getValue().equals("DISCOVER")) {
-            loadMovies(Movie.PREFERENCE.IGNORED);
+            initiateRefresh = true;
+            discoverMovies(Movie.PREFERENCE.IGNORED);
         }
     }
+
+    /**
+     * Loads more movies in the Discover tab
+     * @param page
+     * @param totalItemsCount
+     * @param view
+     *//*
+    public void getMoreMovies(int page, int totalItemsCount, RecyclerView view) {
+        try {
+            List<Movie> listOfMovies = new fetchInterestingMovies().execute("").get();
+            mMoviesList.getValue().addAll(listOfMovies);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     /**
      * Description: fetchInterestingMovies can only fetch 20 movies at a time for a given movie Id.

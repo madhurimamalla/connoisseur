@@ -31,7 +31,7 @@ import timber.log.Timber;
 public class SplashActivityNew extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    SplashNewViewModel splashNewViewModel;
+    private SplashNewViewModel splashNewViewModel;
 
     private final static String TAG = SplashActivityNew.class.getSimpleName();
 
@@ -115,7 +115,7 @@ public class SplashActivityNew extends BaseActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.edit_account_details:
-                Toast.makeText(getApplicationContext(), R.string.Edit_account_details_clicked, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "This feature will be available soon", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.clear_movie_list:
                 if (splashNewViewModel.removeAllSavedMoviesFromFirebase()) {

@@ -94,9 +94,7 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
         ButterKnife.bind(this, rootView);
 
-        movieListViewModel = ViewModelProviders.of(this).get(MovieListViewModel.class);
         movieListViewModel.setIndex(bundleTypeStr);
-
         if (bundleTypeStr.equals("DISCOVER") && mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setEnabled(true);
             mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);

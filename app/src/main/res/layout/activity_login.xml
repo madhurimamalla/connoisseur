@@ -52,12 +52,11 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/signed_out"
-            android:textAlignment="center"
-            />
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/detail"
-            style="@style/ThemeOverlay.MyTextDetail"
+            style="@style/ThemeOverlay.MyTextDetail.Italic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -69,8 +68,11 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:padding="4dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:textAllCaps="false"
+            android:paddingRight="8dp"
+            android:paddingLeft="8dp"
             android:text="@string/app_caption"
             android:theme="@style/FontFamilySet" />
 
@@ -79,6 +81,7 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_margin="@dimen/new_content_margin"
             android:padding="@dimen/new_content_padding"
             android:text="@string/app_caption"
@@ -108,8 +111,10 @@
             android:orientation="vertical"
             android:paddingStart="@dimen/emailPasswordPaddingLeft"
             android:paddingLeft="@dimen/emailPasswordPaddingLeft"
+            android:paddingTop="8dp"
             android:paddingEnd="@dimen/emailPasswordPaddingRight"
-            android:paddingRight="@dimen/emailPasswordPaddingRight">
+            android:paddingRight="@dimen/emailPasswordPaddingRight"
+            android:paddingBottom="8dp">
 
             <EditText
                 android:id="@+id/fieldEmail_new"
@@ -142,7 +147,6 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/emailPasswordButtons"
             android:layout_width="match_parent"
@@ -151,8 +155,10 @@
             android:orientation="horizontal"
             android:paddingStart="@dimen/emailPasswordPaddingLeft"
             android:paddingLeft="@dimen/emailPasswordPaddingLeft"
+            android:paddingTop="8dp"
             android:paddingEnd="@dimen/emailPasswordPaddingRight"
-            android:paddingRight="@dimen/emailPasswordPaddingRight">
+            android:paddingRight="@dimen/emailPasswordPaddingRight"
+            android:paddingBottom="8dp">
 
             <Button
                 android:id="@+id/emailSignInButton"
@@ -185,8 +191,10 @@
             android:orientation="horizontal"
             android:paddingStart="@dimen/emailPasswordPaddingLeft"
             android:paddingLeft="@dimen/emailPasswordPaddingLeft"
+            android:paddingTop="8dp"
             android:paddingEnd="@dimen/emailPasswordPaddingRight"
             android:paddingRight="@dimen/emailPasswordPaddingRight"
+            android:paddingBottom="8dp"
             android:visibility="gone"
             android:weightSum="2.0">
 

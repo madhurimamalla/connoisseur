@@ -1,15 +1,23 @@
 package mmalla.android.com.connoisseur.ui.home;
 
+import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.text.TextUtils;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import mmalla.android.com.connoisseur.model.Genre;
 import mmalla.android.com.connoisseur.model.Movie;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClient;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClientException;
@@ -30,20 +38,24 @@ public class MovieDetailsViewModel extends ViewModel {
     private MutableLiveData<String> mReleaseYear = new MutableLiveData<>();
     private MutableLiveData<String> mVoteCount = new MutableLiveData<>();
     private MutableLiveData<String> mTagline = new MutableLiveData<>();
-    public MutableLiveData<Boolean> showToast = new MutableLiveData<>();
+    public MutableLiveData<Movie.PREFERENCE> showToast = new MutableLiveData<>();
+    private MutableLiveData<String> mRuntime = new MutableLiveData<>();
+    private MutableLiveData<String> mGenres = new MutableLiveData<>();
     private Movie mMovie;
     private Movie tmdbMovie;
     private DatabaseUtils databaseUtils;
     private FirebaseAuth mAuth;
     private MovieDBClient movieDBClient;
+    private static final String FORMAT_USED_BY_TMDB = "yyyy-mm-dd";
 
     public void init() {
         mAuth = FirebaseAuth.getInstance();
         databaseUtils = new DatabaseUtils();
         movieDBClient = new MovieDBClient();
-        showToast.setValue(false);
+        showToast.setValue(Movie.PREFERENCE.IGNORED);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setMovieLiveData(Movie movie) {
         mMovie = movie;
         try {
@@ -58,8 +70,29 @@ public class MovieDetailsViewModel extends ViewModel {
         mPosterPath.setValue(movie.getmPoster());
         mRating.setValue(movie.getmRating());
         mVoteCount.setValue(movie.getmVoteCount());
-        mReleaseYear.setValue(movie.getmReleaseYear());
+        if (movie.getmReleaseYear() != null) {
+            SimpleDateFormat format = new SimpleDateFormat(FORMAT_USED_BY_TMDB);
+            try {
+                Date date = format.parse(movie.getmReleaseYear());
+                int year = date.getYear() + 1900;
+                mReleaseYear.setValue(Integer.toString(year));
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+        }
         mTagline.setValue(tmdbMovie.getmTagline());
+        mRuntime.setValue(tmdbMovie.getmRuntime());
+        if (movie.getmVoteCount() == null) {
+            mVoteCount.setValue(tmdbMovie.getmVoteCount());
+        }
+
+        List<Genre> genresList = tmdbMovie.getmGenres();
+        List<String> genresListNames = new ArrayList<>();
+        for (Genre genre : genresList) {
+            genresListNames.add(genre.getName());
+        }
+        String genreListStr = TextUtils.join(", ", genresListNames);
+        mGenres.setValue(genreListStr);
         Timber.d("Setting the known data....");
     }
 
@@ -83,12 +116,20 @@ public class MovieDetailsViewModel extends ViewModel {
         return mTagline;
     }
 
+    public LiveData<String> getRuntime() {
+        return mRuntime;
+    }
+
     public LiveData<String> getReleaseYear() {
         return mReleaseYear;
     }
 
     public LiveData<String> getVoteCount() {
         return mVoteCount;
+    }
+
+    public LiveData<String> getGenresList() {
+        return mGenres;
     }
 
     /**
@@ -98,7 +139,7 @@ public class MovieDetailsViewModel extends ViewModel {
      */
     public void updateMovie(Movie.PREFERENCE preference) {
         databaseUtils.updateMovie(mAuth.getCurrentUser().getUid(), mMovie, preference);
-        showToast.setValue(true);
+        showToast.setValue(preference);
     }
 
     class fetchMovieDetails extends AsyncTask<String, Void, Movie> {

@@ -57,7 +57,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     /**
      * Creating instance of DatabaseUtils for interacting with DB
      */
-    private DatabaseUtils du = new DatabaseUtils();
+    private DatabaseUtils du;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +130,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                              */
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             User userObj = new User(firebaseUser.getEmail());
+                            du = new DatabaseUtils();
                             du.writeNewUser(mAuth.getCurrentUser().getUid(), userObj);
                             updateUI(user);
                         } else {

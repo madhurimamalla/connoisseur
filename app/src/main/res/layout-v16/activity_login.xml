@@ -50,17 +50,14 @@
             android:text="@string/signed_out"
             android:textAlignment="center" />
 
-        <!-- <Space
-             android:layout_width="1dp"
-             android:layout_height="2dp" />-->
-
         <TextView
             android:id="@+id/detail"
-            style="@style/ThemeOverlay.MyTextDetail"
+            style="@style/ThemeOverlay.MyTextDetail.Italic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textAlignment="center"
+            android:textStyle="italic"
             tools:text="Welcome back user" />
 
         <Button
@@ -68,9 +65,14 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:padding="4dp"
-            android:text="@string/app_caption" />
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:padding="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@string/app_caption"
+            android:theme="@style/FontFamilySet" />
 
         <Button
             android:id="@+id/newcontent_two"
@@ -78,10 +80,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/new_content_margin"
+            android:textAllCaps="false"
             android:padding="@dimen/new_content_padding"
             android:text="@string/app_caption"
-            android:theme="@style/ThemeOverlay.MyDarkButton" />
-
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -112,6 +115,7 @@
 
             <EditText
                 android:id="@+id/fieldEmail_new"
+                style="@style/FontFamilySet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -125,6 +129,7 @@
 
             <EditText
                 android:id="@+id/fieldPassword_new"
+                style="@style/FontFamilySet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"

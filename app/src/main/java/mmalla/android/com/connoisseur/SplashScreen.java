@@ -14,7 +14,7 @@ public class SplashScreen extends AppCompatActivity {
     /**
      * The splash screen of this app is on for SPLASH_TIMEOUT in ms.
      */
-    private static int SPLASH_TIMEOUT = 4000;
+    private static int SPLASH_TIMEOUT = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

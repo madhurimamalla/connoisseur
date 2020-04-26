@@ -4,9 +4,14 @@ package mmalla.android.com.connoisseur.moviedbclient;
  * @author mmalla
  */
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import mmalla.android.com.connoisseur.model.Genre;
 import mmalla.android.com.connoisseur.model.Movie;
 
 /**
@@ -48,9 +53,36 @@ class MovieDetailsJsonUtils {
          */
         final String PM_VOTE_AVG = "vote_average";
 
+        /**
+         * The tagline of the movie
+         */
         final String PM_TAGLINE = "tagline";
 
+        /**
+         * The number of votes a movie has received
+         */
         final String PM_VOTE_COUNT = "vote_count";
+
+        /**
+         * Runtime of the movie
+         */
+        final String PM_RUNTIME = "runtime";
+
+        /**
+         * The list of genres
+         */
+        final String PM_GENRES = "genres";
+
+        /**
+         * Genre name
+         */
+        final String PM_GENRE = "name";
+
+        /**
+         * Genre id
+         */
+        final String PM_GENRE_ID = "id";
+
 
         Movie parsedMovieDetails = new Movie();
 
@@ -64,6 +96,18 @@ class MovieDetailsJsonUtils {
         String movieId = movieJson.getString(PM_MOVIE_ID);
         String tagline = movieJson.getString(PM_TAGLINE);
         String voteCount = movieJson.getString(PM_VOTE_COUNT);
+        String runTime = movieJson.getString(PM_RUNTIME);
+
+        JSONArray genreArray = movieJson.getJSONArray(PM_GENRES);
+        if (genreArray.length() > 0) {
+            List<Genre> genres = new ArrayList<>();
+            for (int i = 0; i < genreArray.length(); i++) {
+                Genre genre = new Genre(genreArray.getJSONObject(i).getString(PM_GENRE_ID),
+                        genreArray.getJSONObject(i).getString(PM_GENRE));
+                genres.add(genre);
+            }
+            parsedMovieDetails.setmGenres(genres);
+        }
 
         parsedMovieDetails.setmTitle(movieTitle);
         parsedMovieDetails.setmId(movieId);
@@ -73,7 +117,7 @@ class MovieDetailsJsonUtils {
         parsedMovieDetails.setmRating(userRating);
         parsedMovieDetails.setmTagline(tagline);
         parsedMovieDetails.setmVoteCount(voteCount);
-
+        parsedMovieDetails.setmRuntime(runTime);
         return parsedMovieDetails;
     }
 }

@@ -185,23 +185,11 @@ public class DatabaseUtils {
      * @param preference
      */
     public void updateMovie(String userId, Movie movie, Movie.PREFERENCE preference) {
-        movieRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Movie>(
-
-        ) {
-            @Override
-            public void onSuccess(List<Movie> result) {
-                DatabaseReference userMoviesListRef = database.getRef().child(USERS).child(userId);
-                movie.setmPref(preference);
-                HashMap<String, Object> map = new HashMap<>();
-                map.put(movie.getmId(), movie);
-                userMoviesListRef.child(MOVIES).updateChildren(map);
-                Timber.d(TAG, "Successfully updated the movie preference sent by the user!");
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Timber.d(TAG, "There's an error updating the movie: " + movie.getmTitle() + " & id: " + movie.getmId());
-            }
-        });
+        DatabaseReference userMoviesListRef = database.getRef().child(USERS).child(userId);
+        movie.setmPref(preference);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(movie.getmId(), movie);
+        userMoviesListRef.child(MOVIES).updateChildren(map);
+        Timber.d(TAG, "Successfully updated the movie preference sent by the user!");
     }
 }
