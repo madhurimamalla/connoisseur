@@ -153,7 +153,11 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
     private void initiateRefresh() {
         Timber.d(TAG, "Initiating refresh....");
-        movieListViewModel.initiateRefresh();
+        if(mSwitchCompat.isChecked()){
+            movieListViewModel.getPopularMovies();
+        } else{
+            movieListViewModel.initiateRefresh();
+        }
         Objects.requireNonNull(mSwipeRefreshLayout).setRefreshing(false);
     }
 

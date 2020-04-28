@@ -79,13 +79,13 @@ public class MovieDBClient {
         }
     }
 
-    private static URL buildUrl(String path) {
+    private static URL buildUrl(String path, String page) {
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .appendPath(path)
                 .appendQueryParameter(QUERY_PARAM, API_KEY)
                 .appendQueryParameter(LANG_PARAM, LANG_VALUE)
-                .appendQueryParameter(PAGE_PARAM, PAGE_VALUE)
+                .appendQueryParameter(PAGE_PARAM, page)
                 .build();
 
         URL url = null;
@@ -216,7 +216,9 @@ public class MovieDBClient {
     private List<Movie> getPopularMovies() throws MovieDBClientException {
         List<Movie> movieList = null;
 
-        URL moviesListUrl = buildUrl(PATH_POPULAR_PARAM);
+        int randomNumber = getRandomNumber(1, 400);
+
+        URL moviesListUrl = buildUrl(PATH_POPULAR_PARAM, Integer.toString(randomNumber));
         Timber.d(TAG, moviesListUrl);
 
         try {
