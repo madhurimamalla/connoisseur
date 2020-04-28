@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +27,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mmalla.android.com.connoisseur.MovieRepository;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
@@ -37,9 +35,7 @@ import timber.log.Timber;
 public class MovieListFragment extends Fragment implements MovieListAdapter.MoviesListOnClickListener {
 
     private final static String TAG = MovieListFragment.class.getSimpleName();
-
-    @BindView(R.id.view_pager_movies_details)
-    ViewPager mMoviesDetailsViewPager;
+    private MovieRepository movieRepository;
 
     @BindView(R.id.loading_icon)
     View loadingIcon;
@@ -64,7 +60,8 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     private List<Movie> moviesList = new ArrayList<>();
     private MovieListAdapter movieListAdapter = null;
 
-    public MovieListFragment() {
+    public MovieListFragment(MovieRepository mRepo) {
+        this.movieRepository = mRepo;
         // Empty constructor
     }
 
@@ -94,16 +91,18 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
         ButterKnife.bind(this, rootView);
 
-        movieListViewModel.setIndex(bundleTypeStr);
+        movieListViewModel.init(bundleTypeStr, movieRepository);
+
         if (bundleTypeStr.equals("DISCOVER") && mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setEnabled(true);
-            mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.primaryTextColor);
 
             mSwipeRefreshLayout.setOnRefreshListener(() -> initiateRefresh());
             if (mSwitchCompat != null) {
                 mSwitchCompat.setVisibility(View.VISIBLE);
             }
 
+            mSwitchCompat.setThumbResource(R.drawable.ic_new_badge);
             mSwitchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     buttonView.setEnabled(true);

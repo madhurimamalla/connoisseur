@@ -37,7 +37,7 @@ public class MovieDetailsFragment extends Fragment {
 
     private final static String TAG = MovieDetailsFragment.class.getSimpleName();
     private final static String DISCOVERED_MOVIE = "CREATED_MOVIE";
-    private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/original/";
+    private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w780/";
     private Movie movie;
 
     private MovieDetailsViewModel movieDetailsViewModel;

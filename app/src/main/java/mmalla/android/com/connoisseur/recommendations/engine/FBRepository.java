@@ -2,9 +2,9 @@ package mmalla.android.com.connoisseur.recommendations.engine;
 
 import mmalla.android.com.connoisseur.model.Movie;
 
-public class MovieRepository extends FirebaseDatabaseRepository<Movie> {
+public class FBRepository extends FirebaseDatabaseRepository<Movie> {
 
-    public MovieRepository() {
+    public FBRepository() {
         super(new MovieMapper());
     }
 

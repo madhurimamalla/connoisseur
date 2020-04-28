@@ -29,7 +29,6 @@ public class DatabaseUtils {
     private final static String MOVIES = "movies";
     private final static String WISHLIST = "wishlist";
     private final static String HISTORY = "history";
-    private MovieRepository movieRepository = new MovieRepository();
     private DatabaseReference database;
 
     public DatabaseUtils() {

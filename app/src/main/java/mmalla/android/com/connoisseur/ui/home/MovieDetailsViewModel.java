@@ -27,7 +27,6 @@ import timber.log.Timber;
 public class MovieDetailsViewModel extends ViewModel {
 
     private static final String TAG = MovieDetailsViewModel.class.getSimpleName();
-
     /**
      * Movie data needs to be set to these variables
      */

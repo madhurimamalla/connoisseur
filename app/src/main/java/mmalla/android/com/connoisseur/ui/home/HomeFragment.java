@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mmalla.android.com.connoisseur.MovieRepository;
 import mmalla.android.com.connoisseur.R;
 import timber.log.Timber;
 
@@ -24,6 +25,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FeaturePagerAdapter featurePagerAdapter;
     private final static String TAG = HomeFragment.class.getSimpleName();
+    private MovieRepository movieRepository;
 
     @BindView(R.id.view_pager_features)
     ViewPager featureViewPager;
@@ -33,6 +35,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         Timber.d("Entered the HomeFragment onCreateView()....");
 
         homeViewModel =
@@ -44,8 +47,9 @@ public class HomeFragment extends Fragment {
          * Binding using ButterKnife
          */
         ButterKnife.bind(this, homeRootView);
-
+        movieRepository = homeViewModel.getMRepository();
         featurePagerAdapter = new FeaturePagerAdapter(getContext(), getChildFragmentManager());
+        featurePagerAdapter.init(movieRepository);
         featureViewPager.setAdapter(featurePagerAdapter);
         tabsLayout.setupWithViewPager(featureViewPager);
         return homeRootView;
