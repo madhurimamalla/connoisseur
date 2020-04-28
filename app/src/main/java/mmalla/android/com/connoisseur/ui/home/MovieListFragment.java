@@ -95,14 +95,14 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
         if (bundleTypeStr.equals("DISCOVER") && mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setEnabled(true);
-            mSwipeRefreshLayout.setColorSchemeResources(R.color.primaryTextColor);
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
 
             mSwipeRefreshLayout.setOnRefreshListener(() -> initiateRefresh());
             if (mSwitchCompat != null) {
                 mSwitchCompat.setVisibility(View.VISIBLE);
             }
 
-            mSwitchCompat.setThumbResource(R.drawable.ic_new_badge);
+//            mSwitchCompat.setThumbResource(R.drawable.ic_new_badge);
             mSwitchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     buttonView.setEnabled(true);
@@ -136,7 +136,8 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
             } else {
                 hideNoMoviesTextView();
                 Timber.d(TAG, "Setting the movies in the MovieListAdapter...");
-                moviesList = movies;
+                moviesList.clear();
+                moviesList.addAll(movies);
                 recyclerView.setAdapter(movieListAdapter);
                 Timber.d(TAG, "Loading the recyclerView with the MovieListAdapter...");
                 hideLoadingIcon();

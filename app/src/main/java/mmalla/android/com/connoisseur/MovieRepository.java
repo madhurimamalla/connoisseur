@@ -35,23 +35,33 @@ public class MovieRepository extends Observable {
         fbRepository.addListener(new FirebaseDatabaseRepository.FirebaseDatabaseRepositoryCallback<Movie>() {
             @Override
             public void onSuccess(List<Movie> result) {
-                for (Movie movie :
-                        result) {
-                    if (movie.getmPref() == Movie.PREFERENCE.DISLIKED || movie.getmPref() == Movie.PREFERENCE.LIKED) {
-                        if (movie.getmPref() == Movie.PREFERENCE.LIKED) {
-                            likedMovies.add(movie);
-                        } else {
-                            dislikedMovies.add(movie);
-                        }
-                        historyMovies.add(movie);
-                    } else if (movie.getmPref() == Movie.PREFERENCE.WISHLISTED) {
-                        watchlistedMovies.add(movie);
+                if (result.size() == 0) {
+                    for (List l : allLists) {
+                        l.clear();
                     }
+                } else {
+                    likedMovies.clear();
+                    dislikedMovies.clear();
+                    historyMovies.clear();
+                    watchlistedMovies.clear();
+                    for (Movie movie :
+                            result) {
+                        if (movie.getmPref() == Movie.PREFERENCE.DISLIKED || movie.getmPref() == Movie.PREFERENCE.LIKED) {
+                            if (movie.getmPref() == Movie.PREFERENCE.LIKED) {
+                                likedMovies.add(movie);
+                            } else {
+                                dislikedMovies.add(movie);
+                            }
+                            historyMovies.add(movie);
+                        } else if (movie.getmPref() == Movie.PREFERENCE.WISHLISTED) {
+                            watchlistedMovies.add(movie);
+                        }
+                    }
+                    allLists.add(likedMovies);  // 0 : Liked Movies
+                    allLists.add(dislikedMovies); // 1 : Disliked Movies
+                    allLists.add(historyMovies); // 2 : History Movies
+                    allLists.add(watchlistedMovies); // 3 : Watchlisted Movies
                 }
-                allLists.add(likedMovies);  // 0 : Liked Movies
-                allLists.add(dislikedMovies); // 1 : Disliked Movies
-                allLists.add(historyMovies); // 2 : History Movies
-                allLists.add(watchlistedMovies); // 3 : Watchlisted Movies
                 updateMoviesList();
             }
 

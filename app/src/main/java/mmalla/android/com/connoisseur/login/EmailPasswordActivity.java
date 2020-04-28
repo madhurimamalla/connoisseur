@@ -38,8 +38,8 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.status)
     TextView mStatusTextView;
 
-    @BindView(R.id.detail)
-    TextView mDetailTextView;
+    @BindView(R.id.newUserMessage)
+    TextView newUserMessage;
 
     @BindView(R.id.fieldEmail_new)
     EditText mEmailField;
@@ -250,9 +250,8 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText("Welcome back " + user.getEmail());
-            //mDetailTextView.setText("Welcome back " + user.getEmail());
-
+            newUserMessage.setText(R.string.welcome_back);
+            mStatusTextView.setText(user.getEmail());
             findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
             mSpace.setVisibility(View.VISIBLE);
@@ -263,10 +262,11 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             disableOldUI();
             findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
 
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
 
+        } else {
+            newUserMessage.setVisibility(View.VISIBLE);
+            newUserMessage.setText(R.string.welcome);
+            mStatusTextView.setText(R.string.new_user_create_account);
             mSpace.setVisibility(View.GONE);
             findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
             findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);

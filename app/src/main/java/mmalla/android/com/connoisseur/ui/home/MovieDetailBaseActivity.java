@@ -28,7 +28,7 @@ public class MovieDetailBaseActivity extends BaseActivity {
     ViewPager movieDetailsViewPager;
 
     MovieDetailsPagerAdapter movieDetailsPagerAdapter;
-    int position;
+    int moviePosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,18 +55,17 @@ public class MovieDetailBaseActivity extends BaseActivity {
         if (savedInstanceState != null) {
             Timber.d(TAG, "Retrieving parcelable array list from savedInstance");
             movieList = savedInstanceState.getParcelableArrayList("SAVED_MOVIES");
-            position = 0;
+            moviePosition = 0;
         } else {
             Timber.d(TAG, "Retrieving the parcelable array list from the previous intent");
             movieList = previousIntent.getExtras().getParcelableArrayList("LIST_MOVIES");
-            position = previousIntent.getExtras().getInt("CLICK_POSITION");
+            moviePosition = previousIntent.getExtras().getInt("CLICK_POSITION");
         }
-
 
         movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getSupportFragmentManager());
         movieDetailsPagerAdapter.setList(movieList);
         movieDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
-        movieDetailsViewPager.setCurrentItem(position);
+        movieDetailsViewPager.setCurrentItem(moviePosition);
     }
 
     @Override

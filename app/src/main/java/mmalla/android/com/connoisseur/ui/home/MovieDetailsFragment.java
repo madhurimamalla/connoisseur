@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,13 +50,13 @@ public class MovieDetailsFragment extends Fragment {
     TextView mPlotSummary;
 
     @BindView(R.id.add_to_watchlist)
-    ImageView watchlistView;
+    FloatingActionButton watchlistView;
 
     @BindView(R.id.like_movie_button)
-    ImageView likedMovieView;
+    FloatingActionButton likedMovieView;
 
     @BindView(R.id.dislike_movie_button)
-    ImageView dislikedMovieView;
+    FloatingActionButton dislikedMovieView;
 
     @BindView(R.id.movie_details_title)
     TextView movieDetailTitle;
@@ -78,7 +79,7 @@ public class MovieDetailsFragment extends Fragment {
     TextView movieVoteCount;
 
     @BindView(R.id.like_dislike)
-    ImageView likeDislike;
+    FloatingActionButton likeDislike;
 
     @BindView(R.id.viewToHelpButton)
     View fadeOutView;
@@ -202,7 +203,7 @@ public class MovieDetailsFragment extends Fragment {
 
         watchlistView.setOnClickListener(v -> {
             Glide.with(getActivity().getApplicationContext())
-                    .load(R.drawable.ic_playlist_add_check_black_36dp).into(watchlistView);
+                    .load(R.drawable.ic_playlist_add_check_white_36dp).into(watchlistView);
             movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED);
             watchlistView.setEnabled(false);
             likeDislike.setVisibility(View.INVISIBLE);
@@ -268,6 +269,7 @@ public class MovieDetailsFragment extends Fragment {
         likedMovieView.setOnClickListener(v -> {
             movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED);
             watchlistView.setVisibility(View.INVISIBLE);
+            dislikedMovieView.setVisibility(View.INVISIBLE);
             closeSubMenusFab();
         });
 
@@ -286,8 +288,10 @@ public class MovieDetailsFragment extends Fragment {
     private void closeSubMenusFab() {
         likedMovieView.animate().translationY(0);
         dislikedMovieView.animate().translationY(0);
+        watchlistView.animate().translationY(0);
         likedMovieView.setVisibility(View.INVISIBLE);
         dislikedMovieView.setVisibility(View.INVISIBLE);
+        watchlistView.setVisibility(View.INVISIBLE);
         likeDislike.setVisibility(View.VISIBLE);
         moviePoster.setAlpha((float) (1.0));
     }
@@ -295,20 +299,18 @@ public class MovieDetailsFragment extends Fragment {
     //Opens FAB submenus
     @SuppressLint("RestrictedApi")
     private void openSubMenusFab() {
-        moviePoster.setAlpha((float) 0.6);
-        likedMovieView.animate().translationX(-getResources().getDimension(R.dimen.standard_75));
+        moviePoster.setAlpha((float) 0.5);
+        likedMovieView.animate().translationY(-getResources().getDimension(R.dimen.standard_150));
         dislikedMovieView.animate().translationY(-getResources().getDimension(R.dimen.standard_75));
+        watchlistView.setVisibility(View.VISIBLE);
         likedMovieView.setVisibility(View.VISIBLE);
         dislikedMovieView.setVisibility(View.VISIBLE);
         likeDislike.setVisibility(View.INVISIBLE);
     }
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.PARCELED_MOVIE), movie);
     }
-
-
 }

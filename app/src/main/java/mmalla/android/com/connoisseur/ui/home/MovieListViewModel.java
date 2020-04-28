@@ -148,40 +148,37 @@ public class MovieListViewModel extends ViewModel implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof MovieRepository) {
+            int size = ((List<List<Movie>>) arg).size();
             if (mTypeOfList.getValue().equals("HISTORY")) {
-                mMoviesList.postValue(((List<List<Movie>>) arg).get(2));
+                if (size == 0) {
+                    mMoviesList.postValue(new ArrayList<Movie>(0));
+                } else {
+                    mMoviesList.postValue(((List<List<Movie>>) arg).get(2));
+                }
             } else if (mTypeOfList.getValue().equals("WATCHLIST")) {
-                mMoviesList.postValue(((List<List<Movie>>) arg).get(3));
+                if (size == 0) {
+                    mMoviesList.postValue(new ArrayList<Movie>(0));
+                } else {
+                    mMoviesList.postValue(((List<List<Movie>>) arg).get(3));
+                }
             } else if (mTypeOfList.getValue().equals("DISCOVER")) {
-                this.likedMovies = ((List<List<Movie>>) arg).get(0);
-                this.dislikedMovies = ((List<List<Movie>>) arg).get(1);
+                if (size == 0) {
+                    this.likedMovies.clear();
+                    this.dislikedMovies.clear();
+                } else {
+                    this.likedMovies = ((List<List<Movie>>) arg).get(0);
+                    this.dislikedMovies = ((List<List<Movie>>) arg).get(1);
+                }
                 discoverMovies(Movie.PREFERENCE.IGNORED);
             }
         }
+
     }
 
     @Override
     protected void onCleared() {
         movieRepository.deleteObserver(this);
     }
-
-
-    /**
-     * Loads more movies in the Discover tab
-     * @param page
-     * @param totalItemsCount
-     * @param view
-     *//*
-    public void getMoreMovies(int page, int totalItemsCount, RecyclerView view) {
-        try {
-            List<Movie> listOfMovies = new fetchInterestingMovies().execute("").get();
-            mMoviesList.getValue().addAll(listOfMovies);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     /**
      * Description: fetchInterestingMovies can only fetch 20 movies at a time for a given movie Id.

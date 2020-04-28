@@ -14,9 +14,10 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/illustration" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_popcorn_with_shades" />
 
     <TextView
         android:id="@+id/appName"
@@ -29,6 +30,7 @@
         android:gravity="center_horizontal"
         android:text="@string/app_name"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.MyTitleText"
         tools:text="@string/app_name" />
 
@@ -38,12 +40,21 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="8dp" />
+
+        <TextView
+            android:id="@+id/newUserMessage"
+            style="@style/ThemeOverlay.MyTextDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textAlignment="center"
+            tools:text="New User? Sign up!" />
 
         <TextView
             android:id="@+id/status"
@@ -52,28 +63,22 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/signed_out"
-            android:textAlignment="center" />
-
-        <TextView
-            android:id="@+id/detail"
-            style="@style/ThemeOverlay.MyTextDetail.Italic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:textAlignment="center"
-            tools:text="Welcome back user" />
+            android:textStyle="italic" />
 
         <Button
             android:id="@+id/new_ui_flow"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="8dp"
-            android:padding="8dp"
-            android:textAllCaps="false"
-            android:paddingRight="8dp"
+            android:gravity="center"
+            android:padding="16dp"
             android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:text="@string/app_caption"
+            android:textAllCaps="false"
             android:theme="@style/FontFamilySet" />
 
         <Button
@@ -81,17 +86,17 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_margin="@dimen/new_content_margin"
             android:padding="@dimen/new_content_padding"
             android:text="@string/app_caption"
-            android:theme="@style/ThemeOverlay.MyDarkButton" />
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:visibility="gone" />
 
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingStart="@dimen/emailPasswordPaddingLeft"
         android:paddingLeft="@dimen/emailPasswordPaddingLeft"
@@ -219,6 +224,4 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-
 </LinearLayout>
