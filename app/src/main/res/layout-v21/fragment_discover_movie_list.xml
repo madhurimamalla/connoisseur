@@ -52,7 +52,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:alpha="0.8"
-        android:text="Popular"
+        android:text="@string/popular_normal"
         android:textColor="@android:color/white"
         android:background="@color/colorPrimary"
         android:elevation="8dp"

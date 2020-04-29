@@ -124,9 +124,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="FontFamilySet">
-        <item name="android:fontFamily">@font/source_serif_pro</item>
-        <item name="android:includeFontPadding">true</item>
-    </style>
+    <style name="FontFamilySet"></style>
 
 </resources>

@@ -10,7 +10,7 @@ import android.os.Build;
 import android.widget.RemoteViews;
 
 import mmalla.android.com.connoisseur.R;
-import mmalla.android.com.connoisseur.SplashActivity;
+import mmalla.android.com.connoisseur.SplashActivityNew;
 import timber.log.Timber;
 
 /**
@@ -33,13 +33,9 @@ public class Widget extends AppWidgetProvider {
 
         // Set up the collection depending on which
         // version is running on the device
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            setRemoteAdapter(context, views);
-        } else {
-            setRemoteAdapterV11(context, views);
-        }
+        setRemoteAdapter(context, views);
 
-        Intent appIntent = new Intent(context, SplashActivity.class);
+        Intent appIntent = new Intent(context, SplashActivityNew.class);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.widget_grid_view, appPendingIntent);
         views.setEmptyView(R.id.widget_grid_view, R.id.empty_view);

@@ -57,7 +57,9 @@ public class SplashActivityNew extends BaseActivity {
             getWindow().setExitTransition(explode);
             getWindow().setReenterTransition(explode);
         }
+
         setContentView(R.layout.activity_splash_new);
+
         /**
          * Configuring the ViewModel class for the activity
          */
@@ -134,13 +136,13 @@ public class SplashActivityNew extends BaseActivity {
                 searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String s) {
-                        Timber.d(TAG, "Text entered : " + s);
+                        Timber.d(TAG, "Text entered : %s", s);
                         return false;
                     }
 
                     @Override
                     public boolean onQueryTextChange(String s) {
-                        Timber.d(TAG, "Text changed : " + s);
+                        Timber.d(TAG, "Text changed : %s", s);
                         return false;
                     }
 

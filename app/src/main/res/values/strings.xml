@@ -118,7 +118,6 @@
     <string name="Cleared_movie_list">Cleared all the user preferences</string>
     <string name="Rating_Title">Rating (Votes)</string>
     <string name="released_date">Released date</string>
-    <string name="search">Search</string>
     <string name="search_option_clicked">Search option clicked!</string>
     <string name="enter_your_password_here">Enter your password here</string>
     <string name="enter_your_username_here">Enter your username here</string>
@@ -148,5 +147,12 @@
     <string name="welcome_back">Welcome back</string>
     <string name="welcome">Welcome!</string>
     <string name="new_user_create_account">New User? Create account!</string>
+    <string name="app_icon">App icon</string>
+    <string name="marker_for_genre">marker for genre</string>
+    <string name="star_icon">star icon</string>
+    <string name="communicate">Communicate</string>
+    <string name="space_of_one_char">  </string>
+    <string name="popular_normal">Popular</string>
+    <string name="search">Search</string>
 
 </resources>

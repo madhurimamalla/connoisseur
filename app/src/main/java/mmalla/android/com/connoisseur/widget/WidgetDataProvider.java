@@ -47,7 +47,7 @@ class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
             this.mAuth = FirebaseAuth.getInstance();
             this.user = mAuth.getCurrentUser();
             this.userId = user.getUid();
-            Timber.d(TAG, "The user name is: " + this.user.getDisplayName().toString());
+            Timber.d(TAG, "The user name is: %s", this.user.getDisplayName().toString());
 
             /**
              * Getting the Firebase database for this application

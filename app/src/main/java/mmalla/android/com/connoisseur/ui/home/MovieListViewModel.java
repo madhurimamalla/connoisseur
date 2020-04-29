@@ -12,7 +12,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutionException;
 
-import mmalla.android.com.connoisseur.MovieRepository;
+import mmalla.android.com.connoisseur.recommendations.engine.MovieRepository;
 import mmalla.android.com.connoisseur.model.Movie;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClient;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClientException;
@@ -23,7 +23,6 @@ public class MovieListViewModel extends ViewModel implements Observer {
 
     private MutableLiveData<List<Movie>> mMoviesList = new MutableLiveData<>();
     private MutableLiveData<String> mTypeOfList = new MutableLiveData<>();
-    private final int LIKED_MOVIES_THRESHOLD = 2;
     private boolean initiateRefresh = false;
     private MovieRepository movieRepository;
     private List<Movie> likedMovies = new ArrayList<>();
@@ -97,6 +96,7 @@ public class MovieListViewModel extends ViewModel implements Observer {
      */
     private void discoverMovies(final Movie.PREFERENCE mPref) {
         if (mPref == Movie.PREFERENCE.IGNORED) {
+            int LIKED_MOVIES_THRESHOLD = 2;
             if (likedMovies.size() <= LIKED_MOVIES_THRESHOLD) {
                 discoveredMovies = loadPopularMovies();
             } else if (mMoviesList != null) {
@@ -106,10 +106,10 @@ public class MovieListViewModel extends ViewModel implements Observer {
                     final MovieDBClient movieDBClient = new MovieDBClient();
                     int luckyNum = movieDBClient.getRandomNumber(0, likedMovies.size() - 1);
                     Movie luckyMovie = likedMovies.get(luckyNum);
-                    Timber.d("Discovered movies based on movie: " + likedMovies.get(luckyNum).getmTitle());
+                    Timber.d("Discovered movies based on movie: %s", likedMovies.get(luckyNum).getmTitle());
                     try {
                         discoveredMovies = new fetchInterestingMovies().execute(luckyMovie.getmId()).get();
-                        Timber.d(TAG, "Discovered movies are found based on similar movies with size: " + discoveredMovies.size());
+                        Timber.d(TAG, "Discovered movies are found based on similar movies with size: %s", discoveredMovies.size());
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -140,7 +140,7 @@ public class MovieListViewModel extends ViewModel implements Observer {
                     discoveredMovies.remove(m);
                 }
             }
-            Timber.d("Loading final discovered movies with size: " + discoveredMovies.size());
+            Timber.d("Loading final discovered movies with size: %s", discoveredMovies.size());
             mMoviesList.postValue(discoveredMovies);
         }
     }

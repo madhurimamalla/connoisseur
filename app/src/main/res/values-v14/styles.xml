@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="FontFamilySet">
-        <item name="fontFamily">@font/source_serif_pro</item>
-        <item name="android:includeFontPadding">true</item>
-    </style>
-</resources>

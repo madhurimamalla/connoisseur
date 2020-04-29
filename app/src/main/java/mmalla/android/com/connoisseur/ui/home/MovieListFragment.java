@@ -27,7 +27,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mmalla.android.com.connoisseur.MovieRepository;
+import mmalla.android.com.connoisseur.recommendations.engine.MovieRepository;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
@@ -72,10 +72,16 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
         Timber.d(TAG, "The movieListViewModel is set here...");
 
+
         movieListViewModel =
                 ViewModelProviders.of(this).get(MovieListViewModel.class);
 
-        bundleTypeStr = Objects.requireNonNull(getArguments()).getString(FEATURE);
+        if (savedInstanceState != null) {
+            moviesList = savedInstanceState.getParcelableArrayList("MOVIE_LIST_FRAGMENT");
+            bundleTypeStr = savedInstanceState.getString("TYPE_OF_TAB");
+        } else {
+            bundleTypeStr = Objects.requireNonNull(getArguments()).getString(FEATURE);
+        }
 
         /*
           Inflating the view of this fragment
@@ -92,7 +98,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         ButterKnife.bind(this, rootView);
 
         movieListViewModel.init(bundleTypeStr, movieRepository);
-
         if (bundleTypeStr.equals("DISCOVER") && mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setEnabled(true);
             mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
@@ -102,7 +107,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
                 mSwitchCompat.setVisibility(View.VISIBLE);
             }
 
-//            mSwitchCompat.setThumbResource(R.drawable.ic_new_badge);
             mSwitchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     buttonView.setEnabled(true);
@@ -153,9 +157,9 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
     private void initiateRefresh() {
         Timber.d(TAG, "Initiating refresh....");
-        if(mSwitchCompat.isChecked()){
+        if (mSwitchCompat.isChecked()) {
             movieListViewModel.getPopularMovies();
-        } else{
+        } else {
             movieListViewModel.initiateRefresh();
         }
         Objects.requireNonNull(mSwipeRefreshLayout).setRefreshing(false);
@@ -224,5 +228,12 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         if (mSwitchCompat != null) {
             mSwitchCompat.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("MOVIE_LIST_FRAGMENT", (ArrayList<? extends Parcelable>) moviesList);
+        outState.putString("TYPE_OF_TAB", bundleTypeStr);
     }
 }

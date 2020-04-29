@@ -4,9 +4,9 @@ import java.util.function.Consumer;
 
 public class Genre {
 
-    String id;
+    private String id;
 
-    String name;
+    private String name;
 
     public Genre(String id, String name) {
         this.id = id;

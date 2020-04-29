@@ -41,7 +41,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     }
 
     public void setMovies(List<Movie> movies) {
-        Timber.d(TAG + "Setting the movies in the MovieListAdapter... ");
+        Timber.d("%sSetting the movies in the MovieListAdapter... ", TAG);
         this.mMoviesList = movies;
         notifyDataSetChanged();
     }

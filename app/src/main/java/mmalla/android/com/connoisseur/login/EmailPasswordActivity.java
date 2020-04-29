@@ -25,7 +25,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.BaseActivity;
 import mmalla.android.com.connoisseur.R;
-import mmalla.android.com.connoisseur.SplashActivity;
 import mmalla.android.com.connoisseur.SplashActivityNew;
 import mmalla.android.com.connoisseur.model.User;
 import mmalla.android.com.connoisseur.recommendations.engine.DatabaseUtils;
@@ -295,18 +294,6 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.verifyEmailButton:
                 sendEmailVerification();
-                break;
-            case R.id.newcontent_two:
-                /**
-                 * Start the SplashActivity on newContent button click
-                 */
-                Intent intent = new Intent(this, SplashActivity.class);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-                } else {
-                    startActivity(intent);
-                }
                 break;
             case R.id.new_ui_flow:
                 Intent homeIntent = new Intent(this, SplashActivityNew.class);

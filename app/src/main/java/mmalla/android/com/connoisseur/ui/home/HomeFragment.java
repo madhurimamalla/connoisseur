@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mmalla.android.com.connoisseur.MovieRepository;
+import mmalla.android.com.connoisseur.recommendations.engine.MovieRepository;
 import mmalla.android.com.connoisseur.R;
 import timber.log.Timber;
 
@@ -35,6 +35,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         Timber.d("Entered the HomeFragment onCreateView()....");
 
@@ -53,5 +54,10 @@ public class HomeFragment extends Fragment {
         featureViewPager.setAdapter(featurePagerAdapter);
         tabsLayout.setupWithViewPager(featureViewPager);
         return homeRootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

@@ -1,0 +1,45 @@
+@startuml
+
+actor movieBuff
+participant SplashActivityNew
+participant HomeFragment
+participant HomeViewModel
+participant MovieListFragment
+participant LiveData
+participant MovieListAdapter
+participant MovieListViewModel
+participant MovieRepository
+participant FirebaseMovieRepository
+participant DatabaseRef
+
+movieBuff -> SplashActivityNew: launch app
+
+SplashActivityNew -> HomeFragment: onCreate()
+HomeFragment -> MovieListFragment: onCreateView()
+HomeFragment -> HomeViewModel: getMRepository()
+HomeViewModel -> MovieRepository: addListenerOnFirebaseRep()
+MovieRepository -> FirebaseMovieRepository: addListener()
+MovieListFragment -> MovieListViewModel: init()
+MovieListViewModel -> MovieRepository: init()
+LiveData -> MovieListViewModel: init()
+MovieListViewModel -> MovieRepository: addObserver()
+FirebaseMovieRepository -> DatabaseRef: addListener(List<Movie> mList)
+DatabaseRef -> FirebaseMovieRepository: notifyMoviesListUpdated()
+FirebaseMovieRepository -> MovieRepository: onSuccess()
+MovieRepository -> MovieListViewModel: notifyRecommendedListUpdated()
+
+MovieListViewModel -> LiveData: setValue()
+LiveData -> MovieListFragment: onChanged()
+MovieListFragment -> MovieListAdapter: setMovies()/notifyAdapter()
+
+movieBuff -> SplashActivityNew: exit app
+SplashActivityNew -> HomeFragment: onDestroy()
+HomeFragment -> MovieListFragment: onDestroyView()
+MovieListFragment -> MovieListViewModel: onCleared()
+MovieListViewModel -> MovieRepository: removeObserver()
+HomeViewModel -> MovieRepository: removeListernerOnFirebaseRep()
+MovieRepository -> FirebaseMovieRepository: removeListener()
+FirebaseMovieRepository -> DatabaseRef: removeListener()
+
+
+@enduml

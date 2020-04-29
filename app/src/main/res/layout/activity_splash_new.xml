@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:theme="@style/FontFamilySet"
+    tools:context=".SplashActivityNew"
     tools:openDrawer="start">
 
     <include

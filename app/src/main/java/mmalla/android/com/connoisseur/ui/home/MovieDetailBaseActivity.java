@@ -3,6 +3,7 @@ package mmalla.android.com.connoisseur.ui.home;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.transition.Explode;
 import android.transition.Fade;
 
@@ -23,6 +24,9 @@ public class MovieDetailBaseActivity extends BaseActivity {
 
     private static final String TAG = MovieDetailBaseActivity.class.getSimpleName();
     private List<Movie> movieList = new ArrayList<>();
+
+    private static final String MOVIE_DETAIL_FRAGMENT_LIST = "MOVIE_DETAIL_FRAGMENT_LIST";
+    private static final String MOVIE_POSITION = "MOVIE_POSITION";
 
     @BindView(R.id.view_pager_movies_details)
     ViewPager movieDetailsViewPager;
@@ -54,8 +58,8 @@ public class MovieDetailBaseActivity extends BaseActivity {
         Intent previousIntent = getIntent();
         if (savedInstanceState != null) {
             Timber.d(TAG, "Retrieving parcelable array list from savedInstance");
-            movieList = savedInstanceState.getParcelableArrayList("SAVED_MOVIES");
-            moviePosition = 0;
+            movieList = savedInstanceState.getParcelableArrayList(MOVIE_DETAIL_FRAGMENT_LIST);
+            moviePosition = savedInstanceState.getInt(MOVIE_POSITION);
         } else {
             Timber.d(TAG, "Retrieving the parcelable array list from the previous intent");
             movieList = previousIntent.getExtras().getParcelableArrayList("LIST_MOVIES");
@@ -70,6 +74,8 @@ public class MovieDetailBaseActivity extends BaseActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(MOVIE_DETAIL_FRAGMENT_LIST, (ArrayList<? extends Parcelable>) movieList);
+        outState.putInt(MOVIE_POSITION, moviePosition);
         super.onSaveInstanceState(outState);
     }
 }

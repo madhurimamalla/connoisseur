@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="mmalla.android.com.connoisseur">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,11 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="m"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".SplashActivityNew"
             android:label="@string/title_activity_splash_new"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".login.EmailPasswordActivity" />
@@ -23,7 +28,9 @@
         </activity>
         <activity
             android:name=".SplashScreen"
-            android:theme="@style/ThemeOverlay.MyNoTitleActivity">
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,29 +39,18 @@
         </activity>
         <activity
             android:name=".login.EmailPasswordActivity"
-            android:theme="@style/ThemeOverlay.MyNoTitleActivity" />
-        <activity android:name=".SplashActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="mmalla.android.com.connoisseur.login.EmailPasswordActivity" />
-        </activity>
-
-        <activity android:name=".ui.home.MovieDetailBaseActivity"
-            android:theme="@style/ThemeOverlay.MyNoTitleActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SplashActivityNew"/>
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity"
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".features.FeatureActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_feature"
-            android:parentActivityName=".SplashActivity"
-            android:theme="@style/FullscreenTheme">
+            android:name=".ui.home.MovieDetailBaseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="mmalla.android.com.connoisseur.SplashActivity" />
+                android:value=".SplashActivityNew" />
         </activity>
 
         <receiver android:name=".widget.Widget">

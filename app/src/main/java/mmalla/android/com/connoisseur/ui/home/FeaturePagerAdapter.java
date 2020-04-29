@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import mmalla.android.com.connoisseur.MovieRepository;
+import mmalla.android.com.connoisseur.recommendations.engine.MovieRepository;
 import mmalla.android.com.connoisseur.R;
 
 public class FeaturePagerAdapter extends FragmentPagerAdapter {

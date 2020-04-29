@@ -5,7 +5,7 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import mmalla.android.com.connoisseur.model.Movie;
 
 @IgnoreExtraProperties
-public class MovieEntity {
+class MovieEntity {
 
     private String mId;
     private Movie.PREFERENCE mPref;

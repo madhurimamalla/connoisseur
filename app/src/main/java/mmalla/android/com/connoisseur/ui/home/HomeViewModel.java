@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import mmalla.android.com.connoisseur.MovieRepository;
+import mmalla.android.com.connoisseur.recommendations.engine.MovieRepository;
 
 public class HomeViewModel extends ViewModel {
 

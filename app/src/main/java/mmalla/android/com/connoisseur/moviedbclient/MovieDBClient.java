@@ -194,7 +194,7 @@ public class MovieDBClient {
      */
     public Movie getMovieDetailsById(String id) throws MovieDBClientException {
 
-        Movie movieDetails = null;
+        Movie movieDetails = new Movie();
         URL movieDetailUrl = buildGetMovieDetailsUrl(id);
         Timber.d(TAG, movieDetailUrl);
         try {
@@ -273,11 +273,7 @@ public class MovieDBClient {
      */
     public int getRandomNumber(int fromNum, int toNum) {
 
-        final int min = fromNum;
-        final int max = toNum;
-        final int random = new Random().nextInt((max - min) + 1) + min;
-
-        return random;
+        return new Random().nextInt((toNum - fromNum) + 1) + fromNum;
     }
 
     /**
@@ -307,7 +303,7 @@ public class MovieDBClient {
      * @return
      * @throws MovieDBClientException
      */
-    public List<Movie> getSearchResults(String queryStr) throws MovieDBClientException {
+    private List<Movie> getSearchResults(String queryStr) throws MovieDBClientException {
         List<Movie> movies = new ArrayList<>();
 
         URL moviesSearchURL = buildSearchQueryUrl(queryStr);

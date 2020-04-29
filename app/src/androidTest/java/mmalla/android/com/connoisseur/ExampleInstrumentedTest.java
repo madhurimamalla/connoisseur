@@ -19,8 +19,8 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getContext();
 
-        assertEquals("mmalla.android.com.whatnext", appContext.getPackageName());
+        assertEquals("mmalla.android.com.connoisseur", appContext.getPackageName());
     }
 }
