@@ -1,11 +1,15 @@
 package mmalla.android.com.connoisseur;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.transition.Explode;
 import android.transition.Fade;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,19 +23,26 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
 
 public class SplashActivityNew extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private SplashNewViewModel splashNewViewModel;
+    List<Movie> searchedList = new ArrayList<>();
 
     private final static String TAG = SplashActivityNew.class.getSimpleName();
 
@@ -97,7 +108,27 @@ public class SplashActivityNew extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.splash_screen_menu, menu);
-        return true;
+
+        SearchView mySearchView = (SearchView) menu.getItem(2).getActionView();
+        mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Timber.d("Started text: " + query);
+                splashNewViewModel.retrieveSearchResults(query);
+                /**
+                 * What's done is getting the results from TMDB.
+                 * TODO Need to complete this SearchView Feature with a new UI design, an activity/fragment
+                 * and complete this.
+                 */
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -123,39 +154,6 @@ public class SplashActivityNew extends BaseActivity {
                 if (splashNewViewModel.removeAllSavedMoviesFromFirebase()) {
                     Toast.makeText(getApplicationContext(), R.string.Cleared_movie_list, Toast.LENGTH_LONG).show();
                 }
-                return true;
-            case R.id.search_button:
-                SearchView searchView = (SearchView) item.getActionView();
-                splashNewViewModel.retrieveSearchResults("Harry");
-                /**
-                 * TODO Implement the search feature for future extension
-                 */
-                /**
-                 * When text is entered into the searchView, start a new SearchActivity
-                 */
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String s) {
-                        Timber.d(TAG, "Text entered : %s", s);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String s) {
-                        Timber.d(TAG, "Text changed : %s", s);
-                        return false;
-                    }
-
-                });
-                /**
-                 * TODO When the searchView is closed, return to SplashActivity with the options
-                 */
-                searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-                    @Override
-                    public boolean onClose() {
-                        return false;
-                    }
-                });
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

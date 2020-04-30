@@ -15,6 +15,7 @@ import mmalla.android.com.connoisseur.model.Movie;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClient;
 import mmalla.android.com.connoisseur.moviedbclient.MovieDBClientException;
 import mmalla.android.com.connoisseur.recommendations.engine.DatabaseUtils;
+import timber.log.Timber;
 
 public class SplashNewViewModel extends ViewModel {
 
@@ -49,6 +50,11 @@ public class SplashNewViewModel extends ViewModel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        Timber.d("The search results are here........");
+    }
+
+    public MutableLiveData<List<Movie>> getSearchResults() {
+        return searchResults;
     }
 
     /**
@@ -71,5 +77,6 @@ public class SplashNewViewModel extends ViewModel {
             return results;
         }
     }
+
 
 }

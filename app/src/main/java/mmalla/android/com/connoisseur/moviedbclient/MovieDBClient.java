@@ -163,11 +163,11 @@ public class MovieDBClient {
      * @return
      */
     private static URL buildSearchQueryUrl(String queryString) {
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+        Uri builtUri = Uri.parse(SEARCH_URL).buildUpon()
                 .appendQueryParameter(QUERY_PARAM, API_KEY)
                 .appendQueryParameter(LANG_PARAM, LANG_VALUE)
-                .appendQueryParameter(PAGE_PARAM, PAGE_VALUE)
                 .appendQueryParameter(QUERY_STRING_PARAM, queryString)
+                .appendQueryParameter(PAGE_PARAM, PAGE_VALUE)
                 .appendQueryParameter(INCLUDE_ADULT_PARAM, "false")
                 .build();
 
