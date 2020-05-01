@@ -36,6 +36,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
     private final static String TAG = MovieListFragment.class.getSimpleName();
     private MovieRepository movieRepository;
+    private static final String CLICK_POSITION = "CLICK_POSITION";
+    private static final String LIST_MOVIES = "LIST_MOVIES";
+    private static final String LIST_TYPE = "LIST_TYPE";
+    private static final String MOVIE_LIST_FRAGMENT = "MOVIE_LIST_FRAGMENT";
 
     @BindView(R.id.loading_icon)
     View loadingIcon;
@@ -77,8 +81,8 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
                 ViewModelProviders.of(this).get(MovieListViewModel.class);
 
         if (savedInstanceState != null) {
-            moviesList = savedInstanceState.getParcelableArrayList("MOVIE_LIST_FRAGMENT");
-            bundleTypeStr = savedInstanceState.getString("TYPE_OF_TAB");
+            moviesList = savedInstanceState.getParcelableArrayList(MOVIE_LIST_FRAGMENT);
+            bundleTypeStr = savedInstanceState.getString(LIST_TYPE);
         } else {
             bundleTypeStr = Objects.requireNonNull(getArguments()).getString(FEATURE);
         }
@@ -203,8 +207,9 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         }
 
         Intent movieDetailsIntent = new Intent(getActivity(), MovieDetailBaseActivity.class);
-        movieDetailsIntent.putExtra("CLICK_POSITION", position);
-        movieDetailsIntent.putParcelableArrayListExtra("LIST_MOVIES", (ArrayList<? extends Parcelable>) new ArrayList<Movie>(this.moviesList));
+        movieDetailsIntent.putExtra(LIST_TYPE, bundleTypeStr);
+        movieDetailsIntent.putExtra(CLICK_POSITION, position);
+        movieDetailsIntent.putParcelableArrayListExtra(LIST_MOVIES, (ArrayList<? extends Parcelable>) new ArrayList<Movie>(this.moviesList));
         startActivity(movieDetailsIntent);
     }
 
@@ -233,7 +238,7 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("MOVIE_LIST_FRAGMENT", (ArrayList<? extends Parcelable>) moviesList);
-        outState.putString("TYPE_OF_TAB", bundleTypeStr);
+        outState.putParcelableArrayList(MOVIE_LIST_FRAGMENT, (ArrayList<? extends Parcelable>) moviesList);
+        outState.putString(LIST_TYPE, bundleTypeStr);
     }
 }

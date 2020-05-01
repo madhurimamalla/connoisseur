@@ -293,6 +293,7 @@
         android:cropToPadding="false"
         android:src="@drawable/ic_playlist_add_white_36dp"
         android:visibility="invisible"
+        android:tag="removed"
         app:elevation="16dp"
         app:fabSize="mini"
         app:layout_anchor="@id/like_dislike"

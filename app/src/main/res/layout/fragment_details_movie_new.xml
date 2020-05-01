@@ -295,6 +295,7 @@
         android:visibility="invisible"
         app:elevation="16dp"
         app:fabSize="mini"
+        android:tag="removed"
         app:layout_anchor="@id/like_dislike"
         app:layout_anchorGravity="center|center" />
 

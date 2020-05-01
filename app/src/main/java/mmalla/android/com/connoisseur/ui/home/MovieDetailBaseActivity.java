@@ -27,12 +27,15 @@ public class MovieDetailBaseActivity extends BaseActivity {
 
     private static final String MOVIE_DETAIL_FRAGMENT_LIST = "MOVIE_DETAIL_FRAGMENT_LIST";
     private static final String MOVIE_POSITION = "MOVIE_POSITION";
+    private static final String CLICK_POSITION = "CLICK_POSITION";
+    private static final String LIST_TYPE = "LIST_TYPE";
 
     @BindView(R.id.view_pager_movies_details)
     ViewPager movieDetailsViewPager;
 
-    MovieDetailsPagerAdapter movieDetailsPagerAdapter;
-    int moviePosition;
+    private MovieDetailsPagerAdapter movieDetailsPagerAdapter;
+    private int moviePosition = 0;
+    private String listType = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,13 +63,16 @@ public class MovieDetailBaseActivity extends BaseActivity {
             Timber.d(TAG, "Retrieving parcelable array list from savedInstance");
             movieList = savedInstanceState.getParcelableArrayList(MOVIE_DETAIL_FRAGMENT_LIST);
             moviePosition = savedInstanceState.getInt(MOVIE_POSITION);
+            listType = savedInstanceState.getString(LIST_TYPE);
         } else {
             Timber.d(TAG, "Retrieving the parcelable array list from the previous intent");
             movieList = previousIntent.getExtras().getParcelableArrayList("LIST_MOVIES");
-            moviePosition = previousIntent.getExtras().getInt("CLICK_POSITION");
+            moviePosition = previousIntent.getExtras().getInt(CLICK_POSITION);
+            listType = previousIntent.getExtras().getString(LIST_TYPE);
         }
 
         movieDetailsPagerAdapter = new MovieDetailsPagerAdapter(getSupportFragmentManager());
+        movieDetailsPagerAdapter.setTypeOfList(listType);
         movieDetailsPagerAdapter.setList(movieList);
         movieDetailsViewPager.setAdapter(movieDetailsPagerAdapter);
         movieDetailsViewPager.setCurrentItem(moviePosition);
@@ -76,6 +82,7 @@ public class MovieDetailBaseActivity extends BaseActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(MOVIE_DETAIL_FRAGMENT_LIST, (ArrayList<? extends Parcelable>) movieList);
         outState.putInt(MOVIE_POSITION, moviePosition);
+        outState.putString(LIST_TYPE, listType);
         super.onSaveInstanceState(outState);
     }
 }

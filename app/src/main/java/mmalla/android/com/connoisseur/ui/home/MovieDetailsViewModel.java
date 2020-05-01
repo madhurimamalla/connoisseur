@@ -37,7 +37,7 @@ public class MovieDetailsViewModel extends ViewModel {
     private MutableLiveData<String> mReleaseYear = new MutableLiveData<>();
     private MutableLiveData<String> mVoteCount = new MutableLiveData<>();
     private MutableLiveData<String> mTagline = new MutableLiveData<>();
-    public MutableLiveData<Movie.PREFERENCE> showToast = new MutableLiveData<>();
+    public MutableLiveData<String> showToast = new MutableLiveData<>();
     private MutableLiveData<String> mRuntime = new MutableLiveData<>();
     private MutableLiveData<String> mGenres = new MutableLiveData<>();
     private Movie mMovie;
@@ -51,7 +51,7 @@ public class MovieDetailsViewModel extends ViewModel {
         mAuth = FirebaseAuth.getInstance();
         databaseUtils = new DatabaseUtils();
         movieDBClient = new MovieDBClient();
-        showToast.setValue(Movie.PREFERENCE.IGNORED);
+        showToast.setValue("");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -136,9 +136,9 @@ public class MovieDetailsViewModel extends ViewModel {
      *
      * @param preference
      */
-    public void updateMovie(Movie.PREFERENCE preference) {
+    public void updateMovie(Movie.PREFERENCE preference, String word) {
         databaseUtils.updateMovie(mAuth.getCurrentUser().getUid(), mMovie, preference);
-        showToast.setValue(preference);
+        showToast.setValue(word);
     }
 
     class fetchMovieDetails extends AsyncTask<String, Void, Movie> {

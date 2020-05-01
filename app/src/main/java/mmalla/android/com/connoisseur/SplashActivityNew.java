@@ -23,7 +23,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,6 +108,7 @@ public class SplashActivityNew extends BaseActivity {
         getMenuInflater().inflate(R.menu.splash_screen_menu, menu);
 
         SearchView mySearchView = (SearchView) menu.getItem(2).getActionView();
+        mySearchView.setQueryHint("Enter a movie...");
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

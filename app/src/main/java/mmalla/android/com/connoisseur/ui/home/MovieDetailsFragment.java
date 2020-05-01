@@ -38,8 +38,10 @@ public class MovieDetailsFragment extends Fragment {
 
     private final static String TAG = MovieDetailsFragment.class.getSimpleName();
     private final static String DISCOVERED_MOVIE = "CREATED_MOVIE";
+    private final static String LIST_TYPE = "LIST_TYPE";
     private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w780/";
     private Movie movie;
+    private String typeOfList = "";
 
     private MovieDetailsViewModel movieDetailsViewModel;
 
@@ -97,10 +99,11 @@ public class MovieDetailsFragment extends Fragment {
      *
      * @return A new instance of fragment DiscoverFragment.
      */
-    public static MovieDetailsFragment newInstance(Movie movie) {
+    public static MovieDetailsFragment newInstance(Movie movie, String listType) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
         Bundle args = new Bundle();
         args.putParcelable(DISCOVERED_MOVIE, movie);
+        args.putString(LIST_TYPE, listType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -111,8 +114,10 @@ public class MovieDetailsFragment extends Fragment {
 
         if (savedInstanceState != null) {
             this.movie = savedInstanceState.getParcelable(getString(R.string.PARCELED_MOVIE));
+            this.typeOfList = savedInstanceState.getString(LIST_TYPE);
         } else if (getArguments() != null) {
             this.movie = getArguments().getParcelable(DISCOVERED_MOVIE);
+            this.typeOfList = getArguments().getString(LIST_TYPE);
         }
 
         Timber.d(TAG, movie.toString());
@@ -201,17 +206,25 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
 
-        watchlistView.setOnClickListener(v -> {
+        Timber.d(TAG + "The type of list is: " + typeOfList);
+        if (typeOfList.equals("WATCHLIST")) {
             Glide.with(getActivity().getApplicationContext())
                     .load(R.drawable.ic_playlist_add_check_white_36dp).into(watchlistView);
-            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED);
-            watchlistView.setEnabled(false);
-            likeDislike.setVisibility(View.INVISIBLE);
-            likedMovieView.setAlpha((float) 1.0);
-            dislikedMovieView.setAlpha((float) 1.0);
-            likedMovieView.setVisibility(View.INVISIBLE);
-            dislikedMovieView.setVisibility(View.INVISIBLE);
-            Timber.d(TAG, getString(R.string.Disabling_the_liked_dislike_buttons));
+            watchlistView.setTag("added");
+        }
+
+        watchlistView.setOnClickListener(v -> {
+            if (watchlistView.getTag().equals("added")) {
+                watchlistView.setTag("removed");
+                movieDetailsViewModel.updateMovie(Movie.PREFERENCE.IGNORED, "removed");
+                Glide.with(getActivity().getApplicationContext()).load(R.drawable.ic_playlist_add_white_36dp).into(watchlistView);
+            } else {
+                Glide.with(getActivity().getApplicationContext())
+                        .load(R.drawable.ic_playlist_add_check_white_36dp).into(watchlistView);
+                watchlistView.setTag("added");
+                movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED, "added");
+            }
+            closeSubMenusFab();
         });
 
         /**
@@ -219,40 +232,23 @@ public class MovieDetailsFragment extends Fragment {
          * once the movie preference entered by the user is
          * updated in the backend
          */
-        movieDetailsViewModel.showToast.observe(this, preference -> {
-            switch (preference) {
-                case IGNORED:
+        movieDetailsViewModel.showToast.observe(this, str -> {
+            switch (str) {
+                case "":
                     break;
-                case LIKED:
+                case "liked":
                     Toast.makeText(getContext(), "Added to your liked movies", Toast.LENGTH_SHORT).show();
                     break;
-                case DISLIKED:
+                case "disliked":
                     Toast.makeText(getContext(), "Added to your disliked movies", Toast.LENGTH_SHORT).show();
                     break;
-                case WISHLISTED:
+                case "added":
                     Toast.makeText(getContext(), "Added to your watchlist", Toast.LENGTH_SHORT).show();
                     break;
+                case "removed":
+                    Toast.makeText(getContext(), "Removed from your watchlist", Toast.LENGTH_SHORT).show();
+                    break;
             }
-        });
-
-        likedMovieView.setOnClickListener(v -> {
-            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED);
-            watchlistView.setAlpha((float) 1.0);
-            dislikedMovieView.setAlpha((float) 1.0);
-            likedMovieView.setEnabled(true);
-            dislikedMovieView.setVisibility(View.GONE);
-            watchlistView.setVisibility(View.GONE);
-            Timber.d(TAG, getString(R.string.Disabling_the_watchlist_dislike_buttons));
-        });
-
-        dislikedMovieView.setOnClickListener(v -> {
-            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED);
-            dislikedMovieView.setEnabled(true);
-            likedMovieView.setAlpha((float) 1.0);
-            watchlistView.setAlpha((float) 1.0);
-            likedMovieView.setVisibility(View.GONE);
-            watchlistView.setVisibility(View.GONE);
-            Timber.d(TAG, getString(R.string.Disabling_the_liked_watchlist_buttons));
         });
 
         likeDislike.setOnClickListener(view -> {
@@ -267,19 +263,18 @@ public class MovieDetailsFragment extends Fragment {
         });
 
         likedMovieView.setOnClickListener(v -> {
-            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED);
+            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.LIKED, "liked");
             watchlistView.setVisibility(View.INVISIBLE);
             dislikedMovieView.setVisibility(View.INVISIBLE);
             closeSubMenusFab();
         });
 
         dislikedMovieView.setOnClickListener(v -> {
-            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED);
+            movieDetailsViewModel.updateMovie(Movie.PREFERENCE.DISLIKED, "disliked");
             likedMovieView.setVisibility(View.VISIBLE);
             watchlistView.setVisibility(View.INVISIBLE);
             closeSubMenusFab();
         });
-
         return rootView;
     }
 
@@ -312,5 +307,6 @@ public class MovieDetailsFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.PARCELED_MOVIE), movie);
+        outState.putString(LIST_TYPE, typeOfList);
     }
 }
