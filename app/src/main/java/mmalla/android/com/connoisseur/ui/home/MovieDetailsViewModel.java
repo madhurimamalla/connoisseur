@@ -86,12 +86,14 @@ public class MovieDetailsViewModel extends ViewModel {
         }
 
         List<Genre> genresList = tmdbMovie.getmGenres();
-        List<String> genresListNames = new ArrayList<>();
-        for (Genre genre : genresList) {
-            genresListNames.add(genre.getName());
+        if (genresList != null) {
+            List<String> genresListNames = new ArrayList<>();
+            for (Genre genre : genresList) {
+                genresListNames.add(genre.getName());
+            }
+            String genreListStr = TextUtils.join(", ", genresListNames);
+            mGenres.setValue(genreListStr);
         }
-        String genreListStr = TextUtils.join(", ", genresListNames);
-        mGenres.setValue(genreListStr);
         Timber.d("Setting the known data....");
     }
 

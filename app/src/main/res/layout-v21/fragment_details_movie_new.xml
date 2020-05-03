@@ -152,28 +152,30 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/genre_layout"
                                 android:layout_width="wrap_content"
+                                android:baselineAligned="true"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:contentDescription="@string/marker_for_genre"
                                     android:alpha="0.6"
                                     android:src="@drawable/ic_label_black_24dp" />
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:text=" " />
 
                                 <TextView
                                     android:id="@+id/genresList"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Drama, Romances, Comedy"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
                                     android:textSize="12sp"
                                     tools:text="Drama, Romances, Comedy" />
                             </LinearLayout>

@@ -1,14 +1,14 @@
 package mmalla.android.com.connoisseur;
 
 import android.annotation.SuppressLint;
-import android.app.SearchManager;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Parcelable;
 import android.transition.Explode;
 import android.transition.Fade;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -34,6 +34,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.model.Movie;
+import mmalla.android.com.connoisseur.ui.home.MovieDetailBaseActivity;
+import mmalla.android.com.connoisseur.ui.search.SearchFragment;
 import timber.log.Timber;
 
 public class SplashActivityNew extends BaseActivity {
@@ -86,7 +88,7 @@ public class SplashActivityNew extends BaseActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                R.id.nav_home, R.id.nav_search, R.id.nav_slideshow,
                 R.id.nav_tools, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
@@ -108,17 +110,28 @@ public class SplashActivityNew extends BaseActivity {
         getMenuInflater().inflate(R.menu.splash_screen_menu, menu);
 
         SearchView mySearchView = (SearchView) menu.getItem(2).getActionView();
-        mySearchView.setQueryHint("Enter a movie...");
+        mySearchView.setQueryHint("Coming soon...");
+        //mySearchView.setQueryHint("Search for a movie...");
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Timber.d("Started text: " + query);
-                splashNewViewModel.retrieveSearchResults(query);
+                //TODO
+                //splashNewViewModel.retrieveSearchResults(query);
                 /**
                  * What's done is getting the results from TMDB.
                  * TODO Need to complete this SearchView Feature with a new UI design, an activity/fragment
                  * and complete this.
                  */
+/*                splashNewViewModel.getSearchResults().observe(, new Observer<List<Movie>>() {
+                    @Override
+                    public void onChanged(List<Movie> movieList) {
+                        searchedList.addAll(movieList);
+                    }
+                });
+                Intent searchResultsIntent = new Intent(getApplicationContext(), SearchFragment.class);
+                searchResultsIntent.putParcelableArrayListExtra(SEARCH_SERVICE, (ArrayList<? extends Parcelable>) new ArrayList<Movie>(searchedList));
+                startActivity(searchResultsIntent);*/
                 return true;
             }
 

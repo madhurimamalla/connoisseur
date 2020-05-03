@@ -76,7 +76,7 @@ public class MovieRepository extends Observable {
          * First notification to bring observers up to speed
          * with the current state of the cache.
          */
-        if (allLists != null && allLists.size() > 0) {
+        if ((allLists != null && allLists.size() > 0) || allLists != null) {
             new Thread(() -> {
                 setChanged();
                 notifyObservers(allLists);

@@ -86,8 +86,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -153,27 +153,30 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/genre_layout"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="2dp"
+                                android:baselineAligned="true"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:contentDescription="@string/marker_for_genre"
+                                    android:layout_height="match_parent"
                                     android:alpha="0.6"
+                                    android:contentDescription="@string/marker_for_genre"
                                     android:src="@drawable/ic_label_black_24dp" />
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:text="@string/space_of_one_char" />
 
                                 <TextView
                                     android:id="@+id/genresList"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
                                     android:textSize="12sp"
                                     tools:text="Drama, Romances, Comedy" />
                             </LinearLayout>
@@ -292,10 +295,10 @@
         android:layout_margin="4dp"
         android:cropToPadding="false"
         android:src="@drawable/ic_playlist_add_white_36dp"
+        android:tag="removed"
         android:visibility="invisible"
         app:elevation="16dp"
         app:fabSize="mini"
-        android:tag="removed"
         app:layout_anchor="@id/like_dislike"
         app:layout_anchorGravity="center|center" />
 

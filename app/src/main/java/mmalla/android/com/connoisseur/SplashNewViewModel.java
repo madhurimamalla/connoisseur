@@ -21,7 +21,7 @@ public class SplashNewViewModel extends ViewModel {
 
     private static final String TAG = SplashNewViewModel.class.getSimpleName();
 
-    DatabaseUtils databaseUtils;
+    private DatabaseUtils databaseUtils;
     private MutableLiveData<List<Movie>> searchResults = new MutableLiveData<>();
     private MutableLiveData<String> userEmailId = new MutableLiveData<>();
 

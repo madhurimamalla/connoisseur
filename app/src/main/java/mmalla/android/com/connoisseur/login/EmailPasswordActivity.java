@@ -206,6 +206,7 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
                         // Re-enable button
                         findViewById(R.id.verifyEmailButton).setEnabled(true);
                         findViewById(R.id.newcontent_two).setEnabled(false);
+                        findViewById(R.id.new_ui_flow).setEnabled(false);
                         disableOldUI();
 
                         if (task.isSuccessful()) {
@@ -258,10 +259,9 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
             findViewById(R.id.newcontent_two).setVisibility(View.VISIBLE);
             findViewById(R.id.newcontent_two).setEnabled(user.isEmailVerified());
             findViewById(R.id.new_ui_flow).setVisibility(View.VISIBLE);
+            findViewById(R.id.new_ui_flow).setEnabled(user.isEmailVerified());
             disableOldUI();
             findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
-
-
         } else {
             newUserMessage.setVisibility(View.VISIBLE);
             newUserMessage.setText(R.string.welcome);

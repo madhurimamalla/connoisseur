@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="mmalla.android.com.connoisseur.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
+        android:id="@+id/nav_search"
+        android:name="mmalla.android.com.connoisseur.ui.search.SearchFragment"
+        android:label="@string/menu_search"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
@@ -40,5 +40,11 @@
         android:name="mmalla.android.com.connoisseur.ui.send.SendFragment"
         android:label="@string/menu_send"
         tools:layout="@layout/fragment_send" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="mmalla.android.com.connoisseur.ui.about.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" />
 
 </navigation>

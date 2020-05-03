@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,9 @@ public class MovieDetailsFragment extends Fragment {
 
     @BindView(R.id.movie_rating_value)
     TextView movieRatingValue;
+
+    @BindView(R.id.genre_layout)
+    LinearLayout genreLayout;
 
     /*
     @BindView(R.id.movie_tagline)
@@ -154,7 +158,7 @@ public class MovieDetailsFragment extends Fragment {
          */
         movieDetailsViewModel.getPosterPath().observe(this, s ->
                 Glide.with(getActivity().getApplicationContext())
-                        .load(IMAGE_MOVIE_URL + s).error(R.drawable.ic_404_new).into(moviePoster));
+                        .load(IMAGE_MOVIE_URL + s).error(R.drawable.ic_404).into(moviePoster));
 
         movieDetailsViewModel.getMovieTitle().observe(this, s -> {
                     movieDetailTitle.setBreakStrategy(Layout.BREAK_STRATEGY_BALANCED);
@@ -168,7 +172,7 @@ public class MovieDetailsFragment extends Fragment {
         movieDetailsViewModel.getRating().observe(this, s -> movieRatingValue.setText(s));
 
         movieDetailsViewModel.getRuntime().observe(this, s -> {
-            if (s == null) {
+            if (s.equals(null)) {
                 runtimeMovie.setVisibility(View.GONE);
             } else {
                 if (Integer.parseInt(s) == 0) {
@@ -199,9 +203,11 @@ public class MovieDetailsFragment extends Fragment {
 
         movieDetailsViewModel.getGenresList().observe(this, s -> {
             if (s != null) {
+                genreLayout.setVisibility(View.VISIBLE);
                 genresList.setText(s);
                 genresList.setVisibility(View.VISIBLE);
             } else {
+                genreLayout.setVisibility(View.INVISIBLE);
                 genresList.setVisibility(View.INVISIBLE);
             }
         });
