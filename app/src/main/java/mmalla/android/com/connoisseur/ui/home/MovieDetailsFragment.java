@@ -158,7 +158,7 @@ public class MovieDetailsFragment extends Fragment {
          */
         movieDetailsViewModel.getPosterPath().observe(this, s ->
                 Glide.with(getActivity().getApplicationContext())
-                        .load(IMAGE_MOVIE_URL + s).error(R.drawable.ic_404).into(moviePoster));
+                        .load(IMAGE_MOVIE_URL + s).error(R.drawable.ic_404_movie_poster_not_found).into(moviePoster));
 
         movieDetailsViewModel.getMovieTitle().observe(this, s -> {
                     movieDetailTitle.setBreakStrategy(Layout.BREAK_STRATEGY_BALANCED);

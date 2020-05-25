@@ -4,6 +4,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,9 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
     @BindView(R.id.no_movies_message)
     View noMoviesMessageView;
+
+    @BindView(R.id.no_movie_image)
+    ImageView noMoviesImageView;
 
     @Nullable
     @BindView(R.id.swipe_refresh_list)
@@ -170,10 +175,12 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     }
 
     public void showNoMoviesTextView() {
+        noMoviesImageView.setVisibility(View.VISIBLE);
         noMoviesMessageView.setVisibility(View.VISIBLE);
     }
 
     public void hideNoMoviesTextView() {
+        noMoviesImageView.setVisibility(View.INVISIBLE);
         noMoviesMessageView.setVisibility(View.INVISIBLE);
     }
 

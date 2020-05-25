@@ -59,7 +59,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     public void onBindViewHolder(@NonNull final MovieViewHolder movieViewHolder, final int i) {
         Movie movie = this.mMoviesList.get(movieViewHolder.getAdapterPosition());
 
-        Glide.with(mContext.getApplicationContext()).load(IMAGE_MOVIE_URL + movie.getmPoster()).error(R.drawable.ic_404).into(movieViewHolder.movie_thumbnail);
+        Glide.with(mContext.getApplicationContext()).load(IMAGE_MOVIE_URL + movie.getmPoster()).error(R.drawable.ic_404_movie_poster_not_found).into(movieViewHolder.movie_thumbnail);
 
         movieViewHolder.movie_thumbnail.setOnClickListener(view -> mListener.onClick(mMoviesList.get(movieViewHolder.getAdapterPosition()), movieViewHolder.getAdapterPosition()));
     }

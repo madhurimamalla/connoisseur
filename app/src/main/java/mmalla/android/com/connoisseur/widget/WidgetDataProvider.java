@@ -41,6 +41,10 @@ class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
     private FirebaseUser user;
     private String userId;
 
+    /**
+     * TODO Needs to be changed to reach and fetch the watchlist directly
+     * @throws NullPointerException
+     */
     private void initData() throws NullPointerException {
         try {
             this.movieList.clear();

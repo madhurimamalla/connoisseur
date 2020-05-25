@@ -7,17 +7,33 @@
 
     <TextView
         android:id="@+id/no_movies_message"
-        style="@style/FontFamilySet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:padding="20dp"
         android:text="@string/no_movies_present_try_adding_a_few"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:theme="@style/FontFamilySet"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/no_movies_present_try_adding_a_few" />
+
+
+    <ImageView
+        android:id="@+id/no_movie_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/no_movies_message"
+        app:srcCompat="@drawable/ic_no_movies_message_image"
+        tools:ignore="VectorDrawableCompat" />
 
     <TextView
         android:id="@+id/error_message"
@@ -52,12 +68,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:alpha="0.8"
-        android:text="@string/popular_normal"
-        android:textColor="@android:color/white"
         android:background="@color/colorPrimary"
         android:elevation="8dp"
         android:fontFamily="@font/source_serif_pro"
         android:padding="8dp"
+        android:text="@string/popular_normal"
+        android:textColor="@android:color/white"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

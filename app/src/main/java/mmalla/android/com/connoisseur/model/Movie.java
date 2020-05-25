@@ -22,7 +22,6 @@ public class Movie implements Parcelable {
         mRuntime = in.readString();
         in.readList(mGenres, List.class.getClassLoader());
     }
-
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel in) {
