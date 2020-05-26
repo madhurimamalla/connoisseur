@@ -172,11 +172,11 @@ public class MovieDetailsFragment extends Fragment {
         movieDetailsViewModel.getRating().observe(this, s -> movieRatingValue.setText(s));
 
         movieDetailsViewModel.getRuntime().observe(this, s -> {
-            if (s.equals(null)) {
-                runtimeMovie.setVisibility(View.GONE);
+            if (s.equals("null")) {
+                runtimeMovie.setVisibility(View.INVISIBLE);
             } else {
                 if (Integer.parseInt(s) == 0) {
-                    runtimeMovie.setVisibility(View.GONE);
+                    runtimeMovie.setVisibility(View.INVISIBLE);
                 } else {
                     runtimeMovie.setText(s + " mins");
                 }
@@ -190,14 +190,14 @@ public class MovieDetailsFragment extends Fragment {
         movieDetailsViewModel.getReleaseYear().observe(this, s -> movieReleaseYear.setText(s));
 
         movieDetailsViewModel.getVoteCount().observe(this, s -> {
-            if (s != null) {
+            if (s.equals("null")) {
+                movieVoteCount.setVisibility(View.GONE);
+            } else {
                 if (Integer.parseInt(s) == 0) {
                     movieVoteCount.setVisibility(View.GONE);
                 } else {
                     movieVoteCount.setText(" (" + s + ")");
                 }
-            } else {
-                movieVoteCount.setVisibility(View.GONE);
             }
         });
 

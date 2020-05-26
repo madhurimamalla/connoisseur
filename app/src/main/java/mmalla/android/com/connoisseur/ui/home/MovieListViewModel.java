@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 
 import android.os.AsyncTask;
 
+import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
