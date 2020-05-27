@@ -29,6 +29,4 @@ public class SplashNewViewModel extends ViewModel {
     public boolean removeAllSavedMoviesFromFirebase() {
         return databaseUtils.removeFullMoviesListFromTheUser(mAuth.getCurrentUser().getUid());
     }
-
-
 }

@@ -202,13 +202,13 @@ public class MovieDetailsFragment extends Fragment {
         });
 
         movieDetailsViewModel.getGenresList().observe(this, s -> {
-            if (s != null) {
+            if (!s.equals("null")) {
                 genreLayout.setVisibility(View.VISIBLE);
                 genresList.setText(s);
                 genresList.setVisibility(View.VISIBLE);
             } else {
-                genreLayout.setVisibility(View.INVISIBLE);
-                genresList.setVisibility(View.INVISIBLE);
+                genreLayout.setVisibility(View.GONE);
+                genresList.setVisibility(View.GONE);
             }
         });
 
@@ -223,7 +223,8 @@ public class MovieDetailsFragment extends Fragment {
             if (watchlistView.getTag().equals("added")) {
                 watchlistView.setTag("removed");
                 movieDetailsViewModel.updateMovie(Movie.PREFERENCE.IGNORED, "removed");
-                Glide.with(getActivity().getApplicationContext()).load(R.drawable.ic_playlist_add_white_36dp).into(watchlistView);
+                Glide.with(getActivity().getApplicationContext())
+                        .load(R.drawable.ic_playlist_add_white_36dp).into(watchlistView);
             } else {
                 Glide.with(getActivity().getApplicationContext())
                         .load(R.drawable.ic_playlist_add_check_white_36dp).into(watchlistView);

@@ -22,7 +22,7 @@ public class SearchViewModel extends ViewModel {
 
     public SearchViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Search feature coming here soon!");
+        mText.setValue("Search for movies now!");
     }
 
     public LiveData<String> getText() {

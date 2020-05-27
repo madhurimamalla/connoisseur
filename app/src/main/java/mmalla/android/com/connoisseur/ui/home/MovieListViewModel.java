@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;

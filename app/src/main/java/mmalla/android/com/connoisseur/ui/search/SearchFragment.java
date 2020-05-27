@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,9 @@ public class SearchFragment extends Fragment implements MovieListAdapterSearch.M
 
     @BindView(R.id.search_results)
     RecyclerView searchResultRV;
+
+    @BindView(R.id.search_illustration)
+    ImageView searchIllustration;
 
     private List<Movie> searchList = new ArrayList<>();
     private MovieListAdapterSearch movieListAdapterSearch = null;
@@ -82,9 +86,11 @@ public class SearchFragment extends Fragment implements MovieListAdapterSearch.M
             public void onChanged(List<Movie> movies) {
                 if (movies.size() == 0) {
                     textView.setVisibility(View.VISIBLE);
+                    searchIllustration.setVisibility(View.VISIBLE);
                     searchResultRV.setVisibility(View.INVISIBLE);
                 } else {
                     textView.setVisibility(View.GONE);
+                    searchIllustration.setVisibility(View.GONE);
                     searchList.clear();
                     searchList.addAll(movies);
                     movieListAdapterSearch.setMovies(movies);

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.transition.Explode;
 import android.transition.Fade;
+import android.view.MotionEvent;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -57,6 +59,12 @@ public class MovieDetailBaseActivity extends BaseActivity {
          * Binding views using ButterKnife
          */
         ButterKnife.bind(this);
+
+        /**
+         * For enabling fullscreen mode to this activity
+         */
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getSupportActionBar().hide();
 
         Intent previousIntent = getIntent();
         if (savedInstanceState != null) {

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -60,7 +61,7 @@ public class MovieDBClient {
      * @return
      * @throws IOException
      */
-    private static String getResponseFromHttpUrl(URL url) throws IOException {
+    private static String getResponseFromHttpUrl(URL url) throws IOException, UnknownHostException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
@@ -203,7 +204,6 @@ public class MovieDBClient {
         } catch (IOException | JSONException e) {
             throw new MovieDBClientException(e);
         }
-
         return movieDetails;
     }
 

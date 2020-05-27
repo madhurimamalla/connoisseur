@@ -94,7 +94,7 @@
                             android:layout_weight="1"
                             android:baselineAligned="true"
                             android:orientation="vertical"
-                            android:padding="8dp">
+                            android:padding="4dp">
 
                             <TextView
                                 android:id="@+id/movie_details_title"
@@ -102,13 +102,12 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:layout_margin="2dp"
-                                android:layout_marginLeft="8dp"
-                                android:layout_weight="1"
                                 android:contentDescription="@string/movie_name"
                                 android:ellipsize="none"
                                 android:includeFontPadding="true"
                                 android:letterSpacing="0.0125"
                                 android:lineSpacingMultiplier="0.9"
+                                android:padding="2dp"
                                 android:text="@string/movie_name"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
@@ -126,26 +125,28 @@
                                     android:id="@+id/movie_year_of_release_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     android:layout_margin="2dp"
-                                    android:padding="4dp"
+                                    android:padding="2dp"
                                     android:text="@string/year_of_release"
-                                    android:textColor="@android:color/holo_green_light"
+                                    android:textColor="@android:color/holo_green_dark"
                                     android:textSize="12sp"
                                     android:textStyle="bold" />
 
                                 <TextView
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:text=" " />
 
                                 <TextView
                                     android:id="@+id/minutes_of_the_movie"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     android:layout_margin="2dp"
-                                    android:padding="4dp"
+                                    android:padding="2dp"
                                     android:text="@string/_120_mins"
-                                    android:textColor="@android:color/holo_red_dark"
+                                    android:textColor="@color/colorPrimaryDark"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
                                     tools:text="120 mins" />
@@ -154,16 +155,19 @@
                             <LinearLayout
                                 android:id="@+id/genre_layout"
                                 android:layout_width="wrap_content"
-                                android:baselineAligned="true"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="2dp"
-                                android:orientation="horizontal">
+                                android:layout_gravity="left"
+                                android:baselineAligned="true"
+                                android:orientation="horizontal"
+                                android:padding="2dp"
+                                tools:ignore="RtlHardcoded">
 
                                 <ImageView
+                                    android:id="@+id/genre_marker"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:contentDescription="@string/marker_for_genre"
                                     android:alpha="0.6"
+                                    android:contentDescription="@string/marker_for_genre"
                                     android:src="@drawable/ic_label_black_24dp" />
 
                                 <TextView
@@ -196,6 +200,8 @@
                                 android:id="@+id/rating_star_layout"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:baselineAligned="true"
                                 android:orientation="horizontal">
 
                                 <ImageView
@@ -294,8 +300,8 @@
         android:layout_margin="4dp"
         android:cropToPadding="false"
         android:src="@drawable/ic_playlist_add_white_36dp"
-        android:visibility="invisible"
         android:tag="removed"
+        android:visibility="invisible"
         app:elevation="16dp"
         app:fabSize="mini"
         app:layout_anchor="@id/like_dislike"

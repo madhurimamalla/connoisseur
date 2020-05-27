@@ -64,11 +64,12 @@ public class MovieDetailsViewModel extends ViewModel {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mPlotSummary.setValue(movie.getmOverview());
+
         mTitle.setValue(movie.getmTitle());
+        mPlotSummary.setValue(movie.getmOverview());
         mPosterPath.setValue(movie.getmPoster());
+
         mRating.setValue(movie.getmRating());
-        mVoteCount.setValue(movie.getmVoteCount());
         if (movie.getmReleaseYear() != null) {
             SimpleDateFormat format = new SimpleDateFormat(FORMAT_USED_BY_TMDB);
             try {
@@ -80,8 +81,10 @@ public class MovieDetailsViewModel extends ViewModel {
             }
         }
         mTagline.setValue(tmdbMovie.getmTagline());
-        mRuntime.setValue(tmdbMovie.getmRuntime());
-        if (movie.getmVoteCount() == null) {
+        if (!tmdbMovie.getmRuntime().contains("null") || !tmdbMovie.getmRuntime().isEmpty()) {
+            mRuntime.setValue(tmdbMovie.getmRuntime());
+        }
+        if (!tmdbMovie.getmVoteCount().contains("null") || !tmdbMovie.getmVoteCount().isEmpty()) {
             mVoteCount.setValue(tmdbMovie.getmVoteCount());
         }
 
@@ -93,8 +96,10 @@ public class MovieDetailsViewModel extends ViewModel {
             }
             String genreListStr = TextUtils.join(", ", genresListNames);
             mGenres.setValue(genreListStr);
+        } else {
+            mGenres.setValue("null");
         }
-        Timber.d("Setting the known data....");
+        Timber.d(TAG, "Setting the known data....");
     }
 
     public LiveData<String> getMovieSummary() {
@@ -140,6 +145,7 @@ public class MovieDetailsViewModel extends ViewModel {
      */
     public void updateMovie(Movie.PREFERENCE preference, String word) {
         databaseUtils.updateMovie(mAuth.getCurrentUser().getUid(), mMovie, preference);
+        Timber.d(TAG, "Updating movie " + mMovie.getmTitle() + " with user preference:" + preference);
         showToast.setValue(word);
     }
 
