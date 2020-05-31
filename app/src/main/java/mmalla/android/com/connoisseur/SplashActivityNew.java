@@ -2,17 +2,12 @@ package mmalla.android.com.connoisseur;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.transition.Explode;
 import android.transition.Fade;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -37,8 +32,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mmalla.android.com.connoisseur.model.Movie;
-import mmalla.android.com.connoisseur.ui.home.MovieDetailBaseActivity;
-import mmalla.android.com.connoisseur.ui.search.SearchFragment;
 import timber.log.Timber;
 
 public class SplashActivityNew extends BaseActivity {
@@ -86,13 +79,21 @@ public class SplashActivityNew extends BaseActivity {
          */
         ButterKnife.bind(this);
 
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getString(R.string.connoisseur_preferences_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (!sharedPreferences.contains(getString(R.string.rating_string))) {
+            editor.putInt(getString(R.string.rating_string), 5).apply();
+        }
+        if (!sharedPreferences.contains(getString(R.string.adult_content))) {
+            editor.putBoolean(getString(R.string.adult_content), false).apply();
+        }
         setSupportActionBar(toolbar);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_search, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                R.id.nav_preferences, R.id.nav_share, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
 

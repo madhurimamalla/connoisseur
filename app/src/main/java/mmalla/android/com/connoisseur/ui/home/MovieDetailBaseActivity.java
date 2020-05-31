@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.transition.Explode;
 import android.transition.Fade;
-import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;

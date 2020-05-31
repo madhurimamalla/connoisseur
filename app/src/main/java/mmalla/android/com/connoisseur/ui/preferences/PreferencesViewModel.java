@@ -1,16 +1,16 @@
-package mmalla.android.com.connoisseur.ui.tools;
+package mmalla.android.com.connoisseur.ui.preferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ToolsViewModel extends ViewModel {
+public class PreferencesViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ToolsViewModel() {
+    public PreferencesViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is tools fragment");
+        mText.setValue("Use the controls below to tweak the recommendation engine");
     }
 
     public LiveData<String> getText() {

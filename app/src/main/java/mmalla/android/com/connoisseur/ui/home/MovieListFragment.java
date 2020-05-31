@@ -3,7 +3,9 @@ package mmalla.android.com.connoisseur.ui.home;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -67,6 +69,7 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     private String bundleTypeStr;
     private List<Movie> moviesList = new ArrayList<>();
     private MovieListAdapter movieListAdapter = null;
+    private SharedPreferences sharedPreferences;
 
     public MovieListFragment(MovieRepository mRepo) {
         this.movieRepository = mRepo;
@@ -168,6 +171,14 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         if (mSwitchCompat.isChecked()) {
             movieListViewModel.getPopularMovies();
         } else {
+            sharedPreferences = getActivity().getSharedPreferences(getString(R.string.connoisseur_preferences_file), Context.MODE_PRIVATE);
+            boolean wantAdultMovies = false;
+            if (sharedPreferences.contains(getString(R.string.adult_content))) {
+                wantAdultMovies = sharedPreferences.getBoolean(getString(R.string.adult_content), false);
+            }
+            /**
+             * TODO Add this param to the API n/w call.
+             */
             movieListViewModel.initiateRefresh();
         }
         Objects.requireNonNull(mSwipeRefreshLayout).setRefreshing(false);

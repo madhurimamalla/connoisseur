@@ -1,11 +1,6 @@
 package mmalla.android.com.connoisseur.ui.home;
 
 import android.os.Bundle;
-
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mmalla.android.com.connoisseur.recommendations.engine.MovieRepository;
 import mmalla.android.com.connoisseur.R;
+import mmalla.android.com.connoisseur.recommendations.engine.MovieRepository;
 import timber.log.Timber;
 
 public class HomeFragment extends Fragment {
@@ -29,7 +26,6 @@ public class HomeFragment extends Fragment {
 
     @BindView(R.id.view_pager_features)
     ViewPager featureViewPager;
-
     @BindView(R.id.featureTabsLayout)
     TabLayout tabsLayout;
 

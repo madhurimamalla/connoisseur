@@ -1,5 +1,6 @@
 package mmalla.android.com.connoisseur.moviedbclient;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 
 import org.json.JSONException;
@@ -61,7 +62,7 @@ public class MovieDBClient {
      * @return
      * @throws IOException
      */
-    private static String getResponseFromHttpUrl(URL url) throws IOException, UnknownHostException {
+    private static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
