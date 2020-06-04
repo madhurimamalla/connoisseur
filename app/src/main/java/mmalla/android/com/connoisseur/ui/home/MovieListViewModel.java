@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class MovieListViewModel extends ViewModel implements Observer {
     private List<Movie> likedMovies = new ArrayList<>();
     private List<Movie> dislikedMovies = new ArrayList<>();
     private List<Movie> discoveredMovies = new ArrayList<>();
+    private boolean wantAdultContent = false;
 
     /**
      * This method is used to set the type of list : WATCHLIST, HISTORY, DISCOVER here

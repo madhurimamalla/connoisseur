@@ -164,13 +164,13 @@ public class MovieDBClient {
      * @param queryString
      * @return
      */
-    private static URL buildSearchQueryUrl(String queryString) {
+    private static URL buildSearchQueryUrl(String queryString, boolean includeAdultContent) {
         Uri builtUri = Uri.parse(SEARCH_URL).buildUpon()
                 .appendQueryParameter(QUERY_PARAM, API_KEY)
                 .appendQueryParameter(LANG_PARAM, LANG_VALUE)
                 .appendQueryParameter(QUERY_STRING_PARAM, queryString)
                 .appendQueryParameter(PAGE_PARAM, PAGE_VALUE)
-                .appendQueryParameter(INCLUDE_ADULT_PARAM, "false")
+                .appendQueryParameter(INCLUDE_ADULT_PARAM, String.valueOf(includeAdultContent))
                 .build();
 
         URL url = null;
@@ -286,10 +286,10 @@ public class MovieDBClient {
      * @return
      * @throws MovieDBClientException
      */
-    public List<Movie> getLimitedSearchResults(String queryStr, int length) throws MovieDBClientException {
+    public List<Movie> getLimitedSearchResults(String queryStr, int length, boolean adultContentFlag) throws MovieDBClientException {
 
         List<Movie> movieList = new ArrayList<>();
-        movieList = getSearchResults(queryStr);
+        movieList = getSearchResults(queryStr, adultContentFlag);
         if (movieList.size() > length) {
             return movieList.subList(0, length - 1);
         } else {
@@ -304,10 +304,10 @@ public class MovieDBClient {
      * @return
      * @throws MovieDBClientException
      */
-    private List<Movie> getSearchResults(String queryStr) throws MovieDBClientException {
+    private List<Movie> getSearchResults(String queryStr, boolean adultContentFlag) throws MovieDBClientException {
         List<Movie> movies = new ArrayList<>();
 
-        URL moviesSearchURL = buildSearchQueryUrl(queryStr);
+        URL moviesSearchURL = buildSearchQueryUrl(queryStr, adultContentFlag);
         try {
             String jsonSearchMoviesResponse = getResponseFromHttpUrl(moviesSearchURL);
             return MoviesListJsonUtils.getSimpleMoviesInformationFromJson(jsonSearchMoviesResponse);

@@ -69,7 +69,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
     private String bundleTypeStr;
     private List<Movie> moviesList = new ArrayList<>();
     private MovieListAdapter movieListAdapter = null;
-    private SharedPreferences sharedPreferences;
 
     public MovieListFragment(MovieRepository mRepo) {
         this.movieRepository = mRepo;
@@ -82,7 +81,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         super.onCreateView(inflater, container, savedInstanceState);
 
         Timber.d(TAG, "The movieListViewModel is set here...");
-
 
         movieListViewModel =
                 ViewModelProviders.of(this).get(MovieListViewModel.class);
@@ -171,14 +169,6 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         if (mSwitchCompat.isChecked()) {
             movieListViewModel.getPopularMovies();
         } else {
-            sharedPreferences = getActivity().getSharedPreferences(getString(R.string.connoisseur_preferences_file), Context.MODE_PRIVATE);
-            boolean wantAdultMovies = false;
-            if (sharedPreferences.contains(getString(R.string.adult_content))) {
-                wantAdultMovies = sharedPreferences.getBoolean(getString(R.string.adult_content), false);
-            }
-            /**
-             * TODO Add this param to the API n/w call.
-             */
             movieListViewModel.initiateRefresh();
         }
         Objects.requireNonNull(mSwipeRefreshLayout).setRefreshing(false);

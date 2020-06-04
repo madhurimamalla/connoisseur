@@ -15,6 +15,7 @@ public class SplashNewViewModel extends ViewModel {
     private MutableLiveData<String> userEmailId = new MutableLiveData<>();
 
     private FirebaseAuth mAuth;
+    private boolean wantAdultContent = false;
 
     public void init() {
         mAuth = FirebaseAuth.getInstance();
@@ -28,5 +29,13 @@ public class SplashNewViewModel extends ViewModel {
 
     public boolean removeAllSavedMoviesFromFirebase() {
         return databaseUtils.removeFullMoviesListFromTheUser(mAuth.getCurrentUser().getUid());
+    }
+
+    public void setAdultContentFlag(boolean doesUserWantAdultContent) {
+        this.wantAdultContent = doesUserWantAdultContent;
+    }
+
+    public boolean getAdultContentFlag() {
+        return wantAdultContent;
     }
 }

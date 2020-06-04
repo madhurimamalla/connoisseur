@@ -1,6 +1,7 @@
 package mmalla.android.com.connoisseur;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -26,19 +27,17 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
 
 public class SplashActivityNew extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private SplashNewViewModel splashNewViewModel;
-    List<Movie> searchedList = new ArrayList<>();
+    SharedPreferences sharedPreferences;
+    private static final String QUERY_STRING = "QUERY_STRING";
+    private static final String ADULT_CONTENT_FLAG = "ADULT_CONTENT_FLAG";
 
     private final static String TAG = SplashActivityNew.class.getSimpleName();
 
@@ -73,6 +72,8 @@ public class SplashActivityNew extends BaseActivity {
         ViewModelProviders.of(this).get(SplashNewViewModel.class);
         splashNewViewModel = new SplashNewViewModel();
         splashNewViewModel.init();
+
+        splashNewViewModel.setAdultContentFlag(doesUserWantAdultContent(this));
 
         /**
          * Binding views using ButterKnife
@@ -114,16 +115,15 @@ public class SplashActivityNew extends BaseActivity {
         getMenuInflater().inflate(R.menu.splash_screen_menu, menu);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         SearchView mySearchView = (SearchView) menu.getItem(2).getActionView();
-        //mySearchView.setQueryHint("Coming soon...");
         mySearchView.setQueryHint("Search for a movie...");
         mySearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Timber.d("Started text: " + query);
-                //TODO
                 Bundle searchBundle = new Bundle();
-                searchBundle.putString("QUERY_STRING", query);
+                searchBundle.putString(QUERY_STRING, query);
+                searchBundle.putBoolean(ADULT_CONTENT_FLAG, splashNewViewModel.getAdultContentFlag());
                 navController.navigate(R.id.nav_search, searchBundle);
                 return true;
             }
@@ -134,6 +134,15 @@ public class SplashActivityNew extends BaseActivity {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private boolean doesUserWantAdultContent(Activity activity) {
+        sharedPreferences = activity.getSharedPreferences(getString(R.string.connoisseur_preferences_file), Context.MODE_PRIVATE);
+        boolean wantAdultMovies = false;
+        if (sharedPreferences.contains(getString(R.string.adult_content))) {
+            wantAdultMovies = sharedPreferences.getBoolean(getString(R.string.adult_content), false);
+        }
+        return wantAdultMovies;
     }
 
     @Override

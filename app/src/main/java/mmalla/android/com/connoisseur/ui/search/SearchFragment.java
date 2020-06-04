@@ -1,6 +1,9 @@
 package mmalla.android.com.connoisseur.ui.search;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -34,6 +37,12 @@ public class SearchFragment extends Fragment implements MovieListAdapterSearch.M
 
     private SearchViewModel searchViewModel;
     private String queryStr;
+    private boolean wantAdultContent = false;
+    private SharedPreferences sharedPreferences;
+
+    private static final String ADULT_CONTENT_FLAG = "ADULT_CONTENT_FLAG";
+    private static final String LIST_OF_MOVIES = "LIST_MOVIES";
+    private static final String QUERY_STRING = "QUERY_STRING";
 
     @BindView(R.id.search_results)
     RecyclerView searchResultRV;
@@ -51,14 +60,18 @@ public class SearchFragment extends Fragment implements MovieListAdapterSearch.M
         searchViewModel =
                 ViewModelProviders.of(this).get(SearchViewModel.class);
 
+        wantAdultContent = doesUserWantAdultContent();
+
         if (savedInstanceState != null) {
-            queryStr = savedInstanceState.getString("QUERY_STRING");
-            searchList = savedInstanceState.getParcelableArrayList("LIST_MOVIES");
+            queryStr = savedInstanceState.getString(QUERY_STRING);
+            searchList = savedInstanceState.getParcelableArrayList(LIST_OF_MOVIES);
+            wantAdultContent = savedInstanceState.getBoolean(ADULT_CONTENT_FLAG);
         } else {
             Bundle receivedBundle = getArguments();
-            if (receivedBundle != null && receivedBundle.getString("QUERY_STRING") != null) {
-                queryStr = getArguments().getString("QUERY_STRING");
+            if (receivedBundle != null && receivedBundle.getString(QUERY_STRING) != null) {
+                queryStr = getArguments().getString(QUERY_STRING);
                 searchViewModel.retrieveSearchResults(queryStr);
+                wantAdultContent = getArguments().getBoolean(ADULT_CONTENT_FLAG);
             }
         }
 
@@ -104,11 +117,21 @@ public class SearchFragment extends Fragment implements MovieListAdapterSearch.M
         return root;
     }
 
+    private boolean doesUserWantAdultContent() {
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.connoisseur_preferences_file), Context.MODE_PRIVATE);
+        boolean wantAdultMovies = false;
+        if (sharedPreferences.contains(getString(R.string.adult_content))) {
+            wantAdultMovies = sharedPreferences.getBoolean(getString(R.string.adult_content), false);
+        }
+        return wantAdultMovies;
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("QUERY_STRING", queryStr);
-        outState.putParcelableArrayList("LIST_MOVIES", (ArrayList<? extends Parcelable>) new ArrayList<>(this.searchList));
+        outState.putString(QUERY_STRING, queryStr);
+        outState.putBoolean(ADULT_CONTENT_FLAG, wantAdultContent);
+        outState.putParcelableArrayList(LIST_OF_MOVIES, (ArrayList<? extends Parcelable>) new ArrayList<>(this.searchList));
     }
 
     @Override

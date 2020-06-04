@@ -27,7 +27,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
 
     private Context mContext;
     private List<Movie> mMoviesList = new ArrayList<>();
-    private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w500/";
+    private final static String IMAGE_MOVIE_URL = "https://image.tmdb.org/t/p/w780";
     private final MovieListAdapter.MoviesListOnClickListener mListener;
 
 

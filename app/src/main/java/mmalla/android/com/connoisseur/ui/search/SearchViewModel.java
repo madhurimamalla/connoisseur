@@ -19,6 +19,7 @@ public class SearchViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
     private MutableLiveData<List<Movie>> searchResults = new MutableLiveData<>();
+    private boolean adultContentFlag = false;
 
     public SearchViewModel() {
         mText = new MutableLiveData<>();
@@ -27,6 +28,14 @@ public class SearchViewModel extends ViewModel {
 
     public LiveData<String> getText() {
         return mText;
+    }
+
+    public boolean getAdultContentFlag() {
+        return this.adultContentFlag;
+    }
+
+    public void setAdultContentFlag(boolean adultContentFlag) {
+        this.adultContentFlag = adultContentFlag;
     }
 
     public void retrieveSearchResults(String query) {
@@ -58,7 +67,7 @@ public class SearchViewModel extends ViewModel {
              * Take in the query string and fetch the search results from TMDB
              */
             try {
-                results = movieDBClient.getLimitedSearchResults(strings[0], 20);
+                results = movieDBClient.getLimitedSearchResults(strings[0], 20, adultContentFlag);
             } catch (MovieDBClientException e) {
                 e.printStackTrace();
             }
