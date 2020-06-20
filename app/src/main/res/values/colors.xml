@@ -16,6 +16,9 @@
     <color name="colorAccent">#b90000</color>
     <color name="beachYellow">#fff5cc</color>
 
+    <color name="likeMovieGreenColor">#3d9119</color>
+    <color name="dislikeMovieRedColor">#a61919</color>
+
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_500">#9E9E9E</color>
@@ -23,4 +26,6 @@
     <color name="photo_placeholder">#ccc</color>
 
     <color name="black_overlay">#66000000</color>
+
+    <color name="black">#000000</color>
 </resources>

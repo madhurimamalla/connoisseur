@@ -2,8 +2,11 @@ package mmalla.android.com.connoisseur.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.preference.Preference;
+import android.view.View;
 
 import java.util.List;
+import java.util.Observer;
 
 /**
  * @author mmalla
@@ -20,8 +23,11 @@ public class Movie implements Parcelable {
         mOverview = in.readString();
         mVoteCount = in.readString();
         mRuntime = in.readString();
+        int mPrefTmp = in.readInt();
+        mPref = mPrefTmp == -1 ? null : PREFERENCE.values()[mPrefTmp];
         in.readList(mGenres, List.class.getClassLoader());
     }
+
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
         public Movie createFromParcel(Parcel in) {
@@ -49,6 +55,8 @@ public class Movie implements Parcelable {
         dest.writeString(mOverview);
         dest.writeString(mVoteCount);
         dest.writeString(mRuntime);
+        int mPrefTmp = mPref == null ? -1 : mPref.ordinal();
+        dest.writeInt(mPrefTmp);
         dest.writeList(mGenres);
     }
 

@@ -24,6 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -130,6 +133,10 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         }
 
         movieListAdapter = new MovieListAdapter(getContext(), this);
+        /**
+         * Setting the type of list in the adapter
+         */
+        movieListAdapter.setTypeOfList(bundleTypeStr);
 
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;

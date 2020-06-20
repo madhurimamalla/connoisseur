@@ -215,10 +215,8 @@ public class MovieDBClient {
      * @throws MovieDBClientException
      */
     private List<Movie> getPopularMovies() throws MovieDBClientException {
-        List<Movie> movieList = null;
 
         int randomNumber = getRandomNumber(1, 100);
-
         URL moviesListUrl = buildUrl(PATH_POPULAR_PARAM, Integer.toString(randomNumber));
         Timber.d(TAG, moviesListUrl);
 

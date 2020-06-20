@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -87,10 +88,10 @@ public class EmailPasswordActivity extends BaseActivity implements View.OnClickL
         // [END initialize_auth]
 
         /**
-         * Make sure the password field is hidden
+         * Make sure the password field is hidden and the auto-complete feature of the keyboard isn't visible.
          */
+        mPasswordField.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         mPasswordField.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
     }
 
     // [START on_start_check_user]

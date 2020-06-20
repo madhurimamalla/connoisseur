@@ -40,6 +40,7 @@ public class MovieDetailsViewModel extends ViewModel {
     public MutableLiveData<String> showToast = new MutableLiveData<>();
     private MutableLiveData<String> mRuntime = new MutableLiveData<>();
     private MutableLiveData<String> mGenres = new MutableLiveData<>();
+    private MutableLiveData<Movie.PREFERENCE> mPrefence = new MutableLiveData<>();
     private Movie mMovie;
     private Movie tmdbMovie;
     private DatabaseUtils databaseUtils;
@@ -68,7 +69,7 @@ public class MovieDetailsViewModel extends ViewModel {
         mTitle.setValue(movie.getmTitle());
         mPlotSummary.setValue(movie.getmOverview());
         mPosterPath.setValue(movie.getmPoster());
-
+        mPrefence.setValue(movie.getmPref());
         mRating.setValue(movie.getmRating());
         if (movie.getmReleaseYear() != null) {
             SimpleDateFormat format = new SimpleDateFormat(FORMAT_USED_BY_TMDB);
@@ -118,6 +119,10 @@ public class MovieDetailsViewModel extends ViewModel {
         return mRating;
     }
 
+    public LiveData<Movie.PREFERENCE> getMoviePreference() {
+        return mPrefence;
+    }
+
     public LiveData<String> getTagline() {
         return mTagline;
     }
@@ -145,6 +150,7 @@ public class MovieDetailsViewModel extends ViewModel {
      */
     public void updateMovie(Movie.PREFERENCE preference, String word) {
         databaseUtils.updateMovie(mAuth.getCurrentUser().getUid(), mMovie, preference);
+        mPrefence.setValue(preference);
         Timber.d(TAG, "Updating movie " + mMovie.getmTitle() + " with user preference:" + preference);
         showToast.setValue(word);
     }
