@@ -124,6 +124,7 @@ public class SplashActivityNew extends BaseActivity {
                 Bundle searchBundle = new Bundle();
                 searchBundle.putString(QUERY_STRING, query);
                 searchBundle.putBoolean(ADULT_CONTENT_FLAG, splashNewViewModel.getAdultContentFlag());
+                mySearchView.clearFocus();
                 navController.navigate(R.id.nav_search, searchBundle);
                 return true;
             }

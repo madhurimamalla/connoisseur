@@ -26,6 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import mmalla.android.com.connoisseur.R;
 import mmalla.android.com.connoisseur.model.Movie;
 import timber.log.Timber;
@@ -67,6 +68,9 @@ public class MovieDetailsFragment extends Fragment {
     @BindView(R.id.dislike_movie_button)
     FloatingActionButton dislikedMovieView;
 
+    @BindView(R.id.close_menu_fab)
+    FloatingActionButton closeMenuFabView;
+
     @BindView(R.id.movie_details_title)
     TextView movieDetailTitle;
 
@@ -90,8 +94,8 @@ public class MovieDetailsFragment extends Fragment {
     @BindView(R.id.movie_vote_count)
     TextView movieVoteCount;
 
-    @BindView(R.id.like_dislike)
-    FloatingActionButton likeDislike;
+    @BindView(R.id.options_menu)
+    FloatingActionButton optionsMenu;
 
     @BindView(R.id.viewToHelpButton)
     View fadeOutView;
@@ -249,6 +253,10 @@ public class MovieDetailsFragment extends Fragment {
                 watchlistView.setTag(WATCHLIST_TAG_ADDED);
                 movieDetailsViewModel.updateMovie(Movie.PREFERENCE.WISHLISTED, WATCHLIST_TAG_ADDED);
             }
+            likedMovieView.setAlpha((float) 1.0);
+            dislikedMovieView.setAlpha((float) 1.0);
+            likedMovieView.setElevation((float) 0);
+            dislikedMovieView.setElevation((float) 0);
             closeSubMenusFab();
         });
 
@@ -262,39 +270,43 @@ public class MovieDetailsFragment extends Fragment {
                 case "":
                     break;
                 case MOVIE_LIKED:
-                    Toast toast = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' ><b>" + "Added to your liked movies" + "</b></font>"), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' >" + "Added to your liked movies" + "</font>"), Toast.LENGTH_SHORT);
                     View toastView = toast.getView();
+                    toastView.setAlpha((float) 0.9);
                     toastView.setBackgroundResource(R.drawable.toast_drawable);
                     toast.show();
                     break;
                 case MOVIE_DISLIKED:
-                    Toast toast2 = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' ><b>" + "Added to your disliked movies" + "</b></font>"), Toast.LENGTH_SHORT);
+                    Toast toast2 = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' >" + "Added to your disliked movies" + "</font>"), Toast.LENGTH_SHORT);
                     View toastView2 = toast2.getView();
+                    toastView2.setAlpha((float) 0.9);
                     toastView2.setBackgroundResource(R.drawable.toast_drawable);
                     toast2.show();
                     break;
                 case WATCHLIST_TAG_ADDED:
-                    Toast toast3 = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' ><b>" + "Added to your watchlist" + "</b></font>"), Toast.LENGTH_SHORT);
+                    Toast toast3 = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' >" + "Added to your watchlist" + "</font>"), Toast.LENGTH_SHORT);
                     View toastView3 = toast3.getView();
+                    toastView3.setAlpha((float) 0.9);
                     toastView3.setBackgroundResource(R.drawable.toast_drawable);
                     toast3.show();
                     break;
                 case WATCHLIST_TAG_REMOVED:
-                    Toast toast4 = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' ><b>" + "Removed from your watchlist" + "</b></font>"), Toast.LENGTH_SHORT);
+                    Toast toast4 = Toast.makeText(getContext(), Html.fromHtml("<font color='#ffffff' >" + "Removed from your watchlist" + "</font>"), Toast.LENGTH_SHORT);
                     View toastView4 = toast4.getView();
+                    toastView4.setAlpha((float) 0.9);
                     toastView4.setBackgroundResource(R.drawable.toast_drawable);
                     toast4.show();
                     break;
             }
         });
 
-        likeDislike.setOnClickListener(view -> {
+        optionsMenu.setOnClickListener(view -> {
             Timber.d("Clicked on the fabSettings....");
             openSubMenusFab();
         });
 
         moviePoster.setOnClickListener(v -> {
-            if (likeDislike.getVisibility() == View.INVISIBLE) {
+            if (optionsMenu.getVisibility() == View.INVISIBLE) {
                 closeSubMenusFab();
             }
         });
@@ -313,6 +325,8 @@ public class MovieDetailsFragment extends Fragment {
             closeSubMenusFab();
         });
 
+        closeMenuFabView.setOnClickListener(v -> closeSubMenusFab());
+
         /**
          * Return the updated rootView
          */
@@ -325,10 +339,12 @@ public class MovieDetailsFragment extends Fragment {
         likedMovieView.animate().translationY(0);
         dislikedMovieView.animate().translationY(0);
         watchlistView.animate().translationY(0);
+        closeMenuFabView.animate().translationY(0);
         likedMovieView.setVisibility(View.INVISIBLE);
         dislikedMovieView.setVisibility(View.INVISIBLE);
         watchlistView.setVisibility(View.INVISIBLE);
-        likeDislike.setVisibility(View.VISIBLE);
+        closeMenuFabView.setVisibility(View.INVISIBLE);
+        optionsMenu.setVisibility(View.VISIBLE);
         moviePoster.setAlpha((float) (1.0));
     }
 
@@ -336,12 +352,14 @@ public class MovieDetailsFragment extends Fragment {
     @SuppressLint("RestrictedApi")
     private void openSubMenusFab() {
         moviePoster.setAlpha((float) 0.5);
-        likedMovieView.animate().translationY(-getResources().getDimension(R.dimen.standard_150));
-        dislikedMovieView.animate().translationY(-getResources().getDimension(R.dimen.standard_75));
+        likedMovieView.animate().translationY(-getResources().getDimension(R.dimen.standard_225));
+        dislikedMovieView.animate().translationY(-getResources().getDimension(R.dimen.standard_150));
+        watchlistView.animate().translationY(-getResources().getDimension(R.dimen.standard_75));
         watchlistView.setVisibility(View.VISIBLE);
         likedMovieView.setVisibility(View.VISIBLE);
         dislikedMovieView.setVisibility(View.VISIBLE);
-        likeDislike.setVisibility(View.INVISIBLE);
+        closeMenuFabView.setVisibility(View.VISIBLE);
+        optionsMenu.setVisibility(View.INVISIBLE);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
