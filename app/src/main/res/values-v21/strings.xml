@@ -22,4 +22,5 @@
     <string name="connoisseur_preferences_file">connoisseur_preferences</string>
     <string name="rating_string">RATING_VALUE</string>
     <string name="adult_content">ADULT_CONTENT</string>
+    <string name="want_to_see_popular_movies">Want to see popular movies?</string>
 </resources>

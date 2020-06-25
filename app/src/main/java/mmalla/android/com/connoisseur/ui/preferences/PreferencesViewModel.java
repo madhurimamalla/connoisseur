@@ -10,7 +10,7 @@ public class PreferencesViewModel extends ViewModel {
 
     public PreferencesViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Use the controls below to tweak your app preferences");
+        mText.setValue("Use the controls below to tweak your app preferences. \n" + "This feature is still in development!");
     }
 
     public LiveData<String> getText() {

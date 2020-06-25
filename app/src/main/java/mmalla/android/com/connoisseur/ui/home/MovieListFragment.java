@@ -1,11 +1,11 @@
 package mmalla.android.com.connoisseur.ui.home;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,10 +22,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-
-import com.google.android.material.tabs.TabItem;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +76,7 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
         // Empty constructor
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -164,6 +163,28 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
             }
         });
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (Objects.requireNonNull(bundleTypeStr).equals("DISCOVER")) {
+                    if (dy <= 0) {
+                        ViewGroup.LayoutParams p = mSwitchCompat.getLayoutParams();
+                        mSwitchCompat.animate().start();
+                        p.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                        mSwitchCompat.setLayoutParams(p);
+                        mSwitchCompat.setText(getResources().getString(R.string.want_to_see_popular_movies));
+                    } else if (dy > 60) {
+                        ViewGroup.LayoutParams p = mSwitchCompat.getLayoutParams();
+                        mSwitchCompat.animate().start();
+                        p.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        mSwitchCompat.setLayoutParams(p);
+                        mSwitchCompat.setText("Popular");
+                    }
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -240,6 +261,7 @@ public class MovieListFragment extends Fragment implements MovieListAdapter.Movi
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onResume() {
